@@ -12,6 +12,10 @@ notifications:
         on_success: change
         on_failure: change
 sudo: false
+env:
+  global:
+    - secure: gOHcFLZwdohQC10PzuLQW3MAisdy7o04LzrHmZVe64O5MuMBu+jy62Te2DzBey/JU7a1JAgx0NrAZTaYWLBcOqbLwUycizBw0fAkahKjdRhD+P5G+q8MdPvGGdUFihEcjf6wYeH297uXL24T3beQohylXzoHnBxW+6tZC7PRFYo=
+    - secure: Ljr6tCLaW/mQuaXH7mTkraUIN+QQN1uQmbp+b0tB6jBjEz2qH8jXCLFT2oBYzUBydmV20KYUiXNmNDo5Fi4zGHYVI8uqC8+iCFLjWGo5R643jbq56bOLluuc6xbJzdCTTYR/OKNHtKyfwwqc6EKpvKDqjb7xEkkbw8yDGikg2JM=
 cache:
     directories:
         - node_modules
