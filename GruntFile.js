@@ -77,6 +77,8 @@ var browsers = [{
 
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
+    var port = grunt.option('port') || 8000;
+    var jasminePort = grunt.option('jasminePort') || 8001;
 
     var jsAppFiles = 'src/app/**/*.js';
     var otherFiles = [
@@ -98,22 +100,6 @@ module.exports = function (grunt) {
         'src/app/package.json',
         'src/app/config.js'
     ];
-    var deployFiles = [
-        '**',
-        '!**/*.uncompressed.js',
-        '!**/*consoleStripped.js',
-        '!**/bootstrap/less/**',
-        '!**/bootstrap/test-infra/**',
-        '!**/tests/**',
-        '!build-report.txt',
-        '!components-jasmine/**',
-        '!favico.js/**',
-        '!jasmine-favicon-reporter/**',
-        '!jasmine-jsreporter/**',
-        '!stubmodule/**',
-        '!util/**'
-    ];
-    var deployDir = 'wri-web';
     var secrets;
     var sauceConfig = {
         urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
@@ -161,28 +147,43 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ['dist'],
-            deploy: ['deploy']
-        },
-        compress: {
-            main: {
-                options: {
-                    archive: 'deploy/deploy.zip'
-                },
-                files: [{
-                    src: deployFiles,
-                    dest: './',
-                    cwd: 'dist/',
-                    expand: true
-                }]
-            }
+            build: ['dist']
         },
         connect: {
-            uses_defaults: {}
+            server: {
+                options: {
+                    port: port,
+                    base: './src',
+                    livereload: true,
+                    open: true
+                }
+            },
+            jasmine: {
+                options: {
+                    port: jasminePort,
+                    base: {
+                        path: '.',
+                        options: {
+                            index: '_SpecRunner.html'
+                        }
+                    }
+                }
+            }
         },
         copy: {
             main: {
-                files: [{expand: true, cwd: 'src/', src: ['*.html'], dest: 'dist/'}]
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['*.html'],
+                    dest: 'dist/'
+                }]
+            },
+            toDts: {
+                files: {
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/dojo/dojo.js',
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/css/agrc/App.css': 'C:/Projects/GitHub/wri-web/dist/app/resources/App.css'
+                }
             }
         },
         dojo: {
@@ -241,15 +242,15 @@ module.exports = function (grunt) {
                 options: {
                     specs: ['src/app/**/Spec*.js'],
                     vendor: [
-                        'src/jasmine-favicon-reporter/vendor/favico.js',
-                        'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
-                        'src/jasmine-jsreporter/jasmine-jsreporter.js',
+                        'src/app/tests/jasmineAMDErrorChecking.js',
                         'src/app/tests/jasmineTestBootstrap.js',
-                        'src/dojo/dojo.js',
                         'src/app/tests/jsReporterSanitizer.js',
-                        'src/app/tests/jasmineAMDErrorChecking.js'
+                        'src/dojo/dojo.js',
+                        'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
+                        'src/jasmine-favicon-reporter/vendor/favico.js',
+                        'src/jasmine-jsreporter/jasmine-jsreporter.js'
                     ],
-                    host: 'http://localhost:8000'
+                    host: 'http://localhost:' + jasminePort
                 }
             }
         },
@@ -284,8 +285,7 @@ module.exports = function (grunt) {
             options: {},
             main: {
                 files: {
-                    'dist/index.html': ['src/index.html'],
-                    'dist/user_admin.html': ['src/user_admin.html']
+                    'dist/index.html': ['src/index.html']
                 }
             }
         },
@@ -295,56 +295,6 @@ module.exports = function (grunt) {
             }
         },
         secrets: secrets,
-        sftp: {
-            stage: {
-                files: {
-                    './': 'deploy/deploy.zip'
-                },
-                options: {
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>'
-                }
-            },
-            prod: {
-                files: {
-                    './': 'deploy/deploy.zip'
-                },
-                options: {
-                    host: '<%= secrets.prod.host %>',
-                    username: '<%= secrets.prod.username %>',
-                    password: '<%= secrets.prod.password %>',
-                    path: './upload/' + deployDir
-                }
-            },
-            options: {
-                createDirectories: true,
-                path: './wwwroot' + deployDir + '/',
-                srcBasePath: 'deploy/',
-                showProgress: true
-            }
-        },
-        sshexec: {
-            options: {
-
-            },
-            stage: {
-                command: ['cd wwwroot/' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.stage.host %>',
-                    username: '<%= secrets.stage.username %>',
-                    password: '<%= secrets.stage.password %>'
-                }
-            },
-            prod: {
-                command: ['cd wwwroot/' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.prod.host %>',
-                    username: '<%= secrets.prod.username %>',
-                    password: '<%= secrets.prod.password %>'
-                }
-            }
-        },
         stylus: {
             main: {
                 options: {
@@ -360,13 +310,15 @@ module.exports = function (grunt) {
             }
         },
         watch: {
+            options: {
+                livereload: true
+            },
             jshint: {
                 files: jsFiles,
                 tasks: ['newer:jshint:main', 'newer:jscs:main', 'jasmine:main:build']
             },
             src: {
-                files: jsFiles.concat(otherFiles),
-                options: { livereload: true }
+                files: jsFiles.concat(otherFiles)
             },
             stylus: {
                 files: 'src/app/**/*.styl',
@@ -382,6 +334,10 @@ module.exports = function (grunt) {
         'if-missing:esri_slurp:dev',
         'connect',
         'stylus',
+        'watch'
+    ]);
+    grunt.registerTask('serve', [
+        'connect',
         'watch'
     ]);
     grunt.registerTask('build-prod', [
@@ -402,17 +358,8 @@ module.exports = function (grunt) {
         'copy:main',
         'processhtml:main'
     ]);
-    grunt.registerTask('deploy-prod', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:prod'
-        //,'sshexec:prod'
-    ]);
-    grunt.registerTask('deploy-stage', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:stage',
-        'sshexec:stage'
+    grunt.registerTask('deploy', [
+        'copy:toDts'
     ]);
     grunt.registerTask('sauce', [
         'jasmine:main:build',

@@ -11,7 +11,7 @@ define([
 
             this.map = new BaseMap(mapDiv, {
                 showAttribution: false,
-                defaultBaseMap: "Lite"
+                defaultBaseMap: "Hybrid"
             });
         }
     };
