@@ -102,7 +102,7 @@ module.exports = function (grunt) {
     ];
     var secrets;
     var sauceConfig = {
-        urls: ['http://127.0.0.1:8001/_SpecRunner.html'],
+        urls: ['http://127.0.0.1:' + jasminePort + '/_SpecRunner.html'],
         tunnelTimeout: 120,
         build: process.env.TRAVIS_JOB_ID,
         browsers: browsers,
@@ -242,13 +242,13 @@ module.exports = function (grunt) {
                 options: {
                     specs: ['src/app/**/Spec*.js'],
                     vendor: [
-                        'src/app/tests/jasmineAMDErrorChecking.js',
-                        'src/app/tests/jasmineTestBootstrap.js',
-                        'src/app/tests/jsReporterSanitizer.js',
-                        'src/dojo/dojo.js',
-                        'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
                         'src/jasmine-favicon-reporter/vendor/favico.js',
-                        'src/jasmine-jsreporter/jasmine-jsreporter.js'
+                        'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
+                        'src/jasmine-jsreporter/jasmine-jsreporter.js',
+                        'src/app/tests/jasmineTestBootstrap.js',
+                        'src/dojo/dojo.js',
+                        'src/app/tests/jsReporterSanitizer.js',
+                        'src/app/tests/jasmineAMDErrorChecking.js'
                     ],
                     host: 'http://localhost:' + jasminePort
                 }
