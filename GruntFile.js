@@ -110,7 +110,7 @@ module.exports = function (grunt) {
         maxRetries: 10,
         maxPollRetries: 10,
         'public': 'public',
-        throttled: 3,
+        throttled: 5,
         sauceConfig: {
             'max-duration': 1800
         },
