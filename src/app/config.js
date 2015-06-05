@@ -22,6 +22,21 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
         urls: {
+            mapService: '/arcgis/rest/services/WRI/MapService/MapServer'
+        },
+
+        layerIndices: {
+            point: 0,
+            line: 1,
+            poly: 2
+        },
+
+        fieldNames: {
+            Project_ID: 'Project_ID'
+        },
+
+        topics: {
+            projectIdsChanged: 'wri/projectIdsChanged'
         }
     };
 
@@ -31,6 +46,11 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-AC122FA9671436';
+
+        var fragment = window.AGRC.urls.mapService;
+        window.AGRC.urls.MapService = 'https://wrimaps.at.utah.gov' + fragment;
+
+        esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
     } else {
         // localhost
         window.AGRC.apiKey = 'AGRC-E5B94F99865799';

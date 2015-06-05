@@ -1,8 +1,8 @@
 {
-    "name": "Atlas.app",
-    "version": "2.5.0",
+    "name": "wri-web",
+    "version": "0.1.0",
     "main": "main",
-    "description": "AGRC Boilerplate",
-    "homepage": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate",
+    "description": "watershed restoration mapping",
+    "homepage": "https://github.com/agrc/wri-web",
     "dojoBuild": "app.profile.js"
 }
