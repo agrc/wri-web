@@ -39,7 +39,7 @@ define([
 
         startup: function () {
             // summary:
-            //      description
+            //      spin up and get everything set up
             console.log('app/router::startup', arguments);
 
             topic.subscribe('/dojo/hashchange', lang.hitch(this, 'onHashChange'));
@@ -51,7 +51,9 @@ define([
         },
         onHashChange: function (newHash) {
             // summary:
-            //      fires anytime the hash in the URL changes
+            //      Fires anytime the hash in the URL changes.
+            //      Check for changes to hash props that we care about
+            //      and fire relevant events.
             // newHash: String
             console.log('app/router:onHashChange', arguments);
 
@@ -88,7 +90,7 @@ define([
         },
         getProjectsWhereClause: function () {
             // summary:
-            //      returns a where class for the current project ids
+            //      returns a definition query containing the current project ids
             // returns: String
             console.log('app/router:getProjectsWhereClause', arguments);
 
@@ -113,6 +115,7 @@ define([
 
             var that = this;
             var makeRequest = function (index) {
+                // query for extent of all features that match the query
                 var url = dojoString.substitute('${0}/${1}/query', [config.urls.mapService, index]);
                 return request.get(url, {
                     query: {

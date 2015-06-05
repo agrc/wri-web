@@ -34,7 +34,7 @@ define([
 
         initMap: function (mapDiv) {
             // summary:
-            //      Sets up the map
+            //      Sets up the map and layers
             console.info('app/mapController/initMap', arguments);
 
             var that = this;
@@ -42,6 +42,9 @@ define([
                 showAttribution: false,
                 defaultBaseMap: "Hybrid"
             });
+
+            // suspend base map layer until we get the initial extent
+            // trying to save requests to the server
             var baseLayer = that.map.getLayer(that.map.layerIds[0]);
             baseLayer.suspend();
 
@@ -55,13 +58,14 @@ define([
         },
         selectLayers: function () {
             // summary:
-            //      selects the feature layers appropriate for the current project ids
+            //      selects the feature layers based upon the current project ids
             // returns: Promise
             console.log('app/mapController:selectLayers', arguments);
 
             var def = new Deferred();
             var q = new Query();
             q.where = router.getProjectsWhereClause();
+            // don't show all features for feature layers
             if (q.where !== '1 = 1') {
                 this.layers.forEach(function (lyr) {
                     lyr.selectFeatures(q);
@@ -85,6 +89,7 @@ define([
                     def.resolve();
                 });
             } else {
+                // TODO: show centroids
                 def.resolve();
             }
 
