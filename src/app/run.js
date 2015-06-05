@@ -18,6 +18,7 @@
             'dojox',
             'esri',
             'ijit',
+            'lodash',
             'proj4',
             'put-selector',
             'xstyle',

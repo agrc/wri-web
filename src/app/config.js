@@ -22,6 +22,17 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
         urls: {
+            mapService: '/arcgis/rest/services/WRI/MapService/MapServer'
+        },
+
+        layerIndices: {
+            point: 0,
+            line: 1,
+            poly: 2
+        },
+
+        fieldNames: {
+            Project_ID: 'Project_ID'
         }
     };
 

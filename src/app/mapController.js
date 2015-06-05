@@ -1,17 +1,28 @@
 define([
-    'agrc/widgets/map/BaseMap'
+    'agrc/widgets/map/BaseMap',
+
+    'app/router',
+
+    'dojo/when'
 ], function (
-    BaseMap
+    BaseMap,
+
+    router,
+
+    when
 ) {
     return {
         initMap: function (mapDiv) {
             // summary:
             //      Sets up the map
-            console.info('app.App::initMap', arguments);
+            console.info('mapController/initMap', arguments);
 
-            this.map = new BaseMap(mapDiv, {
-                showAttribution: false,
-                defaultBaseMap: "Hybrid"
+            when(router.getInitialExtent(), function (extent) {
+                this.map = new BaseMap(mapDiv, {
+                    showAttribution: false,
+                    defaultBaseMap: "Hybrid",
+                    extent: extent
+                });
             });
         }
     };

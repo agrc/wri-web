@@ -2,6 +2,7 @@ define([
     './config',
 
     'app/mapController',
+    'app/router',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -17,6 +18,7 @@ define([
     config,
 
     mapController,
+    router,
 
     _TemplatedMixin,
     _WidgetBase,
