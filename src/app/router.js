@@ -56,11 +56,18 @@ define([
             console.log('app/router:onHashChange', arguments);
 
             var newProps = ioQuery.queryToObject(newHash);
-            newProps.id = (typeof newProps.id === 'string') ? [newProps.id] : newProps.id;
-            if (difference(newProps.id.sort(), this.projectIds.sort()).length > 0) {
+
+            if (!newProps.id) {
+                newProps.id = [];
+            } else {
+                newProps.id = (typeof newProps.id === 'string') ? [newProps.id] : newProps.id;
+            }
+
+            if (difference(newProps.id, this.projectIds).length > 0 ||
+                difference(this.projectIds, newProps.id).length > 0) {
+                this.projectIds = newProps.id;
                 this.onIdsChange(newProps.id);
             }
-            this.projectIds = newProps.id;
         },
         setHash: function (props) {
             // summary:
@@ -71,35 +78,46 @@ define([
 
             hash(ioQuery.objectToQuery(props));
         },
-        onIdsChange: function (/*newIds*/) {
+        onIdsChange: function (newIds) {
             // summary:
             //      fires when the project ids in the hash have changed
             // newIds: String[]
             console.log('app/router:onIdsChange', arguments);
 
+            topic.publish(config.topics.projectIdsChanged, newIds);
         },
-        getInitialExtent: function () {
+        getProjectsWhereClause: function () {
+            // summary:
+            //      returns a where class for the current project ids
+            // returns: String
+            console.log('app/router:getProjectsWhereClause', arguments);
+
+            if (this.projectIds.length === 0) {
+                return '1 = 1';
+            }
+            var id_nums = this.projectIds.map(function (id) {
+                return parseInt(id, 10);
+            });
+            return dojoString.substitute('${0} IN (${1})', [config.fieldNames.Project_ID, id_nums]);
+        },
+        getProjectIdsExtent: function () {
             // summary:
             //      if there are existing id(s) then query the server and return extent
             //      otherwise return null so that the default extent is used
             // returns: Promise || null
-            console.log('app/router:getInitialExtent', arguments);
+            console.log('app/router:getProjectIdsExtent', arguments);
 
-            if (!this.projectIds) {
+            if (this.projectIds.length === 0) {
                 return null;
             }
 
-            var id_nums = this.projectIds.map(function (id) {
-                return parseInt(id, 10);
-            });
-            var where = dojoString.substitute('${0} IN (${1})', [config.fieldNames.Project_ID, id_nums]);
-
+            var that = this;
             var makeRequest = function (index) {
                 var url = dojoString.substitute('${0}/${1}/query', [config.urls.mapService, index]);
                 return request.get(url, {
                     query: {
                         returnExtentOnly: true,
-                        where: where,
+                        where: that.getProjectsWhereClause(),
                         f: 'json'
                     },
                     handleAs: 'json'

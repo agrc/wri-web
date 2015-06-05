@@ -37,13 +37,18 @@ require([
                 router.onHashChange('id=1&id=2&id=3');
 
                 expect(router.projectIds).toEqual(['1', '2', '3']);
+
+                router.onHashChange('test=1');
+
+                expect(router.projectIds).toEqual([]);
             });
             it('calls update functions if new values', function () {
                 router.projectIds = [];
                 router.onHashChange('id=1');
                 router.onHashChange('id=1&id=2');
+                router.onHashChange('id=1');
 
-                expect(router.onIdsChange.calls.count()).toBe(2);
+                expect(router.onIdsChange.calls.count()).toBe(3);
             });
             it('doesn\'t call update if not new values', function () {
                 router.projectIds = ['1'];
@@ -54,16 +59,22 @@ require([
                 expect(router.onIdsChange).not.toHaveBeenCalled();
             });
         });
-        describe('getInitialExtent', function () {
+        describe('getProjectIdsExtent', function () {
             it('returns null if there are no project ids', function () {
-                router.projectIds = null;
+                router.projectIds = [];
 
-                expect(router.getInitialExtent()).toBeNull();
+                expect(router.getProjectIdsExtent()).toBeNull();
             });
             it('returns a promise if there are project ids', function () {
                 router.projectIds = ['1', '2'];
 
-                expect(router.getInitialExtent()).toEqual(jasmine.any(Promise));
+                expect(router.getProjectIdsExtent()).toEqual(jasmine.any(Promise));
+            });
+        });
+        describe('getProjectsWhereClause', function () {
+            it('returns 1=1 if not project ids are specified', function () {
+                router.projectIds = [];
+                expect(router.getProjectsWhereClause()).toBe('1 = 1');
             });
         });
     });

@@ -33,6 +33,10 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         fieldNames: {
             Project_ID: 'Project_ID'
+        },
+
+        topics: {
+            projectIdsChanged: 'wri/projectIdsChanged'
         }
     };
 
