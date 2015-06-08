@@ -142,7 +142,7 @@ define([
                         if (!unionedExtent) {
                             unionedExtent = newExtent;
                         } else {
-                            unionedExtent.union(newExtent);
+                            unionedExtent = unionedExtent.union(newExtent);
                         }
                     }
                 });
