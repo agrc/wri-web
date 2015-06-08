@@ -1,13 +1,11 @@
 require([
     'app/router',
 
-    'dojo/hash',
-    'dojo/promise/Promise'
+    'dojo/hash'
 ], function (
     router,
 
-    hash,
-    Promise
+    hash
 ) {
     describe('app/router', function () {
         afterEach(function () {
@@ -57,24 +55,6 @@ require([
                 router.onHashChange('id=2&id=1');
 
                 expect(router.onIdsChange).not.toHaveBeenCalled();
-            });
-        });
-        describe('getProjectIdsExtent', function () {
-            it('returns null if there are no project ids', function () {
-                router.projectIds = [];
-
-                expect(router.getProjectIdsExtent()).toBeNull();
-            });
-            it('returns a promise if there are project ids', function () {
-                router.projectIds = ['1', '2'];
-
-                expect(router.getProjectIdsExtent()).toEqual(jasmine.any(Promise));
-            });
-        });
-        describe('getProjectsWhereClause', function () {
-            it('returns 1=1 if not project ids are specified', function () {
-                router.projectIds = [];
-                expect(router.getProjectsWhereClause()).toBe('1 = 1');
             });
         });
     });

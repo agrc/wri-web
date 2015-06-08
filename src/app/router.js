@@ -11,6 +11,7 @@ define([
     'dojo/topic',
 
     'esri/geometry/Extent',
+    'esri/graphicsUtils',
 
     'lodash/array/difference'
 ], function (
@@ -26,6 +27,7 @@ define([
     topic,
 
     Extent,
+    graphicsUtils,
 
     difference
 ) {
@@ -102,55 +104,28 @@ define([
             });
             return dojoString.substitute('${0} IN (${1})', [config.fieldNames.Project_ID, id_nums]);
         },
-        getProjectIdsExtent: function () {
+        unionGraphicsIntoExtent: function (graphics) {
             // summary:
-            //      if there are existing id(s) then query the server and return extent
-            //      otherwise return null so that the default extent is used
-            // returns: Promise || null
-            console.log('app/router:getProjectIdsExtent', arguments);
+            //      gets the extent from graphics
+            // graphics
+            console.log('app/router::unionGraphicsIntoExtent', arguments);
 
-            if (this.projectIds.length === 0) {
-                return null;
-            }
+            var unionedExtent;
 
-            var that = this;
-            var makeRequest = function (index) {
-                // query for extent of all features that match the query
-                var url = dojoString.substitute('${0}/${1}/query', [config.urls.mapService, index]);
-                return request.get(url, {
-                    query: {
-                        returnExtentOnly: true,
-                        where: that.getProjectsWhereClause(),
-                        f: 'json'
-                    },
-                    handleAs: 'json'
-                });
-            };
+            graphics.forEach(function (e) {
+                if (!e || e.length < 1) {
+                    return null;
+                }
 
-            var promises = [];
-            var li = config.layerIndices;
-            [li.point, li.line, li.poly].forEach(function (i) {
-                promises.push(makeRequest(i));
+                var newExtent = graphicsUtils.graphicsExtent(e);
+                if (!unionedExtent) {
+                    unionedExtent = newExtent;
+                } else {
+                    unionedExtent = unionedExtent.union(newExtent);
+                }
             });
 
-            var def = new Deferred();
-            all(promises).then(function (extents) {
-                var unionedExtent;
-                extents.forEach(function (e) {
-                    if (!isNaN(e.extent.xmin)) {
-                        var newExtent = new Extent(e.extent);
-                        if (!unionedExtent) {
-                            unionedExtent = newExtent;
-                        } else {
-                            unionedExtent = unionedExtent.union(newExtent);
-                        }
-                    }
-                });
-
-                def.resolve(unionedExtent);
-            });
-
-            return def.promise;
+            return unionedExtent;
         }
     };
 

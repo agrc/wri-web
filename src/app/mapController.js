@@ -7,7 +7,7 @@ define([
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/topic',
-    'dojo/when',
+    'dojo/promise/all',
 
     'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
@@ -21,7 +21,7 @@ define([
     lang,
     Deferred,
     topic,
-    when,
+    all,
 
     Extent,
     FeatureLayer,
@@ -64,15 +64,18 @@ define([
 
             var def = new Deferred();
             var q = new Query();
+
             q.where = router.getProjectsWhereClause();
             // don't show all features for feature layers
             if (q.where !== '1 = 1') {
+                var deferreds = [];
+
                 this.layers.forEach(function (lyr) {
-                    lyr.selectFeatures(q);
+                    deferreds.push(lyr.selectFeatures(q));
                 });
                 var that = this;
-                when(router.getProjectIdsExtent(), function (extent) {
-                    if (extent === null) {
+                all(deferreds).then(function (graphics) {
+                    if (graphics === null) {
                         // state of utah extent
                         that.map.setExtent(new Extent({
                             xmax: 696328,
@@ -84,6 +87,7 @@ define([
                             }
                         }));
                     } else {
+                        var extent = router.unionGraphicsIntoExtent(graphics);
                         that.map.setExtent(extent, true);
                     }
                     def.resolve();
