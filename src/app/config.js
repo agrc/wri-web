@@ -46,6 +46,11 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-AC122FA9671436';
+
+        var fragment = window.AGRC.urls.mapService;
+        window.AGRC.urls.MapService = 'https://wrimaps.at.utah.gov' + fragment;
+
+        esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
     } else {
         // localhost
         window.AGRC.apiKey = 'AGRC-E5B94F99865799';
