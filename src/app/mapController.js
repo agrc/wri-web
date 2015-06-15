@@ -71,6 +71,7 @@ define([
                 this.layers.forEach(function (lyr) {
                     deferreds.push(lyr.selectFeatures(q));
                 });
+
                 var that = this;
                 all(deferreds).then(function (graphics) {
                     if (graphics === null) {
@@ -100,6 +101,7 @@ define([
         addLayers: function () {
             // summary:
             //      Adds the layers to the map
+            // returns: Promise when all layers have been loaded
             console.log('app/mapController:addLayers', arguments);
 
             var li = config.layerIndices;
