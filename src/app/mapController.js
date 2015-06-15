@@ -48,9 +48,7 @@ define([
             var baseLayer = that.map.getLayer(that.map.layerIds[0]);
             baseLayer.suspend();
 
-            that.addLayers();
-
-            that.map.on('load', function () {
+            that.addLayers().then(function () {
                 that.selectLayers().then(lang.hitch(baseLayer, 'resume'));
             });
 
@@ -106,13 +104,26 @@ define([
 
             var li = config.layerIndices;
             var that = this;
+            var deferreds = [];
+
             [li.poly, li.line, li.point].forEach(function (i) {
-                that.layers.push(new FeatureLayer(config.urls.mapService + '/' + i, {
+                var layer = new FeatureLayer(config.urls.mapService + '/' + i, {
                     mode: FeatureLayer.MODE_SELECTION
-                }));
+                });
+
+                var deferred = new Deferred();
+
+                layer.on('load', function () {
+                    deferred.resolve();
+                });
+
+                deferreds.push(deferred);
+                that.layers.push(layer);
             });
 
             this.map.addLayers(this.layers);
+
+            return all(deferreds);
         }
     };
 });
