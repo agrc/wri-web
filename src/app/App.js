@@ -12,6 +12,9 @@ define([
     'dojo/_base/declare',
     'dojo/text!app/templates/App.html',
 
+    'esri/dijit/HomeButton',
+    'esri/geometry/Extent',
+
     'dijit/layout/BorderContainer',
     'dijit/layout/ContentPane'
 ], function (
@@ -26,7 +29,10 @@ define([
 
     array,
     declare,
-    template
+    template,
+
+    HomeButton,
+    Extent
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -72,6 +78,24 @@ define([
             });
 
             mapController.initMap(this.mapDiv);
+
+            var homeBtn = new HomeButton({
+                map: mapController.map,
+
+                // hard-wire state of utah extent in case the
+                // initial page load is not utah
+                extent: new Extent({
+                    xmax: 696328,
+                    xmin: 207131,
+                    ymax: 4785283,
+                    ymin: 3962431,
+                    spatialReference: {
+                        wkid: 26912
+                    }
+                })
+            }, this.homeButtonDiv);
+            homeBtn.startup();
+            this.childWidgets.push(homeBtn);
 
             this.inherited(arguments);
         }
