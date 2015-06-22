@@ -344,7 +344,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/',
-                    src: ['app/**/*.styl'],
+                    src: ['app/resources/App.styl'],
                     dest: 'src/',
                     ext: '.css'
                 }]
@@ -363,7 +363,7 @@ module.exports = function (grunt) {
             },
             stylus: {
                 files: 'src/app/**/*.styl',
-                tasks: ['newer:stylus']
+                tasks: ['stylus']
             }
         }
     });

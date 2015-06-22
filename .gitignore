@@ -10,7 +10,7 @@ node_modules/
 secrets.json
 src/agrc/
 src/app/**/*.css
-src/bootstrap/
+src/bootstrap-stylus/
 src/components-jasmine/
 src/dgrid/
 src/dijit/
