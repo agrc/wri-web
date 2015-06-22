@@ -1,27 +1,29 @@
 define([
     'agrc/widgets/map/BaseMap',
+    'agrc/widgets/map/BaseMapSelector',
 
     'app/config',
     'app/router',
 
     'dojo/_base/lang',
     'dojo/Deferred',
-    'dojo/topic',
     'dojo/promise/all',
+    'dojo/topic',
 
     'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
     'esri/tasks/query'
 ], function (
     BaseMap,
+    BaseMapSelector,
 
     config,
     router,
 
     lang,
     Deferred,
-    topic,
     all,
+    topic,
 
     Extent,
     FeatureLayer,
@@ -37,23 +39,30 @@ define([
             //      Sets up the map and layers
             console.info('app/mapController/initMap', arguments);
 
-            var that = this;
-            that.map = new BaseMap(mapDiv, {
+            this.map = new BaseMap(mapDiv, {
                 showAttribution: false,
-                defaultBaseMap: 'Hybrid',
+                useDefaultBaseMap: false,
                 sliderOrientation: 'horizontal'
+            });
+
+            new BaseMapSelector({
+                map: this.map,
+                id: 'tundra',
+                position: 'TR',
+                defaultThemeLabel: 'Hybrid'
             });
 
             // suspend base map layer until we get the initial extent
             // trying to save requests to the server
-            var baseLayer = that.map.getLayer(that.map.layerIds[0]);
+            var baseLayer = this.map.getLayer(this.map.layerIds[0]);
             baseLayer.suspend();
 
-            that.addLayers().then(function () {
+            var that = this;
+            this.addLayers().then(function () {
                 that.selectLayers().then(lang.hitch(baseLayer, 'resume'));
             });
 
-            topic.subscribe(config.topics.projectIdsChanged, lang.hitch(that, 'selectLayers'));
+            topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'selectLayers'));
         },
         selectLayers: function () {
             // summary:
