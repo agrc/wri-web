@@ -147,7 +147,15 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ['dist']
+            build: ['dist'],
+            all: {
+                options: {
+                    force: true
+                },
+                files: [{
+                    cwd: 'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/'
+                }]
+            }
         },
         connect: {
             server: {
@@ -179,10 +187,43 @@ module.exports = function (grunt) {
                     dest: 'dist/'
                 }]
             },
-            toDts: {
+            all: {
+                files: [{
+                    src: ['**',
+                        '!**/*.uncompressed.js',
+                        '!**/*consoleStripped.js',
+                        '!**/bootstrap/less/**',
+                        '!**/bootstrap/test-infra/**',
+                        '!**/tests/**',
+                        '!build-report.txt',
+                        '!components-jasmine/**',
+                        '!favico.js/**',
+                        '!jasmine-favicon-reporter/**',
+                        '!jasmine-jsreporter/**',
+                        '!stubmodule/**',
+                        '!util/**',
+                        '!**/_SpecRunner.html',
+                        '!**/*.profile.js',
+                        '!**/*.sublime-project',
+                        '!**/bower.json',
+                        '!**/LICENSE.md',
+                        '!**/README.md',
+                        '!**/secrets.json.sample',
+                        '!**/*.styl',
+                        '!index.html',
+                        '!ChangeLog.html',
+                        '!**/Gruntfile.*'
+
+                    ],
+                    dest: 'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/',
+                    cwd: 'dist/',
+                    expand: true
+                }]
+            },
+            dts: {
                 files: {
                     'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/dojo/dojo.js',
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/css/agrc/App.css': 'C:/Projects/GitHub/wri-web/dist/app/resources/App.css'
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/app/resources/App.css'
                 }
             }
         },
@@ -359,7 +400,7 @@ module.exports = function (grunt) {
         'processhtml:main'
     ]);
     grunt.registerTask('deploy', [
-        'copy:toDts'
+        'copy:dts'
     ]);
     grunt.registerTask('sauce', [
         'jasmine:main:build',
