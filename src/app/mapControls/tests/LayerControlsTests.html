@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LayerControls Tests</title>
+
+    <!-- META TAGS -->
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+       <link rel="stylesheet" type="text/css" href="../../../dts/dnr-style.css">
+    <link rel="stylesheet" href="../../resources/App.css">
+
+    <!-- JAVASCRIPT -->
+    <script type='text/javascript' src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../../';
+var widgetUnderTest;
+
+require({
+    baseUrl: baseUrl,
+    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
+    {
+        name: 'jquery',
+        location: 'jquery/dist',
+        main: 'jquery'
+    }]
+}, [
+    'app/mapControls/LayerControls',
+    'app/mapControls/LayerItem',
+
+    'dojo/domReady!'
+], function (Module, LayerItem) {
+    widgetUnderTest = new Module({
+        layers: [
+            new LayerItem({name: 'GNIS'})
+        ]
+    }, 'node');
+
+    widgetUnderTest.startup();
+});
+</script>
+</head>
+<body>
+    <div class="project-container">
+        <div id="node"></div>
+    </div>
+</body>
+</html>

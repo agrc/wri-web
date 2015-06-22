@@ -129,7 +129,5 @@ define([
         }
     };
 
-    obj.startup();
-
     return obj;
 });

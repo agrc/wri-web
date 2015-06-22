@@ -12,10 +12,13 @@
         packages: [
             'agrc',
             'app',
+            'bootstrap-stylus',
             'dgrid',
+            'dgrid0.3',
             'dijit',
             'dojo',
             'dojox',
+            'dstore',
             'esri',
             'ijit',
             'lodash',
@@ -47,7 +50,12 @@
                 location: './stubmodule',
                 main: 'src/stub-module'
             }
-        ]
+        ],
+        map: {
+            'esri': {
+                dgrid: 'dgrid0.3'
+            }
+        }
     };
     require(config, ['dojo/parser', 'jquery', 'dojo/domReady!'], function (parser) {
         parser.parse();

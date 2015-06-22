@@ -12,9 +12,15 @@
     "util": "dojo-util#^1.10",
     "jasmine-jsreporter": "^0.1.2",
     "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d",
-    "lodash": "3.9.3-amd"
+    "lodash": "3.9.3-amd",
+    "bootstrap-stylus": "~4.0.4",
+    "dstore": "~1.1.0",
+    "dgrid": "~0.4.0",
+    "dgrid0.3": "dgrid#0.3.17"
   },
   "resolutions": {
-    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d"
+    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d",
+    "dstore": "~1.1.0",
+    "dgrid": "~0.4.0"
   }
 }

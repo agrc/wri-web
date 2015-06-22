@@ -1,6 +1,18 @@
 @import '../../esri/css/esri.css';
 @import '../../agrc/resources/map/BaseMap.css';
 @import '../../agrc/resources/map/BaseMapSelector.css';
+@require '../../bootstrap-stylus/bootstrap/variables';
+$nav-tabs-border-color = #fff
+$nav-tabs-active-link-hover-border-color = #fff
+@require '../../bootstrap-stylus/bootstrap/mixins';
+@require '../../bootstrap-stylus/bootstrap/normalize';
+@require '../../bootstrap-stylus/bootstrap/utilities';
+@require '../project/resources/ProjectDetails';
+@require '../project/resources/FeaturesGrid';
+@require '../project/resources/ProjectContainer';
+@require '../mapControls/resources/LayerControls';
+@require '../mapControls/resources/LayerItem';
+@require '../project/resources/FeatureDetails';
 
 html, body, .app
     width 100%
@@ -9,14 +21,34 @@ html, body, .app
     padding 0
     overflow hidden
 
-    /* CENTER (MAP) */
-    [data-dojo-attach-point=mapDiv]
+#content-wrapper
+    position absolute
+    top 125px + 31px
+    bottom 100px
+    left 0
+    right 0
+    @media screen and (max-width: 600px)
+        top 47px
+    
+#content, #content #content-map
+    position absolute
+    padding 0
+    top 0
+    bottom 0
+    right 0
+    left 0
+    height auto
+
+#footer-wrapper
+    position absolute
+    bottom 0
+
+.app [data-dojo-attach-point=mapDiv]
         position absolute
         top 0
         bottom 0
         left 0
         right 0
-
         .HomeButton
             position absolute
             top 20px
@@ -28,4 +60,3 @@ html, body, .app
         .agrc .selectorMain
             top 17px
             right 10px
-    

@@ -1,3 +1,4 @@
+*.gdb
 *.odc
 *.pyc
 *.sde
@@ -10,12 +11,15 @@ node_modules/
 secrets.json
 src/agrc/
 src/app/**/*.css
+src/bootstrap-stylus/
 src/bootstrap/
 src/components-jasmine/
 src/dgrid/
+src/dgrid0.3/
 src/dijit/
 src/dojo/
 src/dojox/
+src/dstore/
 src/esri/
 src/favico.js/
 src/ijit/

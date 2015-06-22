@@ -5,6 +5,28 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
 
+    var apiKey;
+    var gisServerBaseUrl;
+    var apiEndpoint;
+    if (has('agrc-build') === 'prod') {
+        // mapserv.utah.gov
+        apiKey = 'AGRC-A94B063C533889';
+        gisServerBaseUrl = 'https://wrimaps.utah.gov';
+        apiEndpoint = '';
+    } else if (has('agrc-build') === 'stage') {
+        // test.mapserv.utah.gov
+        apiKey = 'AGRC-AC122FA9671436';
+        gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
+        apiEndpoint = '';
+    } else {
+        // localhost
+        apiKey = 'AGRC-E5B94F99865799';
+        gisServerBaseUrl = '';
+        apiEndpoint = '/wri';
+    }
+    esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
+    var selectionColor = [255, 255, 0];
+
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -19,10 +41,11 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
-        apiKey: '', // acquire at developer.mapserv.utah.gov
+        apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
         urls: {
-            mapService: '/arcgis/rest/services/WRI/MapService/MapServer'
+            mapService: gisServerBaseUrl + '/arcgis/rest/services/WRI/MapService/MapServer',
+            api: gisServerBaseUrl + apiEndpoint + '/api'
         },
 
         layerIndices: {
@@ -36,25 +59,45 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         },
 
         topics: {
-            projectIdsChanged: 'wri/projectIdsChanged'
+            projectIdsChanged: 'wri/projectIdsChanged',
+            featureSelected: 'wri/featureSelected'
+        },
+
+        symbols: {
+            selected: {
+                point: {
+                    type: "esriSMS",
+                    style: "esriSMSCircle",
+                    color: selectionColor,
+                    size: 10,
+                    angle: 0,
+                    xoffset: 0,
+                    yoffset: 0,
+                    outline: {
+                        color: [0, 0, 0, 255],
+                        width: 1
+                    }
+                },
+                line: {
+                    type: "esriSLS",
+                    style: "esriSLSSolid",
+                    color: selectionColor,
+                    width: 4
+                },
+                poly: {
+                    type: "esriSFS",
+                    style: "esriSFSSolid",
+                    color: selectionColor,
+                    outline: {
+                        type: "esriSLS",
+                        style: "esriSLSSolid",
+                        color: [110, 110, 110, 255],
+                        width: 0.5
+                    }
+                }
+            }
         }
     };
-
-    if (has('agrc-build') === 'prod') {
-        // mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-A94B063C533889';
-    } else if (has('agrc-build') === 'stage') {
-        // test.mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-AC122FA9671436';
-
-        var fragment = window.AGRC.urls.mapService;
-        window.AGRC.urls.mapService = 'https://wrimaps.at.utah.gov' + fragment;
-
-        esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
-    } else {
-        // localhost
-        window.AGRC.apiKey = 'AGRC-E5B94F99865799';
-    }
 
     return window.AGRC;
 });

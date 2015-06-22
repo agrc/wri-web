@@ -1,0 +1,25 @@
+<div>
+    <span class="title">${title} (${projectId})</span>
+    <span id='projectStatus-${status}' class='projectStatus pull-right'>${status}</span>
+    <div class="clearfix"></div>
+    <p>
+        <a href='#' role='button' class="btn btn-primary" data-toggle="button">Adjacent Projects</a>
+        <a href='#${id}_projectDetails' role='button' class="btn btn-primary" data-toggle="collapse">Application Details</a>
+    </p>
+    <div class="project-information collapse" id="${id}_projectDetails">
+        <div class="well">
+            <label>Description</label>
+            <p>${description}</p>
+            <label>Lead Agency:</label> <span>${leadAgency}</span>
+            <br>
+            <label>Acres:</label> <span>{acres}</span>
+            <br>
+            <div data-dojo-attach-point="streamMilesDiv">
+                <label>Stream Miles:</label> <span>{streamMiles}</span>
+            </div>
+            <label>Region:</label> <span>${region}</span>
+            <br>
+            <label>Project Manager:</label> <span>${projectManagerName}</span>
+        </div>
+    </div>
+</div>
