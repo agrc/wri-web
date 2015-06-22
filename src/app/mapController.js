@@ -40,7 +40,8 @@ define([
             var that = this;
             that.map = new BaseMap(mapDiv, {
                 showAttribution: false,
-                defaultBaseMap: "Hybrid"
+                defaultBaseMap: 'Hybrid',
+                sliderOrientation: 'horizontal'
             });
 
             // suspend base map layer until we get the initial extent
@@ -71,7 +72,6 @@ define([
                 this.layers.forEach(function (lyr) {
                     deferreds.push(lyr.selectFeatures(q));
                 });
-
                 var that = this;
                 all(deferreds).then(function (graphics) {
                     if (graphics === null) {
@@ -101,7 +101,6 @@ define([
         addLayers: function () {
             // summary:
             //      Adds the layers to the map
-            // returns: Promise when all layers have been loaded
             console.log('app/mapController:addLayers', arguments);
 
             var li = config.layerIndices;
