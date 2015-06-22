@@ -48,7 +48,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         window.AGRC.apiKey = 'AGRC-AC122FA9671436';
 
         var fragment = window.AGRC.urls.mapService;
-        window.AGRC.urls.MapService = 'https://wrimaps.at.utah.gov' + fragment;
+        window.AGRC.urls.mapService = 'https://wrimaps.at.utah.gov' + fragment;
 
         esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
     } else {
