@@ -17,6 +17,7 @@
             'dijit',
             'dojo',
             'dojox',
+            'dstore',
             'esri',
             'ijit',
             'lodash',

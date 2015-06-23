@@ -1,0 +1,132 @@
+[
+    {
+      "id": 0,
+      "featureId": 2,
+      "type": "Other",
+      "subType": null,
+      "action": null,
+      "origin": "point",
+      "parent": null,
+      "hasChildren": false
+    },
+    {
+      "id": 1,
+      "featureId": 3,
+      "type": "Other",
+      "subType": null,
+      "action": null,
+      "origin": "point",
+      "parent": null,
+      "hasChildren": false
+    },
+    {
+      "id": 2,
+      "featureId": 4,
+      "type": "Trough",
+      "subType": null,
+      "action": null,
+      "origin": "point",
+      "parent": null,
+      "hasChildren": false
+    },
+    {
+      "id": 3,
+      "featureId": 5,
+      "type": "Trough",
+      "subType": null,
+      "action": null,
+      "origin": "point",
+      "parent": null,
+      "hasChildren": false
+    },
+    {
+      "id": 4,
+      "featureId": 294,
+      "type": "Pipeline",
+      "subType": "Below surface",
+      "action": "Construction",
+      "origin": "line",
+      "parent": null,
+      "hasChildren": false
+    },
+    {
+      "id": 5,
+      "featureId": 1139,
+      "type": "",
+      "subType": "Seeding (primary)",
+      "action": ">15 ft. (1-way)",
+      "origin": "poly",
+      "parent": 11,
+      "hasChildren": false
+    },
+    {
+      "id": 6,
+      "featureId": 1139,
+      "type": "",
+      "subType": "Seeding (primary)",
+      "action": "Aerial (fixed-wing)",
+      "origin": "poly",
+      "parent": 11,
+      "hasChildren": false
+    },
+    {
+      "id": 7,
+      "featureId": 1140,
+      "type": "",
+      "subType": "Skid-steer mounted tree cutter",
+      "action": "2-way",
+      "origin": "poly",
+      "parent": 12,
+      "hasChildren": false
+    },
+    {
+      "id": 8,
+      "featureId": 1140,
+      "type": "",
+      "subType": "Skid-steer mounted tree cutter",
+      "action": "Off-set (1-way)",
+      "origin": "poly",
+      "parent": 12,
+      "hasChildren": false
+    },
+    {
+      "id": 9,
+      "featureId": 1140,
+      "type": "",
+      "subType": "Skid-steer mounted tree cutter",
+      "action": "Off-set (2-way)",
+      "origin": "poly",
+      "parent": 12,
+      "hasChildren": false
+    },
+    {
+      "id": 10,
+      "featureId": 1141,
+      "type": "Terrestrial",
+      "subType": "Road decommissioning",
+      "action": "Prescribed Fire",
+      "origin": "poly",
+      "parent": null,
+      "hasChildren": false
+    },
+    {
+      "id": 11,
+      "featureId": 1139,
+      "type": "Terrestrial",
+      "subType": "",
+      "action": "",
+      "origin": "poly",
+      "parent": null,
+      "hasChildren": true
+    },
+    {
+      "id": 12,
+      "featureId": 1140,
+      "type": "Terrestrial",
+      "subType": "",
+      "action": "",
+      "origin": "poly",
+      "parent": null,
+      "hasChildren": true
+    }
+  ]

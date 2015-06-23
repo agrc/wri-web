@@ -16,6 +16,7 @@
     "bootstrap-stylus": "~4.0.4"
   },
   "resolutions": {
-    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d"
+    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d",
+    "dgrid": "~0.4.0"
   }
 }
