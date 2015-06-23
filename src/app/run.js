@@ -12,6 +12,7 @@
         packages: [
             'agrc',
             'app',
+            'bootstrap-stylus',
             'dgrid',
             'dijit',
             'dojo',
@@ -23,10 +24,6 @@
             'put-selector',
             'xstyle',
             {
-                name: 'bootstrap',
-                location: './bootstrap',
-                main: 'dist/js/bootstrap'
-            }, {
                 name: 'jquery',
                 location: './jquery/dist',
                 main: 'jquery'
