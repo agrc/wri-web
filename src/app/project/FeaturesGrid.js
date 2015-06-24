@@ -68,6 +68,7 @@ define([
             var store = new (declare([Memory, DStoreTree]))({
                 data: this.features
             });
+
             this.grid = new (declare([Grid, Tree]))({
                 columns: columns,
                 collection: store.getRootCollection(),
@@ -75,6 +76,7 @@ define([
                     return true;
                 }
             }, this.gridDiv);
+
             aspect.after(this.grid, 'renderRow', function (row, args) {
                 console.log('args', args);
                 if (!args[0].hasChildren) {
@@ -83,9 +85,10 @@ define([
 
                 return row;
             });
+
             this.grid.startup();
-            this.grid.set('collection', store.getRootCollection());
-            this.grid.refresh();
+            // this.grid.set('collection', store.getRootCollection());
+            // this.grid.refresh();
 
             this.setupConnections();
 
