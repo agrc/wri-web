@@ -47,6 +47,7 @@ define([
         //     origin: String (point, line, poly),
         //     parent: Number,
         //     featureId: Number
+        //     size: String
         // }
         features: null,
 
@@ -87,6 +88,7 @@ define([
             });
 
             this.grid.startup();
+            // what is this for?
             // this.grid.set('collection', store.getRootCollection());
             // this.grid.refresh();
 

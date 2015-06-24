@@ -7,7 +7,8 @@
       "action": null,
       "origin": "point",
       "parent": null,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": null
     },
     {
       "id": 1,
@@ -17,7 +18,8 @@
       "action": null,
       "origin": "point",
       "parent": null,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": null
     },
     {
       "id": 2,
@@ -27,7 +29,8 @@
       "action": null,
       "origin": "point",
       "parent": null,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": null
     },
     {
       "id": 3,
@@ -37,7 +40,8 @@
       "action": null,
       "origin": "point",
       "parent": null,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": null
     },
     {
       "id": 4,
@@ -47,7 +51,8 @@
       "action": "Construction",
       "origin": "line",
       "parent": null,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": "2124.51 ft"
     },
     {
       "id": 5,
@@ -57,7 +62,8 @@
       "action": ">15 ft. (1-way)",
       "origin": "poly",
       "parent": 11,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": "163.08 mi²"
     },
     {
       "id": 6,
@@ -67,7 +73,8 @@
       "action": "Aerial (fixed-wing)",
       "origin": "poly",
       "parent": 11,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": "163.08 mi²"
     },
     {
       "id": 7,
@@ -77,7 +84,8 @@
       "action": "2-way",
       "origin": "poly",
       "parent": 12,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": "166.8 mi²"
     },
     {
       "id": 8,
@@ -87,7 +95,8 @@
       "action": "Off-set (1-way)",
       "origin": "poly",
       "parent": 12,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": "166.8 mi²"
     },
     {
       "id": 9,
@@ -97,7 +106,8 @@
       "action": "Off-set (2-way)",
       "origin": "poly",
       "parent": 12,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": "166.8 mi²"
     },
     {
       "id": 10,
@@ -107,26 +117,29 @@
       "action": "Prescribed Fire",
       "origin": "poly",
       "parent": null,
-      "hasChildren": false
+      "hasChildren": false,
+      "size": "122.77 mi²"
     },
     {
       "id": 11,
       "featureId": 1139,
       "type": "Terrestrial",
-      "subType": "",
-      "action": "",
-      "origin": "poly",
+      "subType": null,
+      "action": null,
+      "origin": null,
       "parent": null,
-      "hasChildren": true
+      "hasChildren": true,
+      "size": null
     },
     {
       "id": 12,
       "featureId": 1140,
       "type": "Terrestrial",
-      "subType": "",
-      "action": "",
-      "origin": "poly",
+      "subType": null,
+      "action": null,
+      "origin": null,
       "parent": null,
-      "hasChildren": true
+      "hasChildren": true,
+      "size": null
     }
   ]
