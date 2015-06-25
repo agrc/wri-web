@@ -45,9 +45,6 @@ define([
                 sliderOrientation: 'horizontal'
             });
 
-            this.map.reposition();
-            this.map.resize(true);
-
             new BaseMapSelector({
                 map: this.map,
                 id: 'tundra',
