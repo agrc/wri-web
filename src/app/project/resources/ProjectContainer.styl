@@ -1,1 +1,15 @@
-.project-container {}
+@require '../resources/vars.styl';
+@require '../resources/mixins.styl';
+
+.project-container
+    position absolute
+    top 60px
+    left 20px
+    width 450px
+    padding 10px
+    border-radius(5px)
+    background $projectBackground
+    border 1px $projectBorder solid
+    z-index 1
+    overflow-y auto
+

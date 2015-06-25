@@ -91,8 +91,7 @@ module.exports = function (grunt) {
     var internFile = 'tests/intern.js';
     var jsFiles = [
         jsAppFiles,
-        gruntFile,
-        internFile
+        gruntFile
     ];
     var bumpFiles = [
         'package.json',
@@ -318,7 +317,7 @@ module.exports = function (grunt) {
                 }
             },
             options: {
-                reporter: require('jshint-stylish'),
+                //reporter: require('jshint-stylish'),
                 jshintrc: '.jshintrc'
             }
         },
@@ -356,7 +355,7 @@ module.exports = function (grunt) {
             },
             jshint: {
                 files: jsFiles,
-                tasks: ['newer:jshint:main', 'newer:jscs:main', 'jasmine:main:build']
+                //tasks: ['newer:jshint:main', 'newer:jscs:main', 'jasmine:main:build']
             },
             src: {
                 files: jsFiles.concat(otherFiles)

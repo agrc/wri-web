@@ -6,23 +6,21 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
 
     var apiKey;
-    var mapServer;
+    var gisServerBaseUrl;
     if (has('agrc-build') === 'prod') {
         // mapserv.utah.gov
         apiKey = 'AGRC-A94B063C533889';
-        mapServer = 'https://wrimaps.utah.gov';
+        gisServerBaseUrl = 'https://wrimaps.utah.gov';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
         apiKey = 'AGRC-AC122FA9671436';
-
-        mapServer = 'https://wrimaps.at.utah.gov';
+        gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
     } else {
         // localhost
         apiKey = 'AGRC-E5B94F99865799';
-
-        mapServer = '';
+        gisServerBaseUrl = 'http://localhost/wri';
     }
-    esriConfig.defaults.io.corsEnabledServers.push(mapServer);
+    esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -41,8 +39,8 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
         urls: {
-            mapService: mapServer + '/arcgis/rest/services/WRI/MapService/MapServer',
-            api: mapServer + '/api'
+            mapService: gisServerBaseUrl + '/arcgis/rest/services/WRI/MapService/MapServer',
+            api: gisServerBaseUrl + '/api'
         },
 
         layerIndices: {

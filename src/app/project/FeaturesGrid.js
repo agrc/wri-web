@@ -87,7 +87,6 @@ define([
                 return row;
             });
 
-            this.grid.startup();
             // what is this for?
             // this.grid.set('collection', store.getRootCollection());
             // this.grid.refresh();

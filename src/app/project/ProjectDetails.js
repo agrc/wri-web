@@ -30,7 +30,7 @@ define([
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
-            console.log('app.ProjectDetails::postCreate', arguments);
+            console.log('app.project.ProjectDetails::postCreate', arguments);
 
             if (!this.streamMiles) {
                 domClass.add(this.streamMilesDiv, 'hidden');
@@ -42,7 +42,7 @@ define([
         setupConnections: function () {
             // summary:
             //      wire events, and such
-            console.log('app.ProjectDetails::setupConnections', arguments);
+            console.log('app.project.ProjectDetails::setupConnections', arguments);
 
         }
     });
