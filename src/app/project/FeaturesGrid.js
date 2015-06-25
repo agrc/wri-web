@@ -87,9 +87,9 @@ define([
                 return row;
             });
 
-            // what is this for?
-            // this.grid.set('collection', store.getRootCollection());
-            // this.grid.refresh();
+            // Sets up the selectable stuff above with the aspect.
+            this.grid.set('collection', store.getRootCollection());
+            this.grid.refresh();
 
             this.setupConnections();
 
