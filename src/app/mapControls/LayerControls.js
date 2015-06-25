@@ -3,9 +3,7 @@ define([
     'dijit/_WidgetBase',
 
     'dojo/_base/declare',
-    'dojo/text!app/mapControls/templates/LayerControls.html',
-
-    'xstyle/css!app/mapControls/resources/LayerControls.css'
+    'dojo/text!app/mapControls/templates/LayerControls.html'
 ], function (
     _TemplatedMixin,
     _WidgetBase,

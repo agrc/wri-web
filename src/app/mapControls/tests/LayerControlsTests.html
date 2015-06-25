@@ -6,13 +6,8 @@
     <!-- META TAGS -->
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="app/resources/App.css">
-    <style type='text/css'>
-        body {
-            padding: 50px;
-        }
-    </style>
+       <link rel="stylesheet" type="text/css" href="../../../dts/dnr-style.css">
+    <link rel="stylesheet" href="../../resources/App.css">
 
     <!-- JAVASCRIPT -->
     <script type='text/javascript' src="../../../dojo/dojo.js"></script>
@@ -22,15 +17,11 @@
 
         require({
             baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
+            packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
             {
                 name: 'jquery',
                 location: 'jquery/dist',
                 main: 'jquery'
-            },{
-                name: 'bootstrap',
-                location: 'bootstrap',
-                main: 'dist/js/bootstrap'
             }]
         }, [
             'app/mapControls/LayerControls',
@@ -45,6 +36,8 @@
 </script>
 </head>
 <body>
-    <div id="node"></div>
+    <div class="project-container">
+        <div id="node"></div>
+    </div>
 </body>
 </html>
