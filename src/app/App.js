@@ -96,7 +96,6 @@ define([
 
             this.childWidgets.push(homeBtn);
             this.childWidgets.push(this.projectContainer);
-            this.childWidgets.push(router);
 
             this.setupConnections();
         },
@@ -116,6 +115,8 @@ define([
                 that.own(widget);
                 widget.startup();
             });
+
+            router.startup();
 
             this.inherited(arguments);
         }
