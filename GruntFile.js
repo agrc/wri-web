@@ -158,7 +158,7 @@ module.exports = function (grunt) {
         connect: {
             options: {
                 livereload: true,
-                open: true
+                open: secrets.openOnConnect
             },
             server: {
                 options: {
@@ -173,11 +173,11 @@ module.exports = function (grunt) {
                 proxies: [
                     {
                         context: '/arcgis',
-                        host: 'localhost'
+                        host: secrets.devHost
                     },
                     {
                         context: '/wri/api',
-                        host: 'localhost'
+                        host: secrets.devHost
                     }
                 ]
             },
