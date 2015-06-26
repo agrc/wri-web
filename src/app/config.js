@@ -21,6 +21,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         gisServerBaseUrl = '';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
+    var selectionColor = [255, 255, 0];
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -54,7 +55,43 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         },
 
         topics: {
-            projectIdsChanged: 'wri/projectIdsChanged'
+            projectIdsChanged: 'wri/projectIdsChanged',
+            featureSelected: 'wri/featureSelected'
+        },
+
+        symbols: {
+            selected: {
+                point: {
+                    type: "esriSMS",
+                    style: "esriSMSCircle",
+                    color: selectionColor,
+                    size: 10,
+                    angle: 0,
+                    xoffset: 0,
+                    yoffset: 0,
+                    outline: {
+                        color: [0, 0, 0, 255],
+                        width: 1
+                    }
+                },
+                line: {
+                    type: "esriSLS",
+                    style: "esriSLSSolid",
+                    color: selectionColor,
+                    width: 4
+                },
+                poly: {
+                    type: "esriSFS",
+                    style: "esriSFSSolid",
+                    color: selectionColor,
+                    outline: {
+                        type: "esriSLS",
+                        style: "esriSLSSolid",
+                        color: [110, 110, 110, 255],
+                        width: 0.5
+                    }
+                }
+            }
         }
     };
 

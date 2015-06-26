@@ -1,4 +1,6 @@
 define([
+    'app/config',
+
     'dgrid/OnDemandGrid',
     'dgrid/Tree',
 
@@ -10,10 +12,13 @@ define([
     'dojo/aspect',
     'dojo/dom-class',
     'dojo/text!app/project/templates/FeaturesGrid.html',
+    'dojo/topic',
 
     'dstore/Memory',
     'dstore/Tree'
 ], function (
+    config,
+
     Grid,
     Tree,
 
@@ -25,6 +30,7 @@ define([
     aspect,
     domClass,
     template,
+    topic,
 
     Memory,
     DStoreTree
@@ -100,6 +106,12 @@ define([
             //      wire events, and such
             console.log('app.project.FeaturesGrid::setupConnections', arguments);
 
+            var that = this;
+            this.own(
+                this.grid.on('.dgrid-row.selectable:click', function (evt) {
+                    topic.publish(config.topics.featureSelected, that.grid.row(evt).data);
+                })
+            );
         }
     });
 });

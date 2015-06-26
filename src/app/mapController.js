@@ -12,6 +12,7 @@ define([
 
     'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
+    'esri/symbols/SimpleMarkerSymbol',
     'esri/tasks/query'
 ], function (
     BaseMap,
@@ -27,12 +28,17 @@ define([
 
     Extent,
     FeatureLayer,
+    SimpleMarkerSymbol,
     Query
 ) {
     return {
-        // layers: FeatureLayer[]
+        // layers: Object
         //      POINT, LINE & POLY layers
-        layers: [],
+        layers: {},
+
+        // lastSelectedGraphic: Graphic
+        //      Used to unselect when next feature is selected
+        lastSelectedGraphic: null,
 
         initMap: function (mapDiv) {
             // summary:
@@ -63,6 +69,9 @@ define([
             });
 
             topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'selectLayers'));
+            topic.subscribe(config.topics.featureSelected, function (data) {
+                that.lastSelectedGraphic = that.selectFeature(data, that.lastSelectedGraphic);
+            });
         },
         selectLayers: function () {
             // summary:
@@ -72,13 +81,14 @@ define([
 
             var def = new Deferred();
             var q = new Query();
+            var lyrs = [this.layers.point, this.layers.line, this.layers.poly];
 
             q.where = router.getProjectsWhereClause();
             // don't show all features for feature layers
             if (q.where !== '1 = 1') {
                 var deferreds = [];
 
-                this.layers.forEach(function (lyr) {
+                lyrs.forEach(function (lyr) {
                     deferreds.push(lyr.selectFeatures(q));
                 });
                 var that = this;
@@ -115,9 +125,14 @@ define([
             var li = config.layerIndices;
             var that = this;
             var deferreds = [];
+            var typesLookup = {
+                0: 'poly',
+                1: 'line',
+                2: 'point'
+            };
 
-            [li.poly, li.line, li.point].forEach(function (i) {
-                var layer = new FeatureLayer(config.urls.mapService + '/' + i, {
+            [li.poly, li.line, li.point].forEach(function (index, i) {
+                var layer = new FeatureLayer(config.urls.mapService + '/' + index, {
                     mode: FeatureLayer.MODE_SELECTION
                 });
 
@@ -128,12 +143,39 @@ define([
                 });
 
                 deferreds.push(deferred);
-                that.layers.push(layer);
+                that.layers[typesLookup[i]] = layer;
             });
 
-            this.map.addLayers(this.layers);
+            var lyrs = this.layers;
+            this.map.addLayers([lyrs.poly, lyrs.line, lyrs.point]);
 
             return all(deferreds);
+        },
+        selectFeature: function (data, lastGraphic) {
+            // summary:
+            //      description
+            // data: Object
+            // lastGraphic: Object (optional)
+            // returns: Object[]
+            console.log('app/mapController:selectFeature', arguments);
+
+            if (lastGraphic) {
+                lastGraphic.setSymbol(null);
+            }
+
+            var lyr = this.layers[data.origin];
+            var graphic;
+            lyr.graphics.some(function (g) {
+                if (g.attributes.FeatureID === data.featureId) {
+                    graphic = g;
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            graphic.setSymbol(new SimpleMarkerSymbol(config.symbols.selected[data.origin]));
+
+            return graphic;
         }
     };
 });
