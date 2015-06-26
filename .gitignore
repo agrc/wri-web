@@ -1,3 +1,4 @@
+*.gdb
 *.odc
 *.pyc
 *.sde
@@ -14,6 +15,7 @@ src/bootstrap-stylus/
 src/bootstrap/
 src/components-jasmine/
 src/dgrid/
+src/dgrid0.3/
 src/dijit/
 src/dojo/
 src/dojox/
@@ -34,4 +36,3 @@ src/spinjs/
 src/stubmodule/
 src/util/
 src/xstyle/
-*.gdb

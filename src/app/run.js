@@ -14,6 +14,7 @@
             'app',
             'bootstrap-stylus',
             'dgrid',
+            'dgrid0.3',
             'dijit',
             'dojo',
             'dojox',
@@ -25,6 +26,10 @@
             'put-selector',
             'xstyle',
             {
+                name: 'bootstrap',
+                location: './bootstrap',
+                main: 'dist/js/bootstrap'
+            }, {
                 name: 'jquery',
                 location: './jquery/dist',
                 main: 'jquery'
@@ -45,7 +50,12 @@
                 location: './stubmodule',
                 main: 'src/stub-module'
             }
-        ]
+        ],
+        map: {
+            'esri': {
+                dgrid: 'dgrid0.3'
+            }
+        }
     };
     require(config, ['dojo/parser', 'jquery', 'dojo/domReady!'], function (parser) {
         parser.parse();
