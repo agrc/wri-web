@@ -156,13 +156,30 @@ module.exports = function (grunt) {
             }
         },
         connect: {
+            options: {
+                livereload: true,
+                open: true
+            },
             server: {
                 options: {
                     port: port,
                     base: './src',
-                    livereload: true,
-                    open: true
-                }
+                    logger: 'dev',
+                    middleware: function (connect, options, defaultMiddleware) {
+                        var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                        return [proxy].concat(defaultMiddleware);
+                    }
+                },
+                proxies: [
+                    {
+                        context: '/arcgis',
+                        host: 'localhost'
+                    },
+                    {
+                        context: '/wri/api',
+                        host: 'localhost'
+                    }
+                ]
             },
             jasmine: {
                 options: {
@@ -371,12 +388,16 @@ module.exports = function (grunt) {
         'jshint:force',
         'jscs:force',
         'if-missing:esri_slurp:dev',
-        'connect',
+        'configureProxies:server',
+        'connect:server',
+        'connect:jasmine',
         'stylus',
         'watch'
     ]);
     grunt.registerTask('serve', [
-        'connect',
+        'configureProxies:server',
+        'connect:server',
+        'connect:jasmine',
         'watch'
     ]);
     grunt.registerTask('build-prod', [
