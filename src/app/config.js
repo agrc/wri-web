@@ -18,7 +18,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     } else {
         // localhost
         apiKey = 'AGRC-E5B94F99865799';
-        gisServerBaseUrl = 'http://localhost/wri';
+        gisServerBaseUrl = 'http://localhost/';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
 
@@ -40,7 +40,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         urls: {
             mapService: gisServerBaseUrl + '/arcgis/rest/services/WRI/MapService/MapServer',
-            api: gisServerBaseUrl + '/api'
+            api: gisServerBaseUrl + 'wri/api'
         },
 
         layerIndices: {

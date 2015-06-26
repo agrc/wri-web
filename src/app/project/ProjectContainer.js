@@ -1,5 +1,7 @@
 define([
     'app/config',
+    'app/mapControls/LayerControls',
+    'app/mapControls/LayerItem',
     'app/project/FeaturesGrid',
     'app/project/ProjectDetails',
 
@@ -18,6 +20,8 @@ define([
     'dojo/window'
 ], function (
     config,
+    LayerControls,
+    LayerItem,
     FeaturesGrid,
     ProjectDetails,
 
@@ -48,7 +52,18 @@ define([
             //      Overrides method of same name in dijit._Widget.
             console.log('app.project.ProjectContainer::postCreate', arguments);
 
+            this.childWidgets = [];
+
             this.setupConnections();
+
+            var referenceLayers = new LayerControls({
+                layers: [
+                    new LayerItem({name: 'GNIS'}),
+                    new LayerItem({name: 'HUC'})
+                ]
+            }, this.referenceLayerNode);
+
+            this.childWidgets.push(referenceLayers);
 
             this._resetHeight();
 
@@ -72,7 +87,6 @@ define([
             console.log('app.project.ProjectContainer::showDetailsForProject', arguments);
 
             if (!ids || ids.length !== 1) {
-                domClass.add(this.domNode, 'hidden');
                 return;
             }
 
@@ -123,8 +137,21 @@ define([
             //      resizes the div to fit the screen on window resize
             console.log('app.project.ProjectContainer::_resetHeight', arguments);
 
-            var maxHeight = win.getBox().h - 241;
+            var maxHeight = win.getBox().h - 250;
             domStyle.set(this.domNode, 'maxHeight', maxHeight + 'px');
+        },
+        startup: function () {
+            // summary:
+            //      Fires after postCreate when all of the child widgets are finished laying out.
+            console.log('app.project.ProjectContainer::startup', arguments);
+
+            var that = this;
+            this.childWidgets.forEach(function (widget) {
+                that.own(widget);
+                widget.startup();
+            });
+
+            this.inherited(arguments);
         }
     });
 });
