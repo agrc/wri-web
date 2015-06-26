@@ -137,7 +137,7 @@ define([
             //      resizes the div to fit the screen on window resize
             console.log('app.project.ProjectContainer::_resetHeight', arguments);
 
-            var maxHeight = win.getBox().h - 241;
+            var maxHeight = win.getBox().h - 250;
             domStyle.set(this.domNode, 'maxHeight', maxHeight + 'px');
         },
         startup: function () {
