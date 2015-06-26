@@ -3,14 +3,14 @@ define([
     'dijit/_WidgetBase',
 
     'dojo/_base/declare',
-    'dojo/text!app/mapControls/templates/LayerItem.html',
-
-    'xstyle/css!app/mapControls/resources/LayerItem.css'
+    'dojo/dom-class',
+    'dojo/text!app/mapControls/templates/LayerItem.html'
 ], function (
     _TemplatedMixin,
     _WidgetBase,
 
     declare,
+    domClass,
     template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -20,6 +20,11 @@ define([
         baseClass: 'layer-item',
 
         // Properties to be sent into constructor
+
+        // name: string
+        // summary:
+        //      the name of the layer to show in the UI
+        name: '',
 
         postCreate: function () {
             // summary:
@@ -35,6 +40,13 @@ define([
             //      wire events, and such
             console.log('app.mapControls.LayerItem::setupConnections', arguments);
 
+        },
+        toggle: function () {
+            // summary:
+            //      toggle the highlighted status of a layeritem
+            console.log('app.mapControls::toggle', arguments);
+
+            domClass.toggle(this.toggleNode, 'btn-primary');
         }
     });
 });

@@ -27,6 +27,16 @@ define([
             this.setupConnections();
 
             this.inherited(arguments);
+
+            if (!this.layers || this.layers.length === 0) {
+                return;
+            }
+
+            var that = this;
+
+            this.layers.forEach(function (layer) {
+                layer.placeAt(that.layerContainerNode);
+            });
         },
         setupConnections: function () {
             // summary:

@@ -9,9 +9,6 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="../../../dts/dnr-style.css">
     <link rel="stylesheet" href="../../resources/App.css">
-    <link rel="stylesheet" href="../../../dgrid/css/dgrid.css">
-    <!-- <link rel="stylesheet" href="../../../dgrid/css/columnset.css"> -->
-    <!-- <link rel="stylesheet" href="../../../dgrid/css/skins/cactus.css"> -->
     <style type='text/css'>
         body {
             padding: 50px;
@@ -22,30 +19,30 @@
     <script type='text/javascript' src="../../../dojo/dojo.js"></script>
     <script type='text/javascript' src="../../../jquery/dist/jquery.js"></script>
     <script type="text/javascript">
-        var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../../';
-        var widgetUnderTest;
+var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../../';
+var widgetUnderTest;
 
-        require({
-            baseUrl: baseUrl,
-            packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dgrid', 'dstore', 'dojox', 'xstyle', 'put-selector',
-            {
-                name: 'jquery',
-                location: 'jquery/dist',
-                main: 'jquery'
-            }]
-        }, [
-            'app/project/ProjectContainer',
+require({
+    baseUrl: baseUrl,
+    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dgrid', 'dstore', 'dojox', 'xstyle', 'put-selector',
+    {
+        name: 'jquery',
+        location: 'jquery/dist',
+        main: 'jquery'
+    }]
+}, [
+    'app/project/ProjectContainer',
 
-            'dojo/domReady!'
-        ], function(Module) {
-            widgetUnderTest = new Module({
-            }, 'node');
+    'dojo/domReady!'
+], function (Module) {
+    widgetUnderTest = new Module({
+    }, 'node');
 
-            widgetUnderTest.showDetailsForProject([1636]);
+    widgetUnderTest.showDetailsForProject([1636]);
 
-            // widgetUnderTest.startup();
+    // widgetUnderTest.startup();
 
-        });
+});
 </script>
 </head>
 <body>
