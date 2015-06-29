@@ -174,6 +174,7 @@ define([
                 }
             });
             graphic.setSymbol(new SimpleMarkerSymbol(config.symbols.selected[data.origin]));
+            graphic.getDojoShape().moveToFront();
 
             return graphic;
         }
