@@ -12,6 +12,9 @@ function (
             var g = {
                 attributes: {
                     FeatureID: 1139
+                },
+                getDojoShape: function () {
+                    return {moveToFront: function () {}};
                 }
             };
             beforeEach(function () {
