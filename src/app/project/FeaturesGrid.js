@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/project/OpacitySlider',
 
     'dgrid/OnDemandGrid',
     'dgrid/Tree',
@@ -9,6 +10,7 @@ define([
     'dijit/_WidgetsInTemplateMixin',
 
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/aspect',
     'dojo/dom-class',
     'dojo/text!app/project/templates/FeaturesGrid.html',
@@ -18,6 +20,7 @@ define([
     'dstore/Tree'
 ], function (
     config,
+    OpacitySlider,
 
     Grid,
     Tree,
@@ -27,6 +30,7 @@ define([
     _WidgetsInTemplateMixin,
 
     declare,
+    lang,
     aspect,
     domClass,
     template,
@@ -52,8 +56,9 @@ define([
         //     action: String,
         //     origin: String (point, line, poly),
         //     parent: Number,
-        //     featureId: Number
-        //     size: String
+        //     featureId: Number,
+        //     size: String,
+        //     hasChildren: Boolean
         // }
         features: null,
 
@@ -69,12 +74,22 @@ define([
                     renderExpando: true
                 },
                 action: 'Action',
-                subType: 'Treatment/Type'
+                subType: 'Treatment/Type',
+                opacity: {
+                    label: 'Opacity',
+                    renderCell: function (data) {
+                        if ((!data.hasChildren && !data.parent) || data.hasChildren) {
+                            var stripped = lang.clone(data);
+                            delete stripped.id;
+                            var slider = new OpacitySlider(stripped);
+                            slider.startup();
+                            return slider.domNode;
+                        }
+                    }
+                }
             };
 
-            var store = new (declare([Memory, DStoreTree]))({
-                data: this.features
-            });
+            var store = new (declare([Memory, DStoreTree]))({});
 
             this.grid = new (declare([Grid, Tree]))({
                 columns: columns,
@@ -85,7 +100,6 @@ define([
             }, this.gridDiv);
 
             aspect.after(this.grid, 'renderRow', function (row, args) {
-                console.log('args', args);
                 if (!args[0].hasChildren) {
                     domClass.add(row, 'selectable');
                 }
@@ -94,6 +108,7 @@ define([
             });
 
             // Sets up the selectable stuff above with the aspect.
+            store.setData(this.features);
             this.grid.set('collection', store.getRootCollection());
             this.grid.refresh();
 

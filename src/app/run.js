@@ -42,6 +42,10 @@
                 location: './mustache',
                 main: 'mustache'
             }, {
+                name: 'slider',
+                location: './seiyria-bootstrap-slider',
+                main: 'js/bootstrap-slider'
+            }, {
                 name: 'spin',
                 location: './spinjs',
                 main: 'spin'

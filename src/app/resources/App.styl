@@ -1,18 +1,26 @@
 @import '../../esri/css/esri.css';
 @import '../../agrc/resources/map/BaseMap.css';
 @import '../../agrc/resources/map/BaseMapSelector.css';
+@import '../../seiyria-bootstrap-slider/css/bootstrap-slider.css';
+
+// bootstrap-stylus
 @require '../../bootstrap-stylus/bootstrap/variables';
 $nav-tabs-border-color = #fff
 $nav-tabs-active-link-hover-border-color = #fff
 @require '../../bootstrap-stylus/bootstrap/mixins';
 @require '../../bootstrap-stylus/bootstrap/normalize';
 @require '../../bootstrap-stylus/bootstrap/utilities';
+$icon-font-path = '../../bootstrap-stylus/fonts/';
+@require '../../bootstrap-stylus/bootstrap/glyphicons';
+@require '../../bootstrap-stylus/bootstrap/popovers';
+
 @require '../project/resources/ProjectDetails';
 @require '../project/resources/FeaturesGrid';
 @require '../project/resources/ProjectContainer';
 @require '../mapControls/resources/LayerControls';
 @require '../mapControls/resources/LayerItem';
 @require '../project/resources/FeatureDetails';
+@require '../project/resources/OpacitySlider';
 
 html, body, .app
     width 100%
@@ -60,3 +68,5 @@ html, body, .app
         .agrc .selectorMain
             top 17px
             right 10px
+*:focus
+    outline none !important

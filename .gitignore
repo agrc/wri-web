@@ -25,12 +25,15 @@ src/favico.js/
 src/ijit/
 src/jasmine-favicon-reporter/
 src/jasmine-jsreporter/
+src/jquery-bridget/
 src/jquery/
 src/ladda-bootstrap/
 src/lodash/
+src/modernizr/
 src/mustache/
 src/proj4/
 src/put-selector/
+src/seiyria-bootstrap-slider/
 src/spin.js/
 src/spinjs/
 src/stubmodule/

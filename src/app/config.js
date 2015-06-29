@@ -56,7 +56,8 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
-            featureSelected: 'wri/featureSelected'
+            featureSelected: 'wri/featureSelected',
+            opacityChanged: 'wri/opacityChanged'
         },
 
         symbols: {
