@@ -2,6 +2,7 @@ define([
     './config',
 
     'app/mapController',
+    'app/project/ProjectContainer',
     'app/router',
 
     'dijit/_TemplatedMixin',
@@ -10,7 +11,9 @@ define([
 
     'dojo/_base/array',
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/text!app/templates/App.html',
+    'dojo/topic',
 
     'esri/dijit/HomeButton',
     'esri/geometry/Extent',
@@ -21,6 +24,7 @@ define([
     config,
 
     mapController,
+    ProjectContainer,
     router,
 
     _TemplatedMixin,
@@ -29,7 +33,9 @@ define([
 
     array,
     declare,
+    lang,
     template,
+    topic,
 
     HomeButton,
     Extent
@@ -65,17 +71,6 @@ define([
             // );
 
             this.inherited(arguments);
-        },
-        startup: function () {
-            // summary:
-            //      Fires after postCreate when all of the child widgets are finished laying out.
-            console.log('app.App::startup', arguments);
-
-            var that = this;
-            array.forEach(this.childWidgets, function (widget) {
-                that.own(widget);
-                widget.startup();
-            });
 
             mapController.initMap(this.mapDiv);
 
@@ -94,8 +89,34 @@ define([
                     }
                 })
             }, this.homeButtonDiv);
-            homeBtn.startup();
+
+            this.projectContainer = new ProjectContainer({
+
+            }, this.projectContainerNode);
+
             this.childWidgets.push(homeBtn);
+            this.childWidgets.push(this.projectContainer);
+
+            this.setupConnections();
+        },
+        setupConnections: function () {
+            // summary:
+            //      wire events, and such
+            console.log('app.App::setupConnections', arguments);
+
+        },
+        startup: function () {
+            // summary:
+            //      Fires after postCreate when all of the child widgets are finished laying out.
+            console.log('app.App::startup', arguments);
+
+            var that = this;
+            array.forEach(this.childWidgets, function (widget) {
+                that.own(widget);
+                widget.startup();
+            });
+
+            router.startup();
 
             this.inherited(arguments);
         }

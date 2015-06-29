@@ -88,11 +88,9 @@ module.exports = function (grunt) {
         'src/ChangeLog.html'
     ];
     var gruntFile = 'GruntFile.js';
-    var internFile = 'tests/intern.js';
     var jsFiles = [
         jsAppFiles,
-        gruntFile,
-        internFile
+        gruntFile
     ];
     var bumpFiles = [
         'package.json',
@@ -158,13 +156,30 @@ module.exports = function (grunt) {
             }
         },
         connect: {
+            options: {
+                livereload: true,
+                open: secrets.openOnConnect
+            },
             server: {
                 options: {
                     port: port,
                     base: './src',
-                    livereload: true,
-                    open: true
-                }
+                    logger: 'dev',
+                    middleware: function (connect, options, defaultMiddleware) {
+                        var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                        return [proxy].concat(defaultMiddleware);
+                    }
+                },
+                proxies: [
+                    {
+                        context: '/arcgis',
+                        host: secrets.devHost
+                    },
+                    {
+                        context: '/wri/api',
+                        host: secrets.devHost
+                    }
+                ]
             },
             jasmine: {
                 options: {
@@ -344,7 +359,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/',
-                    src: ['app/**/*.styl'],
+                    src: ['app/resources/App.styl'],
                     dest: 'src/',
                     ext: '.css'
                 }]
@@ -363,7 +378,7 @@ module.exports = function (grunt) {
             },
             stylus: {
                 files: 'src/app/**/*.styl',
-                tasks: ['newer:stylus']
+                tasks: ['stylus']
             }
         }
     });
@@ -373,12 +388,16 @@ module.exports = function (grunt) {
         'jshint:force',
         'jscs:force',
         'if-missing:esri_slurp:dev',
-        'connect',
+        'configureProxies:server',
+        'connect:server',
+        'connect:jasmine',
         'stylus',
         'watch'
     ]);
     grunt.registerTask('serve', [
-        'connect',
+        'configureProxies:server',
+        'connect:server',
+        'connect:jasmine',
         'watch'
     ]);
     grunt.registerTask('build-prod', [
