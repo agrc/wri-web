@@ -2,6 +2,7 @@ define([
     'app/config',
     'app/mapControls/LayerControls',
     'app/mapControls/LayerItem',
+    'app/project/FeatureDetails',
     'app/project/FeaturesGrid',
     'app/project/ProjectDetails',
 
@@ -22,6 +23,7 @@ define([
     config,
     LayerControls,
     LayerItem,
+    FeatureDetails,
     FeaturesGrid,
     ProjectDetails,
 
@@ -64,6 +66,11 @@ define([
             }, this.referenceLayerNode);
 
             this.childWidgets.push(referenceLayers);
+
+            var details = new FeatureDetails(null, this.featureDetailsNode);
+            details.startup();
+
+            this.childWidgets.push(details);
 
             this._resetHeight();
 
