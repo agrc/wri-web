@@ -7,18 +7,22 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
     var apiKey;
     var gisServerBaseUrl;
+    var apiEndpoint;
     if (has('agrc-build') === 'prod') {
         // mapserv.utah.gov
         apiKey = 'AGRC-A94B063C533889';
         gisServerBaseUrl = 'https://wrimaps.utah.gov';
+        apiEndpoint = '';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
         apiKey = 'AGRC-AC122FA9671436';
         gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
+        apiEndpoint = '';
     } else {
         // localhost
         apiKey = 'AGRC-E5B94F99865799';
         gisServerBaseUrl = '';
+        apiEndpoint = '/wri';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
     var selectionColor = [255, 255, 0];
@@ -41,7 +45,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         urls: {
             mapService: gisServerBaseUrl + '/arcgis/rest/services/WRI/MapService/MapServer',
-            api: gisServerBaseUrl + '/wri/api'
+            api: gisServerBaseUrl + apiEndpoint + '/api'
         },
 
         layerIndices: {
