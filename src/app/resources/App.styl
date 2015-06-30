@@ -1,16 +1,25 @@
+$icon-font-path = '../../bootstrap-stylus/fonts/';
+$nav-tabs-active-link-hover-border-color = #fff
+$nav-tabs-border-color = #fff
+
 @import '../../esri/css/esri.css';
 @import '../../agrc/resources/map/BaseMap.css';
 @import '../../agrc/resources/map/BaseMapSelector.css';
+@import '../../seiyria-bootstrap-slider/css/bootstrap-slider.css';
+
+// bootstrap-stylus
 @require '../../bootstrap-stylus/bootstrap/variables';
-$nav-tabs-border-color = #fff
-$nav-tabs-active-link-hover-border-color = #fff
 @require '../../bootstrap-stylus/bootstrap/mixins';
 @require '../../bootstrap-stylus/bootstrap/normalize';
 @require '../../bootstrap-stylus/bootstrap/utilities';
+@require '../../bootstrap-stylus/bootstrap/glyphicons';
+@require '../../bootstrap-stylus/bootstrap/popovers';
+
 @require '../project/resources/ProjectDetails';
 @require '../project/resources/FeaturesGrid';
 @require '../project/resources/ProjectContainer';
 @require '../project/resources/FeatureDetails';
+@require '../project/resources/OpacitySlider';
 @require '../mapControls/resources/LayerControls';
 @require '../mapControls/resources/LayerItem';
 @require '../mapControls/resources/CentroidSwitchButton';
@@ -69,3 +78,5 @@ html, body, .app
         .agrc .selectorMain
             top 17px
             right 10px
+*:focus
+    outline none !important

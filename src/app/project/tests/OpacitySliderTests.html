@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FeaturesGrid Tests</title>
+    <title>OpacitySlider Tests</title>
 
     <!-- META TAGS -->
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="../../../dts/dnr-style.css">
-    <link rel="stylesheet" href="../../resources/App.css">
+    <link rel="stylesheet" href="../../../app/resources/App.css">
     <style type='text/css'>
         body {
             padding: 50px;
-            background: none;
-            width: 450px;
+            background-color: #fff;
         }
     </style>
 
@@ -25,25 +24,27 @@ var widgetUnderTest;
 
 require({
     baseUrl: baseUrl,
-    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dgrid', 'dojox', 'dstore', 'put-selector', 'xstyle',
+    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
     {
-        name: 'slider',
-        location: './seiyria-bootstrap-slider',
-        main: 'js/bootstrap-slider'
-    }, {
         name: 'jquery',
         location: 'jquery/dist',
         main: 'jquery'
+    }, {
+        name: 'bootstrap',
+        location: 'bootstrap',
+        main: 'dist/js/bootstrap'
+    }, {
+        name: 'slider',
+        location: './seiyria-bootstrap-slider',
+        main: 'js/bootstrap-slider'
     }]
 }, [
     'jquery',
-    'app/project/FeaturesGrid',
-    'dojo/text!app/project/tests/data/features.json',
+    'app/project/OpacitySlider',
 
     'dojo/domReady!'
-], function ($, Module, featuresTxt) {
+], function ($, Module) {
     widgetUnderTest = new Module({
-        features: JSON.parse(featuresTxt)
     }, 'node');
 
     widgetUnderTest.startup();
