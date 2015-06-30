@@ -79,7 +79,7 @@ define([
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
             featureSelected: 'wri/featureSelected',
-            opacityChanged: 'wri/opacityChanged'
+            opacityChanged: 'wri/opacityChanged',
             map: {
                 extentChange: 'wri/extentChange',
                 toggleCentroids: 'wri/toggle'
