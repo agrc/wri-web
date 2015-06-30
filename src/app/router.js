@@ -7,8 +7,6 @@ define([
     'dojo/string',
     'dojo/topic',
 
-    'esri/graphicsUtils',
-
     'lodash/array/difference'
 ], function (
     config,
@@ -19,17 +17,15 @@ define([
     dojoString,
     topic,
 
-    graphicsUtils,
-
     difference
 ) {
-    var obj = {
+    return {
         // description:
         //      Parse and update the URL parameters used to set and preserve the state of the application
 
         // projectIds: String []
         //      The id or id's of the currently displayed projects
-        projectIds: [],
+        projectIds: null,
 
         startup: function () {
             // summary:
@@ -39,9 +35,7 @@ define([
             topic.subscribe('/dojo/hashchange', lang.hitch(this, 'onHashChange'));
 
             var beginHash = hash();
-            if (beginHash) {
-                this.onHashChange(beginHash);
-            }
+            this.onHashChange(beginHash);
         },
         onHashChange: function (newHash) {
             // summary:
@@ -57,6 +51,14 @@ define([
                 newProps.id = [];
             } else {
                 newProps.id = (typeof newProps.id === 'string') ? [newProps.id] : newProps.id;
+            }
+
+            // on first load, still publish if no hash is present
+            if (!this.projectIds) {
+                this.projectIds = newProps.id;
+                this.onIdsChange(this.projectIds);
+
+                return;
             }
 
             if (difference(newProps.id, this.projectIds).length > 0 ||
@@ -95,31 +97,6 @@ define([
                 return parseInt(id, 10);
             });
             return dojoString.substitute('${0} IN (${1})', [config.fieldNames.Project_ID, id_nums]);
-        },
-        unionGraphicsIntoExtent: function (graphics) {
-            // summary:
-            //      gets the extent from graphics
-            // graphics
-            console.log('app/router::unionGraphicsIntoExtent', arguments);
-
-            var unionedExtent;
-
-            graphics.forEach(function (e) {
-                if (!e || e.length < 1) {
-                    return null;
-                }
-
-                var newExtent = graphicsUtils.graphicsExtent(e);
-                if (!unionedExtent) {
-                    unionedExtent = newExtent;
-                } else {
-                    unionedExtent = unionedExtent.union(newExtent);
-                }
-            });
-
-            return unionedExtent;
         }
     };
-
-    return obj;
 });

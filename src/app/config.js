@@ -63,6 +63,11 @@ define([
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
+        // scaleTrigger: int
+        // summary:
+        //      the basemap level to toggle centroids
+        scaleTrigger: 8,
+
         urls: {
             mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
             centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
@@ -128,11 +133,16 @@ define([
             opacityChanged: 'wri/opacityChanged',
             filterQueryChanged: 'wri/filterQueryChanged',
             map: {
-                extentChange: 'wri/extentChange',
-                toggleCentroids: 'wri/toggle'
+                extentChanged: 'wri/extentChanged',
+                toggleCentroids: 'wri/toggle',
+                setExtent: 'wri/setExtent',
+                setMap: 'wri/setMap'
             },
             layer: {
                 add: 'wri/add'
+            },
+            centroidController: {
+                updateVisibility: 'wri/thisFeelsBad'
             }
         },
 

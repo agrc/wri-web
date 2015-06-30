@@ -1,7 +1,6 @@
 define([
     './config',
 
-    'app/centroidSwitch',
     'app/mapController',
     'app/project/ProjectContainer',
     'app/router',
@@ -10,13 +9,11 @@ define([
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
-    'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/text!app/templates/App.html'
 ], function (
     config,
 
-    centroidSwitch,
     mapController,
     ProjectContainer,
     router,
@@ -25,7 +22,6 @@ define([
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    array,
     declare,
     template
 ) {
@@ -48,7 +44,7 @@ define([
 
             config.app = this;
             this.childWidgets = [];
-            this.childObjects = [mapController, router, centroidSwitch];
+            this.childObjects = [mapController, router];
 
             this.inherited(arguments);
         },
