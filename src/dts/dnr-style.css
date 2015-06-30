@@ -21,7 +21,7 @@ html {
     body {
         background: #1c514e;
     }
-    
+
 /* New Modal popup Dialog CSS */
 
 .modalContent {padding:15px;}
@@ -131,7 +131,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#64928c', end
   display: block;
   margin-left: auto;
   margin-right: auto;
-} 
+}
 
 .infoCircle2 label {display:block; text-align:center; font-size:2em; line-height:50px; font-family: Impact, Charcoal, sans-serif;
 -webkit-text-shadow: 3px 6px 16px rgba(0,0,0,0.42);
@@ -165,7 +165,7 @@ letter-spacing: 1.5px;}
     letter-spacing: 1px;
     text-shadow: 2px 2px 3px #333;
     text-decoration:none;
-  /* font-family: 'Lato', sans-serif; */    
+  /* font-family: 'Lato', sans-serif; */
 }
 
 #statContainer h2 a.home:hover {
@@ -187,14 +187,14 @@ letter-spacing: 1.5px;}
     text-shadow: 2px 2px 3px #333;
     /*font-family: 'Lato', sans-serif;*/
     text-decoration:none;
-    
+
 }
 
 #statContainer h3 a:hover {
     color: #FFFFFF;
     text-decoration:underline;
     }
-    
+
 #statContainer h3 a:visited {
     color: #A2CDCA;
     }
@@ -256,7 +256,7 @@ hr {
 audio,
 canvas,
 img,
-video, 
+video,
 .wp-caption {
     vertical-align: middle;
     max-width: 100% !important;
@@ -347,7 +347,7 @@ height:125px;
     padding: 0;
     text-align: right;
     float:right;
-            
+
 }
 #header-container ul#menu > li {
     float: left;
@@ -355,7 +355,7 @@ height:125px;
     padding: 0;
     margin: 0;
 }
-        
+
 
 #header-container ul#menu li a {
     background:none;
@@ -374,7 +374,7 @@ height:125px;
 #header-container ul#menu li a.logout:hover {
     color: #F1F2F2;
     text-decoration: none;
-    /*background-color:#617F7E;*/ 
+    /*background-color:#617F7E;*/
     background-color: #1C514E
     }
 
@@ -387,12 +387,6 @@ height:125px;
     text-decoration: none;
     background-color: #1B7772;
     }
-
-#header-container ul#menu li a.maps {background:#58585B url(../img/icon-large-maps.png) no-repeat center 10px;}
-#header-container ul#menu li a.projects {background:#58585B url(../img/icon-large-projects.png) no-repeat center 10px;}
-#header-container ul#menu li a.users {background:#58585B url(../img/icon-large-users.png) no-repeat center 10px;}
-#header-container ul#menu li a.login {background:#58585B url(../img/icon-large-login.png) no-repeat center 10px;}
-#header-container ul#menu li a.logout {background:#58585B url(../img/icon-large-login.png) no-repeat center 10px;}
 
 #header-container ul#menu li a.menu-active {
     color: #F1F2F2;
@@ -423,7 +417,7 @@ height:125px;
 #header-container #mainmenu-wrapper li.menu-item > ul.sub-menu > li.menu-item.menuover > ul.sub-menu {
     left:100%;
 }
-    
+
 #header-container #mobilemenu {
     display:none;
 }
@@ -471,7 +465,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1c514e', end
 
 #searchResults {margin-top:20px;}
 
-/* ******** Site Header Search ******** 
+/* ******** Site Header Search ********
 .search-box {
   -webkit-transition: width 0.6s, border-radius 0.6s, background 0.6s, box-shadow 0.6s;
           transition: width 0.6s, border-radius 0.6s, background 0.6s, box-shadow 0.6s;
@@ -579,7 +573,6 @@ background-image: linear-gradient(to top, #eee 0%, #fff 50%);
 /* change to match your site */
 
 #content-wrapper {
-    background:#495958 url('../img/watershed-home.jpg') no-repeat fixed center top;
     webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -637,7 +630,7 @@ a:link, a:visited {color:#2191AE;}
 
 table a, table a:visited {color:#2191AE;}
 #content #secondary-menu-button {
-    display:none; 
+    display:none;
 }
 
 /*    *********    *********   Secondary Menu   *********    *********    */
@@ -647,15 +640,15 @@ table a, table a:visited {color:#2191AE;}
 #content-secondary .widget.widget_nav_menu {
     padding:0;
 }
-#content-secondary .widget_nav_menu h3 {    
+#content-secondary .widget_nav_menu h3 {
     /* change to match your site */
     padding:15px 20px;
     margin:0;
-    background:#666; 
+    background:#666;
     color:#fff;
     font-size:1.4em;
 }
-#content-secondary .widget_nav_menu ul.menu, 
+#content-secondary .widget_nav_menu ul.menu,
 #content-secondary .widget_nav_menu ul.menu ul.sub-menu {
     list-style-type: none;
     margin:0;
@@ -681,7 +674,7 @@ table a, table a:visited {color:#2191AE;}
     color:#444;
     font-weight: bold;
 }
-#content-secondary .widget_nav_menu ul.menu > li.menu-item a:hover, 
+#content-secondary .widget_nav_menu ul.menu > li.menu-item a:hover,
 #content-secondary .widget_nav_menu ul.menu li.menu-item.current-menu-item > a {
         /* change to match your site */
     color:#00a1ff;
@@ -695,7 +688,7 @@ table a, table a:visited {color:#2191AE;}
     vertical-align: top;
     margin-right:10px;
 }
-#content-secondary .widget_nav_menu ul.menu > li.menu-item a .menu-arrow:hover, 
+#content-secondary .widget_nav_menu ul.menu > li.menu-item a .menu-arrow:hover,
 #content-secondary .widget_nav_menu ul.menu > li.menu-item a .menu-arrow.open {
     background-position-x: right;
 }
@@ -891,7 +884,7 @@ p.wp-caption-text {
     display: none;
     border-radius: 15px;
     position: relative;
-    
+
 }
 .admin-bar .feedbackformarea {
     margin: 40px auto;
@@ -1034,11 +1027,11 @@ a.button.left {
 }
 
 .button.calendar, a.button.calendar {
-    background: url('../ico/icon-calendar.png') center center no-repeat, 
+    background: url('../ico/icon-calendar.png') center center no-repeat,
         #f0f0f0 linear-gradient(to bottom, #f0f0f0, #cccccc) left top repeat-x;
 }
 .button.calendar:hover, a.button.calendar:hover {
-    background: url('../ico/icon-calendar.png') center center no-repeat, 
+    background: url('../ico/icon-calendar.png') center center no-repeat,
         #e0f5ff linear-gradient(to bottom, #e0f5ff, #77d6ff) left top repeat-x;
 }
 
@@ -1057,7 +1050,7 @@ a.button.left {
 .button.icon:hover, a.button.icon:hover {
     border: 1px solid #999;
 }
- 
+
 */
 a.btn.btn-primary.disabled{
     background-color:#CECECE;
@@ -1104,7 +1097,7 @@ a.btn.btn-primary.disabled{
     display:block;
         /*margin-right:-15px;
         margin-left:-15px;*/
-        
+
 }
 
 .row:before,
@@ -1145,7 +1138,7 @@ a.btn.btn-primary.disabled{
     margin-left:4%;
     width:22%;
 }
-.row .col4:first-child, 
+.row .col4:first-child,
 .row .col4:nth-child(4n+5) {
     margin-left:0;
     clear:left;
@@ -1153,9 +1146,9 @@ a.btn.btn-primary.disabled{
 .row .col5 {
     margin-left:2.5%;
     width:18%;
-    
+
 }
-.row .col5:first-child, 
+.row .col5:first-child,
 .row .col5:nth-child(5n+6) {
     margin-left:0;
     clear:left;
@@ -1164,7 +1157,7 @@ a.btn.btn-primary.disabled{
     margin-left:2%;
     width:15%;
 }
-.row .col6:first-child, 
+.row .col6:first-child,
 .row .col6:nth-child(6n+7) {
     margin-left:0;
     clear:left;
@@ -1230,7 +1223,7 @@ width:500px;
     padding: 3px 6px;
     position: relative; /* allows proper formatting if hint is two lines */
     display: none;
-       
+
 }
 
 .formHint:before {
@@ -1247,11 +1240,11 @@ width:500px;
 .showFormHint {display:inline-block;}
 
 /*.inputGroup input:focus + .formHint {display:inline-block;}
-.inputGroup input:required:valid + .formHint {background: #28921f;}  change form hint color when valid 
-.inputGroup input:required:valid + .formHint::before {color:#28921f;}  change form hint arrow color when valid 
+.inputGroup input:required:valid + .formHint {background: #28921f;}  change form hint color when valid
+.inputGroup input:required:valid + .formHint::before {color:#28921f;}  change form hint arrow color when valid
 
 .inputGroup select:focus + .formHint {display:inline-block;}
-.inputGroup select:required:valid + .formHint {background: #28921f;}  change form hint color when valid 
+.inputGroup select:required:valid + .formHint {background: #28921f;}  change form hint color when valid
 .inputGroup select:required:valid + .formHint::before {color:#28921f;}  change form hint arrow color when valid */
 
 
@@ -1263,8 +1256,8 @@ textarea + .formHint {
     padding: 3px 6px;
     position: relative; /* allows proper formatting if hint is two lines */
     display:none;
-    
-    
+
+
 }
 
 textarea + .formHint:before {
@@ -1303,7 +1296,7 @@ textarea + .formHint:before {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
 }
 
 .icon-calendar {background:url(../ico/icon-calendar.png) center no-repeat;}
@@ -1332,8 +1325,8 @@ textarea + .formHint:before {
     /*padding: .2em .2em 0;*/
     display: none;
     border:#6D6E71 1px solid;
-    
-    
+
+
 }
 .ui-datepicker .ui-datepicker-header {
     position: relative;
@@ -1394,7 +1387,7 @@ textarea + .formHint:before {
     font-size: .9em;
     border-collapse: collapse;
     margin: 0 0 .4em;
-    
+
 }
 
 
@@ -1404,12 +1397,12 @@ textarea + .formHint:before {
     font-weight: bold;
     border: 0;
     background:#108C4F;
-    
+
 }
 .ui-datepicker td {
     border: 0;
     padding: 1px;
-    
+
 }
 .ui-datepicker td span,
 .ui-datepicker td a {
@@ -1515,17 +1508,17 @@ textarea + .formHint:before {
 }
 
 .ui-datepicker tr:nth-child(even) td {
-    background: #C7DDD2;    
+    background: #C7DDD2;
 }
 
 .ui.datepicker tr:nth-child(odd) td {
-    background: green;  
+    background: green;
 }
 
 /*Modal information*/
-    
+
     /* old modal info .modalWhite {background-color:#ffffff; border-radius:5px; padding:10px; width:500px;}*/
-    
+
 /* New Modal popup Dialog CSS */
 
 .modalContent {padding:15px;}
@@ -1789,7 +1782,7 @@ table {
     text-align: left;
     width: 100%;
     font-size:.9em;
-}   
+}
 
 tr.total {font-weight:bold;}
 tr.total a {font-weight:normal; text-decoration:none; margin-left:10px; color:#169CD1;}
@@ -1807,7 +1800,7 @@ th {
     color: #fff;
     padding: 7px 15px;
     position: relative;
-    text-shadow: 0 1px 0 #000;  
+    text-shadow: 0 1px 0 #000;
     font-weight:normal!important;
 }
 
@@ -1824,7 +1817,7 @@ th:after {
 }
 
 th:first-child {
-    border-left: 1px solid #777;    
+    border-left: 1px solid #777;
     box-shadow: inset 1px 1px 0 #999;
 }
 
@@ -1843,15 +1836,15 @@ td {
 }
 
 tr {
-    
+
 }
 
 tr:nth-child(even) td {
-    background: #f1f1f1;    
+    background: #f1f1f1;
 }
 
 tr:nth-child(odd) td {
-    background: #ffffff;    
+    background: #ffffff;
 }
 
 .dark-green-v {
@@ -1870,15 +1863,15 @@ table.tablesorter tr:hover td {/*background:#BACCBC;*/ background:#E2DEC0;}
 }
 
 #speciesTable tr:nth-child(even) td {
-    background:#EAE4CA; 
+    background:#EAE4CA;
 }
 
 #speciesTable tr td table tr:nth-child(even) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #speciesTable tr td table tr:nth-child(odd) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #habitatsTable tr td {
@@ -1887,15 +1880,15 @@ table.tablesorter tr:hover td {/*background:#BACCBC;*/ background:#E2DEC0;}
 }
 
 #habitatsTable tr:nth-child(even) td {
-    background:#EAE4CA; 
+    background:#EAE4CA;
 }
 
 #habitatsTable tr td table tr:nth-child(even) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #habitatsTable tr td table tr:nth-child(odd) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #seedMixTable tr td {
@@ -1904,15 +1897,15 @@ table.tablesorter tr:hover td {/*background:#BACCBC;*/ background:#E2DEC0;}
 }
 
 #seedMixTable tr:nth-child(even) td {
-    background:#EAE4CA; 
+    background:#EAE4CA;
 }
 
 #seedMixTable tr td table tr:nth-child(even) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #seedMixTable tr td table tr:nth-child(odd) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #budgetItemsTable tr td {
@@ -1921,15 +1914,15 @@ table.tablesorter tr:hover td {/*background:#BACCBC;*/ background:#E2DEC0;}
 }
 
 #budgetItemsTable tr:nth-child(even) td {
-    background:#EAE4CA; 
+    background:#EAE4CA;
 }
 
 #budgetItemsTable tr td table tr:nth-child(even) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #budgetItemsTable tr td table tr:nth-child(odd) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #expenseItemsTable tr td {
@@ -1938,23 +1931,23 @@ table.tablesorter tr:hover td {/*background:#BACCBC;*/ background:#E2DEC0;}
 }
 
 #expenseItemsTable tr:nth-child(even) td {
-    background:#EAE4CA; 
+    background:#EAE4CA;
 }
 
 #expenseItemsTable td.attention {
-    background:#AF4925; 
+    background:#AF4925;
 }
 
 #expenseItemsTable tr:nth-child(even) td.attention {
-    background:#AF4925; 
+    background:#AF4925;
 }
 
 #expenseItemsTable tr td table tr:nth-child(even) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #expenseItemsTable tr td table tr:nth-child(odd) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #fundingItemsTable tr td {
@@ -1963,15 +1956,15 @@ table.tablesorter tr:hover td {/*background:#BACCBC;*/ background:#E2DEC0;}
 }
 
 #fundingItemsTable tr:nth-child(even) td {
-    background:#EAE4CA; 
+    background:#EAE4CA;
 }
 
 #fundingItemsTable tr td table tr:nth-child(even) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 #fundingItemsTable tr td table tr:nth-child(odd) td {
-    background:#FFFFFF; 
+    background:#FFFFFF;
 }
 
 
@@ -2110,7 +2103,7 @@ div.Zebra_DatePicker td.dp_clear:hover {
     float:left;
     padding-right: 20px;
     list-style-type:none;
-    
+
 }
 
 .userStatus ul li a.myProjects {background: url("../img/userstatus-icon-myprojects.png") center right no-repeat; width: 36px; height: 36px; padding: 10px 50px 10px 0; color:#A2CDCA; text-decoration:none;}
@@ -2167,7 +2160,7 @@ label.searchlabel.open {
     left: 0;
     top: 0;
     overflow: hidden;
-    
+
 }
 .searchwrapper {
     position: relative;
@@ -2204,22 +2197,22 @@ label.searchlabel.open {
    Media Queries for Responsive Design.
    ========================================================================== */
 @media only screen and (max-width:1300px){
-    
+
     .circle1, .circle2, circle3 {
     float:left;
     margin-right:0px;
     margin-bottom:25px;
     }
-    
+
     .infoCircle2 {
     width:350px;
     height:350px;
     }
-    
+
 }
 
 @media only screen and (max-width:1150px){
-    
+
     .infoCircle2 {
     width:325px;
     height:325px;
@@ -2227,16 +2220,16 @@ label.searchlabel.open {
 }
 
 @media only screen and (max-width:1100px){
-    
+
     .infoCircle2 {
     width:300px;
     height:300px;
     }
-    
+
     #projectHeader ul {
     width: 60%;
     }
-    
+
     .projectStatus {
     float: right;
     }
@@ -2245,19 +2238,19 @@ label.searchlabel.open {
 @media only screen and (max-width:1000px){
     #formContainer {
     width: 72%;
-    
+
     }
 
     #applicationNavigation {
     width: 22%;
-    
+
     }
-    
+
     #projectHeaderContainer {
     width: 100%;
     padding: 10px 15px 10px 0px;
     }
-    
+
     #header-container #mainmenu {
     width: 60%;
     }
@@ -2268,7 +2261,7 @@ label.searchlabel.open {
 
 
 @media only screen and (max-width: 800px) {
-    
+
     .circle1, .circle2, .circle3 {
         float: none;
         margin-right:0px;
@@ -2276,17 +2269,17 @@ label.searchlabel.open {
         width:100%;
         clear:both;
     }
-    
+
     .infoCircle2 {
         margin:0 auto;
         float:none;
     }
     .projectStatus {float:right;}
-    
+
     .inputGroup input[type="text"] {width:85%}
     /*.xlarge {width:85%;}*/
 
-    
+
     #wri-logo {
     width: 30%;
     }
@@ -2318,7 +2311,7 @@ label.searchlabel.open {
     }
     .row .col5:first-child,
     .row .col5:nth-child(3n+4),
-    .row .col6:first-child, 
+    .row .col6:first-child,
     .row .col6:nth-child(3n+4) {
         margin-left:0;
         clear:left;
@@ -2328,7 +2321,7 @@ label.searchlabel.open {
     #uibar #settings a img {
         display:none;
     }
-    
+
     #speciesTable {display:table;}
     #speciesTable table {display:table;}
     #speciesTable thead {display:table-header-group;}
@@ -2337,20 +2330,20 @@ label.searchlabel.open {
     #speciesTable td {display:table-cell;}
     #speciesTable tr {display:table-row;}
     #speciesTable thead tr {position:relative; top:0; left:0;}
-    
+
     #speciesTable tr { }
-    
-    #speciesTable td { 
+
+    #speciesTable td {
         /* Behave  like a "row" */
         border-right: 1px solid #fff;
         border-left: 1px solid #e8e8e8;
         border-top: 1px solid #fff;
         border-bottom: 1px solid #e8e8e8;
-        padding: 10px 15px; 
+        padding: 10px 15px;
         transition: all 300ms;
     }
-    
-    #speciesTable td:before { 
+
+    #speciesTable td:before {
         /* Now like a table header */
         position: relative;
         /* Top/left values mimic padding */
@@ -2358,38 +2351,38 @@ label.searchlabel.open {
         left: 6px;*/
         top: 0px;
         left: 0px;
-        width: 0; 
-        padding:0;      
-        
+        width: 0;
+        padding:0;
+
         white-space: nowrap;
         /*background-color:#cecece;*/
-        
+
     }
-    
+
     /* Force table to not be like tables anymore */
-    table, thead, tbody, th, td, tr { 
-        display: block; 
+    table, thead, tbody, th, td, tr {
+        display: block;
     }
-    
+
     /* Hide table headers (but not display: none;, for accessibility) */
-    thead tr { 
+    thead tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
     }
-    
+
     tr { border: 1px solid #ccc; }
-    
-    td { 
+
+    td {
         /* Behave  like a "row" */
         border: none;
-        border-bottom: 1px solid #eee; 
+        border-bottom: 1px solid #eee;
         position: relative;
         padding:3px 0;
-        padding-left: 35%; 
+        padding-left: 35%;
     }
-    
-    td:before { 
+
+    td:before {
         /* Now like a table header */
         position: absolute;
         /* Top/left values mimic padding */
@@ -2397,19 +2390,19 @@ label.searchlabel.open {
         left: 6px;*/
         top: 0px;
         left: 0px;
-        width: 30%; 
-        padding:3px 10px;       
-        
+        width: 30%;
+        padding:3px 10px;
+
         white-space: nowrap;
         /*background-color:#cecece;*/
-        
+
     }
-    
+
     /*
     Label the data
     */
-    
-    
+
+
     .responsiveSearchTable td:nth-of-type(1):before { content: "ID"; }
     .responsiveSearchTable td:nth-of-type(2):before { content: "Project Title"; }
     .responsiveSearchTable td:nth-of-type(3):before { content: "Region"; }
@@ -2418,12 +2411,12 @@ label.searchlabel.open {
     .responsiveSearchTable td:nth-of-type(6):before { content: "FY"; }
     .responsiveSearchTable td:nth-of-type(7):before { content: "Project Manager"; }
     .responsiveSearchTable td:nth-of-type(8):before { content: "Map Features"; }
-    
+
     .responsiveUsersTable td:nth-of-type(1):before { content: "Email"; }
     .responsiveUsersTable td:nth-of-type(2):before { content: "First Name"; }
     .responsiveUsersTable td:nth-of-type(3):before { content: "Last Name"; }
     .responsiveUsersTable td:nth-of-type(4):before { content: "Phone"; }
-    
+
     #formContainer {
         width: 96%;
         float: left;
@@ -2431,7 +2424,7 @@ label.searchlabel.open {
         /*z-index: 10;*/
         margin-top: 90px;
     }
-    
+
     #applicationNavigation {
         background: #404041;
         width: 96%;
@@ -2441,12 +2434,12 @@ label.searchlabel.open {
         /*z-index: 500;*/
         clear: left;
     }
-    
+
     #applicationNavigation ul li a.completed {
         background: transparent url(../img/completed.png) center left 10px no-repeat;
         padding-left: 35px;
         }
-        
+
     #applicationNavigation ul li a {
         color: #ffffff;
         text-decoration: none;
@@ -2455,19 +2448,19 @@ label.searchlabel.open {
         display: inline-block;
         float: left;
     }
-    
-    
-    
+
+
+
 }
 
 @media only screen and (max-width:715px){
     #header-container ul#menu li a {
     padding: 53px 15px;
     }
-    
+
     .search{width:100%; float:right; color: #F1F2F2; margin:.5em 0; padding-top:15px;}
     .userStatus{width:600px; float:left; padding-left:0px;}
-    .userStatus ul {padding-left:0; padding-left:5px;}    
+    .userStatus ul {padding-left:0; padding-left:5px;}
     .userStatus ul li {float:left; padding-right: 20px; list-style-type:none;}
     .userStatus ul li a.myProjects {background: url("../img/userstatus-icon-myprojects.png") center right no-repeat; width: 36px; height: 36px; padding: 10px 50px 10px 0; color:#A2CDCA; text-decoration:none;}
     .userStatus ul li a.addProject {background: url("../img/userstatus-icon-addproject.png") center right no-repeat; width: 36px; height: 36px; padding: 10px 50px 10px 0; color:#A2CDCA; text-decoration:none;}
@@ -2485,35 +2478,35 @@ label.searchlabel.open {
         padding:7px 7px 0 7 px;
         line-height:1em;*/
     }
-    
+
     #mobile-searchbutton{background: transparent url('../img/icon-search.png') top left no-repeat; float:right; height:40px; width:24px;}
     #mobile-mainmenu-button{background: transparent url('../img/icon-mobilemenu.png') top left no-repeat; float:left; height:40px; width:24px;}
     #mobilemenu {height:40px; background-color:/*#397D84*/ black; color:#FFF; padding: 7px 7px 0 7px;}
     #mobilemenu span{display:block; text-align:center; font-size:.9em;}
     #mobilemenu span a{color:#FFFFFF; text-decoration:none; font-size:.9em;}
-    
+
     #header-container #mainmenu-wrapper {
         display:none;
         /*position:relative;*/
     }
-    
+
     #wri-logo {display:none;}
-    
+
     #header-container #header-wrapper {
         background:none;
         box-shadow:none;
         display:none;
     }
-    
+
     #header-container #header-wrapper #header {
         height:auto;
         position:relative;
         padding-top: 0;
     }
-    
+
     #header-container #mainmenu {float:none; width:100%;}
     #statusBox {}
-    
+
     #header-container ul#menu {
         font-size: 1.2em;
         margin: 0;
@@ -2522,14 +2515,14 @@ label.searchlabel.open {
         float:none;
         width:100%;
     }
-    
+
     #header-container ul#menu > li {
         float: none;
         list-style: none;
         padding: 0;
         margin: 0;
         }
-        
+
     #header-container ul#menu li a {
         background:none;
         color: #F1F2F2;
@@ -2538,43 +2531,43 @@ label.searchlabel.open {
         line-height: 20px;
         display:block;
     }
-    
+
     /*#header-container #mainmenu-wrapper ul#menu-mainmenu > li.menu-item {
         float:none;
         text-align:center;
     }*/
-    
+
     /*#header-container #mainmenu-wrapper ul#menu-mainmenu > li.menu-item a {
         text-align:center;
         padding:10px 0;
         border-bottom:1px solid #bbb7b7;
     }*/
-    
+
     #header-container #mainmenu-wrapper ul.sub-menu {
         position: relative;
         min-width: 100%;
         /*margin-left:20px;*/ /* change to match your site */
         margin-left:0;
     }
-    
+
     /*#header-container #searchform_main {
         display:none;
     }*/
-    
+
     /*#content {
         background: #FFFFFF;
         }*/
-    
+
     .circle1, .circle2, circle3 {
         margin-bottom:25px;
     }
-    
+
     .infoCircle2 {
         width:300px;
         height:300px;
-        
+
     }
-    
+
     #content #content-secondary {
         display:none;
         width:100%;
@@ -2588,45 +2581,45 @@ label.searchlabel.open {
     }
     #uibar {
         display:none;
-    }   
-    
+    }
+
     #footer a {
     color:#397D84;}
-    
+
     #footer ul {
         list-style:none;
         width:300px;
         margin:0 auto;
     }
-    
+
     #footer li {
         float:none;
         text-align:center;
     }
-    
+
     #footer li a {
         padding:5px 10px;
         font-size:.8em;
     }
-    
+
     .versionNumber {clear:both; float:left;}
-    
+
     #searchform_home {
         margin-top: 150px;
     }
-    
+
     body {/*background: #E8E9EA;*/
         background: #BCBEC0;
     }
-    
+
     #projectSearch {
         margin-bottom: 50px;
         margin-top: 50px;
     }
-    
-    
-    
-    
+
+
+
+
 }
 
 @media print,
@@ -2642,7 +2635,7 @@ label.searchlabel.open {
         background-image: url('../img/secondary-menu-arrows2x.png');
         background-size: 42px;
     }
-    
+
     #sitesettings-panel .closebutton {
         background:transparent url('../img/icon_closebutton_white2x.png') left top no-repeat;
         background-size:40px;
@@ -2882,11 +2875,11 @@ html[dir="rtl"] #basicSearch .select2-container .select2-choice .select2-arrow, 
   display: inline-block;
 }
 
-#name-link:active #name-link-role { 
-    display: block; 
+#name-link:active #name-link-role {
+    display: block;
 }
- 
-#name-link-role {   
+
+#name-link-role {
     position: absolute;
     z-index: 100;
     border: 3px solid #666;
@@ -2905,21 +2898,21 @@ html[dir="rtl"] #basicSearch .select2-container .select2-choice .select2-arrow, 
     border-style: solid;
     border-width: 8px 8px;
     border-color: transparent transparent #666 transparent;
-    bottom: 100%; 
+    bottom: 100%;
     left: 20%;
     margin-top:-10px;
 }
 
 .centeredFrame {
-    width: 95%; 
-    height: 95%; 
-    position:relative; 
+    width: 95%;
+    height: 95%;
+    position:relative;
     vertical-align: middle;
-}   
+}
 
 .centeredFrame img{
-    position: relative; 
-    top: 50%; 
+    position: relative;
+    top: 50%;
     left: 50%;
 }
 
