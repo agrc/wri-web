@@ -26,6 +26,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
     var selectionColor = [255, 255, 0];
+    var serviceUrlTemplate = '/arcgis/rest/services/WRI/{{name}}/MapServer';
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -44,7 +45,8 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
         apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
         urls: {
-            mapService: gisServerBaseUrl + '/arcgis/rest/services/WRI/MapService/MapServer',
+            mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
+            centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
             api: gisServerBaseUrl + apiEndpoint + '/api'
         },
 
@@ -60,7 +62,13 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
-            featureSelected: 'wri/featureSelected'
+            featureSelected: 'wri/featureSelected',
+            map: {
+                extentChange: 'wri/extentChange'
+            },
+            layer: {
+                add: 'wri/add'
+            }
         },
 
         symbols: {

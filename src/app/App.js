@@ -3,6 +3,7 @@ define([
 
     'app/mapController',
     'app/project/ProjectContainer',
+    'app/centroidSwitch',
     'app/router',
 
     'dijit/_TemplatedMixin',
@@ -25,6 +26,7 @@ define([
 
     mapController,
     ProjectContainer,
+    centroidSwitch,
     router,
 
     _TemplatedMixin,
@@ -117,6 +119,7 @@ define([
             });
 
             router.startup();
+            centroidSwitch.startup();
 
             this.inherited(arguments);
         }

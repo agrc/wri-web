@@ -64,13 +64,26 @@ define([
             baseLayer.suspend();
 
             var that = this;
-            this.addLayers().then(function () {
+            this.addProjectViewLayers().then(function () {
                 that.selectLayers().then(lang.hitch(baseLayer, 'resume'));
             });
+
+            this.setupConnections();
+        },
+        setupConnections: function () {
+            // summary:
+            //      wire events, and such
+            console.log('app/mapController::setupConnections', arguments);
+
+            var that = this;
 
             topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'selectLayers'));
             topic.subscribe(config.topics.featureSelected, function (data) {
                 that.lastSelectedGraphic = that.selectFeature(data, that.lastSelectedGraphic);
+            });
+            topic.subscribe(config.topics.layer.add, lang.hitch(this, 'addLayers'));
+            this.map.on('extent-change', function (change) {
+                topic.publish(config.topics.map.extentChange, change);
             });
         },
         selectLayers: function () {
@@ -117,13 +130,12 @@ define([
 
             return def.promise;
         },
-        addLayers: function () {
+        addProjectViewLayers: function () {
             // summary:
             //      Adds the layers to the map
-            console.log('app/mapController:addLayers', arguments);
+            console.log('app/mapController:addProjectViewLayers', arguments);
 
             var li = config.layerIndices;
-            var that = this;
             var deferreds = [];
             var typesLookup = {
                 0: 'poly',
@@ -131,9 +143,10 @@ define([
                 2: 'point'
             };
 
-            [li.poly, li.line, li.point].forEach(function (index, i) {
-                var layer = new FeatureLayer(config.urls.mapService + '/' + index, {
-                    mode: FeatureLayer.MODE_SELECTION
+            [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
+                var layer = new FeatureLayer(config.urls.mapService + '/' + layerIndex, {
+                    mode: FeatureLayer.MODE_SELECTION,
+                    id: typesLookup[i]
                 });
 
                 var deferred = new Deferred();
@@ -143,8 +156,8 @@ define([
                 });
 
                 deferreds.push(deferred);
-                that.layers[typesLookup[i]] = layer;
-            });
+                this.layers[typesLookup[i]] = layer;
+            }, this);
 
             var lyrs = this.layers;
             this.map.addLayers([lyrs.poly, lyrs.line, lyrs.point]);
@@ -177,6 +190,33 @@ define([
             graphic.getDojoShape().moveToFront();
 
             return graphic;
+        },
+        addLayers: function (layers) {
+            // summary:
+            //      toggles layers in the map
+            // layers: { graphicsLayers: [], dynamicLayers: [] }
+            console.log('app/mapController::addLayers', arguments);
+
+            var loaded = false;
+            layers.graphicsLayers.forEach(function (layer) {
+                loaded = this.map.graphicsLayerIds.some(function (id) {
+                    return id === layer.id;
+                }, this);
+
+                if (!loaded) {
+                    this.map.addLayer(layer);
+                }
+            }, this);
+
+            layers.graphicsLayers.forEach(function (layer) {
+                loaded = this.map.graphicsLayerIds.some(function (id) {
+                    return id === layer.id;
+                }, this);
+
+                if (!loaded) {
+                    this.map.addLayer(layer);
+                }
+            }, this);
         }
     };
 });
