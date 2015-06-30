@@ -1,9 +1,9 @@
 define([
     './config',
 
+    'app/centroidSwitch',
     'app/mapController',
     'app/project/ProjectContainer',
-    'app/centroidSwitch',
     'app/router',
 
     'dijit/_TemplatedMixin',
@@ -12,21 +12,16 @@ define([
 
     'dojo/_base/array',
     'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/text!app/templates/App.html',
-    'dojo/topic',
 
     'esri/dijit/HomeButton',
-    'esri/geometry/Extent',
-
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane'
+    'esri/geometry/Extent'
 ], function (
     config,
 
+    centroidSwitch,
     mapController,
     ProjectContainer,
-    centroidSwitch,
     router,
 
     _TemplatedMixin,
@@ -35,9 +30,7 @@ define([
 
     array,
     declare,
-    lang,
     template,
-    topic,
 
     HomeButton,
     Extent

@@ -2,15 +2,11 @@ define([
     'app/config',
 
     'dojo/_base/lang',
-    'dojo/Deferred',
     'dojo/hash',
     'dojo/io-query',
-    'dojo/promise/all',
-    'dojo/request',
     'dojo/string',
     'dojo/topic',
 
-    'esri/geometry/Extent',
     'esri/graphicsUtils',
 
     'lodash/array/difference'
@@ -18,15 +14,11 @@ define([
     config,
 
     lang,
-    Deferred,
     hash,
     ioQuery,
-    all,
-    request,
     dojoString,
     topic,
 
-    Extent,
     graphicsUtils,
 
     difference
