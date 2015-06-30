@@ -173,11 +173,17 @@ module.exports = function (grunt) {
                 proxies: [
                     {
                         context: '/arcgis',
-                        host: secrets.devHost
+                        host: secrets.devHost,
+                        headers: {
+                            connection: 'keep-alive'
+                        }
                     },
                     {
                         context: '/wri/api',
-                        host: secrets.devHost
+                        host: secrets.devHost,
+                        headers: {
+                            connection: 'keep-alive'
+                        }
                     }
                 ]
             },
