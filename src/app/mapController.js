@@ -151,9 +151,7 @@ define([
 
                 var deferred = new Deferred();
 
-                layer.on('load', function () {
-                    deferred.resolve();
-                });
+                layer.on('load', deferred.resolve);
 
                 deferreds.push(deferred);
                 this.layers[typesLookup[i]] = layer;
