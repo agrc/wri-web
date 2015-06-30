@@ -5,7 +5,9 @@ define([
     'esri/config',
     'esri/symbols/SimpleFillSymbol',
     'esri/symbols/SimpleLineSymbol',
-    'esri/symbols/SimpleMarkerSymbol'
+    'esri/symbols/SimpleMarkerSymbol',
+
+    'dojo/domReady!'
 ], function (
     has,
 

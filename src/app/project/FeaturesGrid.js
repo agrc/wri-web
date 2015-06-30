@@ -76,7 +76,7 @@ define([
                 action: 'Action',
                 subType: 'Treatment/Type',
                 opacity: {
-                    label: 'Opacity',
+                    label: '',
                     renderCell: lang.hitch(this, 'renderCell')
                 }
             };
