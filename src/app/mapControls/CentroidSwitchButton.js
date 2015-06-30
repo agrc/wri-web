@@ -1,16 +1,22 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
     'dojo/_base/declare',
-    'dojo/text!app/mapControls/templates/CentroidSwitchButton.html',
-
-    'xstyle/css!app/mapControls/resources/CentroidSwitchButton.css'
+    'dojo/dom-class',
+    'dojo/topic',
+    'dojo/text!app/mapControls/templates/CentroidSwitchButton.html'
 ], function (
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
 
     declare,
+    domClass,
+    topic,
     template
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -21,20 +27,15 @@ define([
 
         // Properties to be sent into constructor
 
-        postCreate: function () {
-            // summary:
-            //      Overrides method of same name in dijit._Widget.
-            console.log('app.mapControls.CentroidSwitchButton::postCreate', arguments);
-
-            this.setupConnections();
-
-            this.inherited(arguments);
-        },
-        setupConnections: function () {
+        toggle: function (e) {
             // summary:
             //      wire events, and such
-            console.log('app.mapControls.CentroidSwitchButton::setupConnections', arguments);
+            console.log('app.mapControls.CentroidSwitchButton::toggle', arguments);
 
+            domClass.toggle(e.target, 'toggle');
+            var hasClass = domClass.contains(e.target, 'toggle');
+
+            topic.publish(config.topics.map.toggleCentroids, hasClass);
         }
     });
 });

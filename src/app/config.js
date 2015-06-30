@@ -64,7 +64,8 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
             projectIdsChanged: 'wri/projectIdsChanged',
             featureSelected: 'wri/featureSelected',
             map: {
-                extentChange: 'wri/extentChange'
+                extentChange: 'wri/extentChange',
+                toggleCentroids: 'wri/toggle'
             },
             layer: {
                 add: 'wri/add'

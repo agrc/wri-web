@@ -4,12 +4,14 @@ define([
 
     'app/config',
     'app/router',
+    'app/mapControls/CentroidSwitchButton',
 
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/promise/all',
     'dojo/topic',
 
+    'esri/dijit/HomeButton',
     'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
     'esri/symbols/SimpleMarkerSymbol',
@@ -21,11 +23,14 @@ define([
     config,
     router,
 
+    CentroidSwitchButton,
+
     lang,
     Deferred,
     all,
     topic,
 
+    HomeButton,
     Extent,
     FeatureLayer,
     SimpleMarkerSymbol,
@@ -40,10 +45,12 @@ define([
         //      Used to unselect when next feature is selected
         lastSelectedGraphic: null,
 
-        initMap: function (mapDiv) {
+        initMap: function (mapDiv, toolbarNode) {
             // summary:
             //      Sets up the map and layers
             console.info('app/mapController/initMap', arguments);
+
+            this.childWidgets = [];
 
             this.map = new BaseMap(mapDiv, {
                 showAttribution: false,
@@ -51,12 +58,36 @@ define([
                 sliderOrientation: 'horizontal'
             });
 
-            new BaseMapSelector({
+            var selector = new BaseMapSelector({
                 map: this.map,
                 id: 'tundra',
                 position: 'TR',
                 defaultThemeLabel: 'Hybrid'
             });
+
+            var homeButton = new HomeButton({
+                map: this.map,
+                // hard-wire state of utah extent in case the
+                // initial page load is not utah
+                extent: new Extent({
+                    xmax: 696328,
+                    xmin: 207131,
+                    ymax: 4785283,
+                    ymin: 3962431,
+                    spatialReference: {
+                        wkid: 26912
+                    }
+                })
+            }).placeAt(toolbarNode, 'first');
+
+            homeButton._css.home = 'home toolbar-item';
+
+            var centroidButton = new CentroidSwitchButton({
+            }).placeAt(toolbarNode, 'last');
+
+            this.childWidgets.push(selector);
+            this.childWidgets.push(homeButton);
+            this.childWidgets.push(centroidButton);
 
             // suspend base map layer until we get the initial extent
             // trying to save requests to the server
@@ -206,14 +237,23 @@ define([
                 }
             }, this);
 
-            layers.graphicsLayers.forEach(function (layer) {
-                loaded = this.map.graphicsLayerIds.some(function (id) {
+            layers.dynamicLayers.forEach(function (layer) {
+                loaded = this.map.layerIds.some(function (id) {
                     return id === layer.id;
                 }, this);
 
                 if (!loaded) {
                     this.map.addLayer(layer);
                 }
+            }, this);
+        },
+        startup: function () {
+            // summary:
+            //      spin up and get everything set up
+            console.log('app/mapController::startup', arguments);
+
+            this.childWidgets.forEach(function (widget) {
+                widget.startup();
             }, this);
         }
     };

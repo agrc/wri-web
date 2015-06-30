@@ -1,1 +1,12 @@
-.centroid-switch-button {}
+.app [data-dojo-attach-point=mapDiv]
+    .toolbar
+        .HomeButton.centroid-switch-button
+            left 90px + 28 + 7
+            .home
+                background-image url("../mapControls/resources/explode.png")
+            .toggle
+                -webkit-transform: rotate(180deg);
+                -moz-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                -o-transform: rotate(180deg);
+                transform: rotate(180deg);

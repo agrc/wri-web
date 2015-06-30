@@ -1,19 +1,23 @@
 define([
   'app/config',
+  'app/mapController',
 
   'dojo/_base/lang',
   'dojo/Deferred',
   'dojo/promise/all',
   'dojo/topic',
+  'dojo/when',
 
   'esri/layers/FeatureLayer'
 ], function (
   config,
+  mapController,
 
   lang,
   Deferred,
   all,
   topic,
+  when,
 
   FeatureLayer
 ) {
@@ -56,6 +60,7 @@ define([
 
           topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'switchLayersFromProject'));
           topic.subscribe(config.topics.map.extentChange, lang.hitch(this, 'switchLayersFromExtent'));
+          topic.subscribe(config.topics.map.toggleCentroids, lang.hitch(this, 'updateOverride'));
       },
       switchLayersFromProject: function (ids) {
           // summary:
@@ -87,12 +92,14 @@ define([
               return;
           }
 
-          this._loadLayers().then(lang.hitch(this, function () {
+          when(this._loadLayers(), lang.hitch(this, function () {
               if (this.override) {
                   this.centroidLayer.setVisibility(false);
-                  this.explodedLayer.forEach(function (layer) {
-                      layer.setVisibility(false);
-                  });
+                  Object.keys(this.explodedLayer).forEach(function (key) {
+                      var layer = this.explodedLayer[key];
+                      layer.setVisibility(true);
+                  }, this);
+
                   return;
               }
 
@@ -101,11 +108,25 @@ define([
                   var layer = this.explodedLayer[key];
                   layer.setVisibility(extent.lod.level >= this.scaleTrigger);
               }, this);
-              // topic.publish(config.topics.layer.toggleVisibility, {
-              //     centroids: extent.lod.level < this.scaleTrigger,
-              //     projects: extent.lod.level >= this.scaleTrigger
-              // });
           }));
+      },
+      updateOverride: function (value) {
+          // summary:
+          //      sets the override to true or false
+          // value: boolean
+          console.log('app.centroidSwitch::updateOverride', arguments);
+
+          this.override = value;
+
+          var lod = {};
+          lang.setObject('level', mapController.map.getLevel(), lod);
+
+          this.switchLayersFromExtent({
+              levelChange: true,
+              extent: mapController.map.extent,
+              lod: lod,
+              delta: true
+          });
       },
       _loadLayers: function () {
           // summary:
@@ -144,16 +165,14 @@ define([
                                    this.explodedLayer['line-exploded'],
                                    this.explodedLayer['point-exploded'],
                                    this.centroidLayer
-                                 ]
+                               ],
+                  dynamicLayers: []
               });
 
               return all(deferreds);
           }
 
-          var d = new Deferred();
-          d.resolve();
-
-          return d.promise;
+          return true;
       }
   };
 

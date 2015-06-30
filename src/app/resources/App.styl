@@ -10,9 +10,10 @@ $nav-tabs-active-link-hover-border-color = #fff
 @require '../project/resources/ProjectDetails';
 @require '../project/resources/FeaturesGrid';
 @require '../project/resources/ProjectContainer';
+@require '../project/resources/FeatureDetails';
 @require '../mapControls/resources/LayerControls';
 @require '../mapControls/resources/LayerItem';
-@require '../project/resources/FeatureDetails';
+@require '../mapControls/resources/CentroidSwitchButton';
 
 html, body, .app
     width 100%
@@ -29,7 +30,7 @@ html, body, .app
     right 0
     @media screen and (max-width: 600px)
         top 47px
-    
+
 #content, #content #content-map
     position absolute
     padding 0
@@ -49,14 +50,22 @@ html, body, .app
         bottom 0
         left 0
         right 0
-        .HomeButton
+        .toolbar
             position absolute
             top 20px
-            left 100px
             z-index 50
-            .home
+            .HomeButton
+                position inherit
+                left 90px
+            .home, .toolbar-item
                 width 28px
                 height 28px
+                &:hover
+                    background-color #333
+                    background-color rgba(102, 102, 102, 0.90)
+                &:active
+                    background-color #ccc
+                    background-color rgba(102, 102, 102, 0.60)
         .agrc .selectorMain
             top 17px
             right 10px
