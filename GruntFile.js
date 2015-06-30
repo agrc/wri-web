@@ -137,6 +137,18 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        amdcheck: {
+            main: {
+                options: {
+                    removeUnusedDependencies: false
+                },
+                files: [{
+                    src: [
+                        'src/app/**/*.js'
+                    ]
+                }]
+            }
+        },
         bump: {
             options: {
                 files: bumpFiles,
@@ -393,6 +405,7 @@ module.exports = function (grunt) {
         'jasmine:main:build',
         'jshint:force',
         'jscs:force',
+        'amdcheck:main',
         'if-missing:esri_slurp:dev',
         'configureProxies:server',
         'connect:server',
