@@ -128,11 +128,16 @@ define([
             opacityChanged: 'wri/opacityChanged',
             filterQueryChanged: 'wri/filterQueryChanged',
             map: {
-                extentChange: 'wri/extentChange',
-                toggleCentroids: 'wri/toggle'
+                extentChanged: 'wri/extentChanged',
+                toggleCentroids: 'wri/toggle',
+                setExtent: 'wri/setExtent',
+                setMap: 'wri/setMap'
             },
             layer: {
                 add: 'wri/add'
+            },
+            centroidController: {
+                updateVisibility: 'wri/thisFeelsBad'
             }
         },
 

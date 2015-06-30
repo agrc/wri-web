@@ -4,11 +4,14 @@ define([
 
     'app/config',
     'app/router',
+    'app/graphicsUtils',
+    'app/centroidController',
     'app/mapControls/CentroidSwitchButton',
 
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/promise/all',
+    'dojo/when',
     'dojo/topic',
 
     'esri/dijit/HomeButton',
@@ -21,12 +24,14 @@ define([
 
     config,
     router,
-
+    graphicsUtils,
+    centroidController,
     CentroidSwitchButton,
 
     lang,
     Deferred,
     all,
+    when,
     topic,
 
     HomeButton,
@@ -91,13 +96,8 @@ define([
 
             // suspend base map layer until we get the initial extent
             // trying to save requests to the server
-            var baseLayer = this.map.getLayer(this.map.layerIds[0]);
-            baseLayer.suspend();
-
-            var that = this;
-            this.addProjectViewLayers().then(function () {
-                that.selectLayers().then(lang.hitch(baseLayer, 'resume'));
-            });
+            this.baseLayer = this.map.getLayer(this.map.layerIds[0]);
+            this.baseLayer.suspend();
 
             this.setupConnections();
         },
@@ -110,62 +110,105 @@ define([
             topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'selectFeature'));
             topic.subscribe(config.topics.opacityChanged, lang.hitch(this, 'changeOpacity'));
             topic.subscribe(config.topics.layer.add, lang.hitch(this, 'addLayers'));
+            topic.subscribe(config.topics.map.setExtent, lang.hitch(this, 'setExtent'));
+            topic.subscribe(config.topics.map.setMap, lang.hitch(this, '_setMap'));
+            topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
 
             this.map.on('extent-change', function (change) {
-                topic.publish(config.topics.map.extentChange, change);
+                topic.publish(config.topics.map.extentChanged, change);
             });
         },
-        selectLayers: function () {
+        selectLayers: function (ids) {
             // summary:
             //      selects the feature layers based upon the current project ids
+            // ids: [int] of project ids
             // returns: Promise
             console.log('app/mapController:selectLayers', arguments);
 
-            var def = new Deferred();
-            var q = new Query();
-            var lyrs = [this.layers.point, this.layers.line, this.layers.poly];
+            if (!ids || ids.length === 0 || ids.length > 1) {
+                // ids is null or has no project id's
+                // load centroids and exploded
+                // hide all other layers and clear all selections
+                // zoom to full extent
 
-            q.where = router.getProjectsWhereClause();
-            // don't show all features for feature layers
-            if (q.where !== '1 = 1') {
-                var deferreds = [];
-
-                lyrs.forEach(function (lyr) {
-                    deferreds.push(lyr.selectFeatures(q));
-                });
-                var that = this;
-                all(deferreds).then(function (graphics) {
-                    if (graphics === null) {
-                        // state of utah extent
-                        that.map.setExtent(new Extent({
-                            xmax: 696328,
-                            xmin: 207131,
-                            ymax: 4785283,
-                            ymin: 3962431,
-                            spatialReference: {
-                                wkid: 26912
-                            }
-                        }));
-                    } else {
-                        var extent = router.unionGraphicsIntoExtent(graphics);
-                        that.map.setExtent(extent, true);
+                when(centroidController.ensureLayersLoaded(), lang.hitch(this, function (result) {
+                    if (result !== true) {
+                        this.addLayers({
+                            graphicsLayers: result.map(function (layers) {
+                                return layers.layer;
+                            }),
+                            dynamicLayers: []
+                        });
                     }
-                    def.resolve();
-                });
+
+                    this.map.graphicsLayerIds.forEach(function (id) {
+                        this.map.getLayer(id).setVisibility(false);
+                    }, this);
+
+                    when(centroidController.showFeaturesFor(router.getProjectsWhereClause()), lang.hitch(this,
+                        function (extent) {
+                            if (extent === null) {
+                                // state of utah extent
+                                extent = this.setExtent();
+                            } else {
+                                this.setExtent(extent);
+                            }
+
+                            this.baseLayer.resume();
+
+                            this.updateCentroidVisibility();
+                        }
+                    ));
+                }));
             } else {
-                lyrs.forEach(function (lyr) {
-                    lyr.clearSelection();
-                });
+                // single project view
+                // load point, line, polygon
+                // hide other layers and clear their selections
+                // set selection on point, line, polygon
+                // zoom to extent
+                this.map.graphicsLayerIds.forEach(function (id) {
+                    this.map.getLayer(id).setVisibility(false);
+                }, this);
 
-                def.resolve();
+                var q = new Query();
+                q.where = router.getProjectsWhereClause();
+
+                if (q.where === '1 = 1') {
+                    return;
+                }
+
+                when(this.ensureProjectLayersAdded(), lang.hitch(this,
+                    function () {
+                        var deferreds = [];
+
+                        [this.layers.poly, this.layers.line, this.layers.point].forEach(function (lyr) {
+                            deferreds.push(lyr.selectFeatures(q));
+                        });
+
+                        var that = this;
+                        all(deferreds).then(function (graphics) {
+                            if (graphics === null) {
+                                // state of utah extent
+                                that.setExtent();
+                            } else {
+                                var extent = graphicsUtils.unionGraphicsIntoExtent(graphics);
+                                that.setExtent(extent);
+                            }
+
+                            that.baseLayer.resume();
+                        });
+                    })
+                );
             }
-
-            return def.promise;
         },
-        addProjectViewLayers: function () {
+        ensureProjectLayersAdded: function () {
             // summary:
             //      Adds the layers to the map
-            console.log('app/mapController:addProjectViewLayers', arguments);
+            console.log('app/mapController:ensureProjectLayersAdded', arguments);
+
+            if (this.layersLoaded) {
+                return true;
+            }
 
             var li = config.layerIndices;
             var deferreds = [];
@@ -191,6 +234,8 @@ define([
 
             var lyrs = this.layers;
             this.map.addLayers([lyrs.poly, lyrs.line, lyrs.point]);
+
+            this.layersLoaded = true;
 
             return all(deferreds);
         },
@@ -287,6 +332,61 @@ define([
                 }
             }, this);
         },
+        setExtent: function (extent) {
+            // summary:
+            //      sets the map extent
+            // extent: esri Extent. if null use full extent
+            console.log('app/mapController::setExtent', arguments);
+
+            if (!extent) {
+                extent = new Extent({
+                    xmax: 696328,
+                    xmin: 207131,
+                    ymax: 4785283,
+                    ymin: 3962431,
+                    spatialReference: {
+                        wkid: 26912
+                    }
+                });
+
+                this.map.setExtent(extent, false);
+
+                return extent;
+            }
+
+            this.map.setExtent(extent, true);
+
+            return extent;
+        },
+        updateCentroidVisibility: function () {
+            // summary:
+            //      creates the extent event object and invokes the method
+            // : {5:type or return: type}
+            console.log('app/mapController::updateCentroidVisibility', arguments);
+
+            var extent = {
+                levelChange: true,
+                extent: this.map.extent,
+                lod:  {
+                    level: this.map.getLevel()
+                },
+                delta: true
+            };
+
+            centroidController.updateLayerVisibilityFor(extent);
+        },
+        _setMap: function (obj) {
+            // summary:
+            //      calls setMap on the obj
+            // obj
+            console.log('app/mapController::_setMap', arguments);
+
+            if (!obj.setMap) {
+                return;
+            }
+
+            obj.setMap(this.map);
+        },
         startup: function () {
             // summary:
             //      spin up and get everything set up
@@ -295,6 +395,8 @@ define([
             this.childWidgets.forEach(function (widget) {
                 widget.startup();
             }, this);
+
+            centroidController.startup();
         }
     };
 });
