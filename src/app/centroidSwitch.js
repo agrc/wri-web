@@ -70,6 +70,18 @@ define([
 
           if (!ids || ids.length === 1) {
               this.enabled = false;
+
+              if (this.centroidLayer) {
+                  this.centroidLayer.setVisibility(false);
+              }
+
+              if (this.explodedLayer) {
+                  Object.keys(this.explodedLayer).forEach(function (key) {
+                      var layer = this.explodedLayer[key];
+                      layer.setVisibility(true);
+                  }, this);
+              }
+
               return;
           }
 
