@@ -12,7 +12,6 @@ define([
 
     'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
-    'esri/symbols/SimpleMarkerSymbol',
     'esri/tasks/query'
 ], function (
     BaseMap,
@@ -28,7 +27,6 @@ define([
 
     Extent,
     FeatureLayer,
-    SimpleMarkerSymbol,
     Query
 ) {
     return {
@@ -39,6 +37,11 @@ define([
         // lastSelectedGraphic: Graphic
         //      Used to unselect when next feature is selected
         lastSelectedGraphic: null,
+
+        // lastSelectedOriginalSymbol: Symbol
+        //      Used to reapply the original symbol to the last selected graphic
+        lastSelectedOriginalSymbol: null,
+
 
         initMap: function (mapDiv) {
             // summary:
@@ -69,9 +72,8 @@ define([
             });
 
             topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'selectLayers'));
-            topic.subscribe(config.topics.featureSelected, function (data) {
-                that.lastSelectedGraphic = that.selectFeature(data, that.lastSelectedGraphic);
-            });
+            topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'selectFeature'));
+            topic.subscribe(config.topics.opacityChanged, lang.hitch(this, 'changeOpacity'));
         },
         selectLayers: function () {
             // summary:
@@ -151,32 +153,71 @@ define([
 
             return all(deferreds);
         },
-        selectFeature: function (data, lastGraphic) {
+        getGraphicById: function (featureId, layer) {
             // summary:
             //      description
-            // data: Object
-            // lastGraphic: Object (optional)
-            // returns: Object[]
-            console.log('app/mapController:selectFeature', arguments);
+            // featureId: Number
+            // layer: String (point | line | poly)
+            console.log('app/mapController:getGraphicById', arguments);
 
-            if (lastGraphic) {
-                lastGraphic.setSymbol(null);
-            }
-
-            var lyr = this.layers[data.origin];
+            var lyr = this.layers[layer];
             var graphic;
             lyr.graphics.some(function (g) {
-                if (g.attributes.FeatureID === data.featureId) {
+                if (g.attributes.FeatureID === featureId) {
                     graphic = g;
                     return true;
                 } else {
                     return false;
                 }
             });
-            graphic.setSymbol(new SimpleMarkerSymbol(config.symbols.selected[data.origin]));
-            graphic.getDojoShape().moveToFront();
 
             return graphic;
+        },
+        selectFeature: function (data) {
+            // summary:
+            //      Changes the color of the passed in graphic and reverts any previous ones
+            // data: Object
+            console.log('app/mapController:selectFeature', arguments);
+
+            var graphic = this.getGraphicById(data.featureId, data.origin);
+
+            if (this.lastSelectedGraphic) {
+                var resetSymbol = this.lastSelectedOriginalSymbol ||
+                    lang.clone(this.layers[data.origin].renderer.getSymbol(this.lastSelectedGraphic));
+                if (this.lastSelectedGraphic.symbol) {
+                    resetSymbol.color.a = this.lastSelectedGraphic.symbol.color.a;
+                }
+                this.lastSelectedGraphic.setSymbol(resetSymbol);
+            }
+
+            var newSelectionSymbol = config.symbols.selected[data.origin];
+
+            // persist any existing opacity to selection symbol
+            if (graphic.symbol) {
+                newSelectionSymbol = lang.clone(newSelectionSymbol);
+                newSelectionSymbol.color.a = graphic.symbol.color.a;
+            }
+
+            // store so that we can reset these on next selection
+            this.lastSelectedOriginalSymbol = lang.clone(graphic.symbol);
+            this.lastSelectedGraphic = graphic;
+
+            graphic.setSymbol(newSelectionSymbol);
+            graphic.getDojoShape().moveToFront();
+        },
+        changeOpacity: function (newValue, origin, featureId) {
+            // summary:
+            //      Updates the opacity for the feature
+            // newValue: Number
+            //      new opacity
+            // origin: String
+            // featureId: String
+            console.log('app/mapController:changeOpacity', arguments);
+
+            var graphic = this.getGraphicById(featureId, origin);
+            var symbol = lang.clone(graphic.symbol || this.layers[origin].renderer.getSymbol(graphic));
+            symbol.color.a = newValue;
+            graphic.setSymbol(symbol);
         }
     };
 });

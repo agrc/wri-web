@@ -48,8 +48,9 @@ define([
 
             $(this.sliderDiv).slider({
                 min: 0,
-                max: 100,
-                value: 100,
+                max: 1,
+                value: 1,
+                step: 0.01,
                 tooltip: 'hide'
             });
             $(this.sliderDiv).on('change', lang.hitch(this, 'onChange'));
@@ -67,7 +68,7 @@ define([
             // evt: Event Object
             console.log('app/project/OpacitySlider:onChange', arguments);
 
-            topic.publish(config.topics.opacityChanged, evt.value, this.origin, this.featureId);
+            topic.publish(config.topics.opacityChanged, evt.value.newValue, this.origin, this.featureId);
         }
     });
 });

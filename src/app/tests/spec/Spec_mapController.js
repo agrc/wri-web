@@ -1,46 +1,104 @@
 require([
-    'app/mapController'
+    'app/config',
+    'app/mapController',
+
+    'dojo/_base/lang'
 ],
 
 function (
-    mapController
-    ) {
+    config,
+    mapController,
+
+    lang
+) {
     describe('app/mapController', function () {
         describe('selectFeature', function () {
             var data;
-            var setSymbolSpy;
-            var g = {
-                attributes: {
-                    FeatureID: 1139
-                },
-                getDojoShape: function () {
-                    return {moveToFront: function () {}};
-                }
-            };
+            var g;
+            var defaultSymbol = { color: { a: 1 } };
             beforeEach(function () {
+                g = {
+                    attributes: {
+                        FeatureID: 1139
+                    },
+                    getDojoShape: function () {
+                        return {moveToFront: function () {}};
+                    },
+                    symbol: { color: { a: 1 } }
+                };
                 data = {
                     featureId: 1139,
                     origin: 'point'
                 };
-                g.setSymbol = setSymbolSpy = jasmine.createSpy('setSymbol');
+                g.setSymbol = jasmine.createSpy('setSymbol');
                 mapController.layers.point = {
-                    graphics: [g]
+                    graphics: [g],
+                    renderer: {
+                        getSymbol: function () {
+                            return defaultSymbol;
+                        }
+                    }
                 };
             });
-            it('unselects the last graphic', function () {
-                var lastGraphic = {
-                    setSymbol: jasmine.createSpy('setSymbol')
-                };
+            it('no last graphic and no current symbol', function () {
+                g.symbol = undefined;
+                mapController.selectFeature(data);
 
-                mapController.selectFeature(data, lastGraphic);
-
-                expect(lastGraphic.setSymbol).toHaveBeenCalledWith(null);
+                expect(g.setSymbol.calls.mostRecent().args[0].style)
+                    .toEqual(config.symbols.selected.point.style);
+                expect(mapController.lastSelectedGraphic).toBe(g);
+                expect(mapController.lastSelectedOriginalSymbol).toBeUndefined();
             });
-            it('sets the selection graphic symbol', function () {
-                var rtn = mapController.selectFeature(data);
+            it('no last graphic and current symbol', function () {
+                mapController.selectFeature(data);
 
-                expect(setSymbolSpy).toHaveBeenCalled();
-                expect(rtn).toBe(g);
+                expect(g.setSymbol.calls.mostRecent().args[0].style)
+                    .toEqual(config.symbols.selected.point.style);
+                expect(mapController.lastSelectedGraphic).toBe(g);
+                expect(mapController.lastSelectedOriginalSymbol).toEqual(g.symbol);
+            });
+            it('existing last graphic no last symbol', function () {
+                var lastGraphic = lang.clone(g);
+                lastGraphic.setSymbol = jasmine.createSpy('setSymbol');
+                mapController.lastSelectedGraphic = lastGraphic;
+                mapController.lastSelectedOriginalSymbol = undefined;
+
+                mapController.selectFeature(data);
+
+                expect(lastGraphic.setSymbol).toHaveBeenCalledWith(defaultSymbol);
+            });
+            it('existing opacity on select graphic', function () {
+                var opacity = 0.5;
+                g.symbol.color.a = opacity;
+                mapController.lastSelectedOriginalSymbol = undefined;
+
+                mapController.selectFeature(data);
+
+                expect(g.setSymbol.calls.mostRecent().args[0].color.a).toEqual(opacity);
+            });
+            it('opacity changed on last selected graphic', function () {
+                var opacity = 0.3;
+                var lastGraphic = lang.clone(g);
+                lastGraphic.setSymbol = jasmine.createSpy('setSymbol');
+                lastGraphic.symbol.color.a = opacity;
+                mapController.lastSelectedGraphic = lastGraphic;
+                mapController.lastSelectedOriginalSymbol = { color: { a: 1 } };
+
+                mapController.selectFeature(data);
+
+                expect(lastGraphic.setSymbol.calls.mostRecent().args[0].color.a).toBe(opacity);
+            });
+            it('opacity changed on last selected graphic with no symbol', function () {
+                var opacity = 0.4;
+                var lastGraphic = lang.clone(g);
+                lastGraphic.setSymbol = jasmine.createSpy('setSymbol');
+                lastGraphic.symbol.color.a = opacity;
+                mapController.lastSelectedGraphic = lastGraphic;
+                mapController.lastSelectedOriginalSymbol = undefined;
+
+                mapController.selectFeature(data);
+
+                expect(lastGraphic.setSymbol.calls.mostRecent().args[0].color.a).toBe(opacity);
             });
         });
     });

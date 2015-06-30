@@ -1,5 +1,19 @@
 /* jshint maxlen:false */
-define(['dojo/has', 'esri/config'], function (has, esriConfig) {
+define([
+    'dojo/has',
+
+    'esri/config',
+    'esri/symbols/SimpleFillSymbol',
+    'esri/symbols/SimpleLineSymbol',
+    'esri/symbols/SimpleMarkerSymbol'
+], function (
+    has,
+
+    esriConfig,
+    SimpleFillSymbol,
+    SimpleLineSymbol,
+    SimpleMarkerSymbol
+) {
     // force api to use CORS on mapserv thus removing the test request on app load
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
@@ -62,7 +76,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
 
         symbols: {
             selected: {
-                point: {
+                point: new SimpleMarkerSymbol({
                     type: "esriSMS",
                     style: "esriSMSCircle",
                     color: selectionColor,
@@ -74,14 +88,14 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
                         color: [0, 0, 0, 255],
                         width: 1
                     }
-                },
-                line: {
+                }),
+                line: new SimpleLineSymbol({
                     type: "esriSLS",
                     style: "esriSLSSolid",
                     color: selectionColor,
                     width: 4
-                },
-                poly: {
+                }),
+                poly: new SimpleFillSymbol({
                     type: "esriSFS",
                     style: "esriSFSSolid",
                     color: selectionColor,
@@ -91,7 +105,7 @@ define(['dojo/has', 'esri/config'], function (has, esriConfig) {
                         color: [110, 110, 110, 255],
                         width: 0.5
                     }
-                }
+                })
             }
         }
     };

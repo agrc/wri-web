@@ -77,15 +77,7 @@ define([
                 subType: 'Treatment/Type',
                 opacity: {
                     label: 'Opacity',
-                    renderCell: function (data) {
-                        if ((!data.hasChildren && !data.parent) || data.hasChildren) {
-                            var stripped = lang.clone(data);
-                            delete stripped.id;
-                            var slider = new OpacitySlider(stripped);
-                            slider.startup();
-                            return slider.domNode;
-                        }
-                    }
+                    renderCell: lang.hitch(this, 'renderCell')
                 }
             };
 
@@ -116,6 +108,20 @@ define([
 
             this.inherited(arguments);
         },
+        renderCell: function (data) {
+            // summary:
+            //      description
+            // data: {}
+            console.log('app.project.FeaturesGrid:renderCell', arguments);
+
+            if ((!data.hasChildren && !data.parent) || data.hasChildren) {
+                var stripped = lang.clone(data);
+                delete stripped.id;
+                var slider = new OpacitySlider(stripped);
+                slider.startup();
+                return slider.domNode;
+            }
+        },
         setupConnections: function () {
             // summary:
             //      wire events, and such
@@ -124,7 +130,9 @@ define([
             var that = this;
             this.own(
                 this.grid.on('.dgrid-row.selectable:click', function (evt) {
-                    topic.publish(config.topics.featureSelected, that.grid.row(evt).data);
+                    if (evt.target.tagName === 'TD') {
+                        topic.publish(config.topics.featureSelected, that.grid.row(evt).data);
+                    }
                 })
             );
         }
