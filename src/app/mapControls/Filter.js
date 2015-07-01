@@ -77,7 +77,6 @@ define([
             //      apply base class
             console.log('app/mapControls/Filter:constructor', arguments);
 
-            this.baseClass += ' list-filter';
             this.selectedValues = [];
         },
         postCreate: function () {
