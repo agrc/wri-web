@@ -153,7 +153,10 @@ define([
                     def.resolve();
                 });
             } else {
-                // TODO: show centroids
+                lyrs.forEach(function (lyr) {
+                    lyr.clearSelection();
+                });
+
                 def.resolve();
             }
 
