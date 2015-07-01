@@ -1,6 +1,7 @@
 /* jshint maxlen:false */
 define([
     'dojo/has',
+    'dojo/string',
 
     'esri/config',
     'esri/symbols/SimpleFillSymbol',
@@ -10,6 +11,7 @@ define([
     'dojo/domReady!'
 ], function (
     has,
+    dojoString,
 
     esriConfig,
     SimpleFillSymbol,
@@ -43,6 +45,7 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
     var selectionColor = [255, 255, 0];
     var serviceUrlTemplate = '/arcgis/rest/services/WRI/{{name}}/MapServer';
+    var Project_ID = 'Project_ID';
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -73,13 +76,57 @@ define([
         },
 
         fieldNames: {
-            Project_ID: 'Project_ID'
+            Project_ID: Project_ID,
+            Status: 'Status',
+            TypeCode: 'TypeCode'
+        },
+
+        featureTypesInTables: {
+            0: 'POLY',
+            1: 'POLY',
+            2: 'POLY',
+            3: 'POLY',
+            5: 'POLY',
+            6: 'LINE',
+            7: 'LINE',
+            8: 'LINE',
+            9: 'POINT',
+            10: 'POINT',
+            11: 'POINT',
+            12: 'POINT'
+        },
+
+        domains: {
+            projectStatus: [
+                'Cancelled',
+                'Complete',
+                'Current',
+                'Pending Complet',
+                'Project',
+                'Proposal',
+                'Proposed'
+            ],
+            featureType: [
+                ['Terrestrial', 0],
+                ['Aquatic/Riparian', 1],
+                ['Fish Passage Structure', 2],
+                ['Easement/Aquisition', 3],
+                ['Affected Area', 5],
+                ['Dam', 6],
+                ['Pipeline', 7],
+                ['Fence', 8],
+                ['Guzzler', 9],
+                ['Trough', 10],
+                ['Water Control Structure', 11],
+                ['Other', 12]
+            ]
         },
 
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
             featureSelected: 'wri/featureSelected',
             opacityChanged: 'wri/opacityChanged',
+            filterQueryChanged: 'wri/filterQueryChanged',
             map: {
                 extentChange: 'wri/extentChange',
                 toggleCentroids: 'wri/toggle'

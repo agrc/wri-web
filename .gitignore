@@ -9,6 +9,7 @@ deploy
 dist/
 node_modules/
 secrets.json
+src/agrc-jasmine-matchers/
 src/agrc/
 src/app/**/*.css
 src/bootstrap-stylus/
