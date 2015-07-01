@@ -33,7 +33,7 @@ require([
         describe('postCreate', function () {
             it('creates bubbles', function () {
                 expect(testWidget.buttonContainer.children.length).toBe(3);
-                expect(testWidget.buttonContainer.children[1].value).toBe('value2');
+                expect(testWidget.buttonContainer.children[1].children[0].value).toBe('value2');
             });
         });
         describe('itemClicked', function () {
