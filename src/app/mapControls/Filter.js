@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/mapControls/_CollapsePanel',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -19,6 +20,7 @@ define([
     'bootstrap-stylus/js/transition'
 ], function (
     config,
+    _CollapsePanel,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -32,7 +34,7 @@ define([
     query,
     template
 ) {
-    var c = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    var c = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _CollapsePanel], {
         // description:
         //      A control for filtering by a defined set of choices.
         //      Allows selection of one or more choices.
@@ -84,26 +86,18 @@ define([
             //      build bubbles
             console.log('app/mapControls/Filter:postCreate', arguments);
 
-            var that = this;
-            on(this.heading, 'click', function (evt) {
-                if (evt.srcElement !== that.closeBtn &&
-                    evt.srcElement !== that.closeSpan) {
-                    $(that.body).collapse('toggle');
-                }
-            });
-
             this.items.forEach(function (item) {
                 var lbl = domConstruct.create('label', {
                     'class': 'btn btn-default btn-xs',
                     innerHTML: ' ' + item[0]
-                }, that.buttonContainer);
+                }, this.buttonContainer);
                 domConstruct.create('input', {
                     value: item[1],
                     type: 'checkbox',
                     autocomplete: 'off',
-                    'onclick': lang.partial(lang.hitch(that, 'itemClicked'), item[1])
+                    'onclick': lang.partial(lang.hitch(this, 'itemClicked'), item[1])
                 }, lbl, 'first');
-            });
+            }, this);
 
             if (this.anyAllToggle) {
                 domClass.remove(this.anyAllGroup, 'hidden');
