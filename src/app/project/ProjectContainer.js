@@ -94,6 +94,7 @@ define([
             console.log('app.project.ProjectContainer::showDetailsForProject', arguments);
 
             if (!ids || ids.length !== 1) {
+                domClass.toggle(this.domNode, 'hidden', ids && ids.length !== 1);
                 return;
             }
 
