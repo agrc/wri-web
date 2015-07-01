@@ -12,6 +12,7 @@
         packages: [
             'agrc',
             'app',
+            'bootstrap',
             'bootstrap-stylus',
             'dgrid',
             'dgrid0.3',
@@ -26,10 +27,6 @@
             'put-selector',
             'xstyle',
             {
-                name: 'bootstrap',
-                location: './bootstrap',
-                main: 'dist/js/bootstrap'
-            }, {
                 name: 'jquery',
                 location: './jquery/dist',
                 main: 'jquery'

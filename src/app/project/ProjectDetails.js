@@ -8,7 +8,8 @@ define([
     'dojo/text!app/project/templates/ProjectDetails.html',
 
     'bootstrap-stylus/js/button',
-    'bootstrap-stylus/js/collapse'
+    'bootstrap-stylus/js/collapse',
+    'bootstrap-stylus/js/transition'
 ], function (
     _TemplatedMixin,
     _WidgetBase,
