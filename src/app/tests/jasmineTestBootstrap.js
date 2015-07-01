@@ -4,8 +4,8 @@ var dojoConfig = {
     // isDebug: false,
     isJasmineTestRunner: true,
     packages: [{
-        name: 'matchers',
-        location: 'matchers/src'
+        name: 'agrc-jasmine-matchers',
+        location: 'agrc-jasmine-matchers/src'
     }, {
         name: 'stubmodule',
         location: 'stubmodule/src',

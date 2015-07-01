@@ -74,6 +74,15 @@ require([
 
                 expect(testWidget.getQuery()).toBe(expected);
             });
+            it('prepend related table queries', function () {
+                testWidget.relatedTableQuery = true;
+                var expected = "Project_ID IN (SELECT Project_ID FROM POINT WHERE FieldName IN ('1', '2')) OR Project_ID IN (SELECT Project_ID FROM LINE WHERE FieldName IN ('1', '2')) OR Project_ID IN (SELECT Project_ID FROM POLY WHERE FieldName IN ('1', '2'))";
+
+                testWidget.itemClicked('1');
+                testWidget.itemClicked('2');
+
+                expect(testWidget.getQuery()).toBe(expected);
+            });
         });
     });
 });

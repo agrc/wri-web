@@ -2,7 +2,7 @@
     <div class="panel-heading" data-dojo-attach-point='heading'>
         ${name}
         <div class="hidden">(<span data-dojo-attach-point='numSpan'>0</span>)</div>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+        <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"
             data-dojo-attach-point='closeBtn'
             data-dojo-attach-event='click: remove'>
             <span aria-hidden="true"
@@ -18,20 +18,20 @@
             <div class="btn-group pull-right hidden"
                 data-toggle="buttons"
                 data-dojo-attach-point='anyAllGroup'>
-                <label class='btn btn-default btn-xs active'>
+                <label class='btn btn-default btn-xs active'
+                    data-toggle='tooltip'
+                    title='show projects with <u><b>any</b></u> of these values'>
                     <input type='radio' name='${id}_any_all'
                         autocomplete='off'
                         data-dojo-attach-point='anyBtn'
-                        data-dojo-attach-event='click: toggleAny'
-                        data-toggle='tooltip'
-                        title='show projects with <u><b>any</b></u> of these values'> any
+                        data-dojo-attach-event='click: toggleAny'> any
                 </label>
-                <label class='btn btn-default btn-xs'>
+                <label class='btn btn-default btn-xs'
+                    data-toggle='tooltip'
+                    title='show projects with <u><b>all</b></u> of these values'>
                     <input type='radio' name='${id}_any_all'
                         autocomplete='off'
-                        data-dojo-attach-event='click: toggleAny'
-                        data-toggle='tooltip'
-                        title='show projects with <u><b>all</b></u> of these values'> all
+                        data-dojo-attach-event='click: toggleAny'> all
                 </label>
             </div>
         </div>

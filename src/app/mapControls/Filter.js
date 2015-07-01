@@ -1,4 +1,6 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
@@ -11,11 +13,13 @@ define([
     'dojo/query',
     'dojo/text!app/mapControls/templates/Filter.html',
 
+    'bootstrap-stylus/js/button',
     'bootstrap-stylus/js/collapse',
     'bootstrap-stylus/js/tooltip',
-    'bootstrap-stylus/js/button',
     'bootstrap-stylus/js/transition'
 ], function (
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
@@ -64,6 +68,10 @@ define([
         //      If true the any/all toggle buttons appear
         anyAllToggle: false,
 
+        // relatedTableQuery: Boolean (default: false)
+        //      If true this is a query on related tables
+        relatedTableQuery: false,
+
         constructor: function () {
             // summary:
             //      apply base class
@@ -76,11 +84,6 @@ define([
             // summary:
             //      build bubbles
             console.log('app/mapControls/Filter:postCreate', arguments);
-
-            $(this.body).collapse({
-                parent: this.parent,
-                toggle: false
-            });
 
             var that = this;
             on(this.heading, 'click', function (evt) {
@@ -165,15 +168,16 @@ define([
                     values = this.selectedValues;
                 }
                 if (this.any) {
-                    return this.fieldName + ' IN (' + values.join(', ') + ')';
+                    var where = this.fieldName + ' IN (' + values.join(', ') + ')';
+                    return this.getRelatedTableQuery(where);
                 } else {
                     var that = this;
                     return values.reduce(function (previousReturn, currentValue) {
                         var where = that.fieldName + ' = ' + currentValue;
                         if (!previousReturn) {
-                            return where;
+                            return that.getRelatedTableQuery(where);
                         } else {
-                            return previousReturn + ' AND ' + where;
+                            return previousReturn + ' AND ' + that.getRelatedTableQuery(where);
                         }
                     }, false);
                 }
@@ -209,6 +213,16 @@ define([
             $(this.body).collapse('show');
 
             this.inherited(arguments);
+        },
+        getRelatedTableQuery: function (where) {
+            // summary:
+            //      Optionally wraps the where clause if it's applicable to the results table
+            // where: String
+            //      The original where clause
+            console.log('app/filters/_RelatedTableQuery:getRelatedTableQuery', arguments);
+
+            return (!this.relatedTableQuery) ?
+                where : config.queryByFeaturesTxt.replace(/{{query}}/g, where);
         }
     });
 
