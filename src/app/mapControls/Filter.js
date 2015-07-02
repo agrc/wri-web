@@ -91,7 +91,6 @@ define([
                     'onclick': lang.partial(lang.hitch(this, 'itemClicked'), item[1])
                 }, this.buttonContainer);
                 domConstruct.create('input', {
-                    value: item[1],
                     type: 'checkbox',
                     autocomplete: 'off'
                 }, lbl, 'first');
