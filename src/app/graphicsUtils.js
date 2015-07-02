@@ -1,7 +1,7 @@
 define([
-  'esri/graphicsUtils'
+    'esri/graphicsUtils'
 ], function (
-  graphicsUtils
+    graphicsUtils
 ) {
     return {
         unionGraphicsIntoExtent: function (graphics) {
