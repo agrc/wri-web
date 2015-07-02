@@ -4,7 +4,6 @@ define([
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
-    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -17,7 +16,6 @@ define([
 
     _TemplatedMixin,
     _WidgetBase,
-    _WidgetsInTemplateMixin,
 
     declare,
     lang,
@@ -25,12 +23,11 @@ define([
     template,
     topic
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin], {
         // description:
         //      Holds filter widgets and coordinates their work
         templateString: template,
         baseClass: 'filters-container',
-        widgetsInTemplate: true,
 
         // filters: _Filter[]
         //      list of filters for this widget

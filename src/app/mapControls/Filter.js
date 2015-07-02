@@ -4,7 +4,6 @@ define([
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
-    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -24,7 +23,6 @@ define([
 
     _TemplatedMixin,
     _WidgetBase,
-    _WidgetsInTemplateMixin,
 
     declare,
     lang,
@@ -34,7 +32,7 @@ define([
     query,
     template
 ) {
-    var c = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _CollapsePanel], {
+    var c = declare([_WidgetBase, _TemplatedMixin, _CollapsePanel], {
         // description:
         //      A control for filtering by a defined set of choices.
         //      Allows selection of one or more choices.

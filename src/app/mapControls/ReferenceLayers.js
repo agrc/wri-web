@@ -3,7 +3,6 @@ define([
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
-    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/_base/declare',
     'dojo/text!app/mapControls/templates/ReferenceLayers.html',
@@ -15,12 +14,11 @@ define([
 
     _TemplatedMixin,
     _WidgetBase,
-    _WidgetsInTemplateMixin,
 
     declare,
     template
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _CollapsePanel], {
+    return declare([_WidgetBase, _TemplatedMixin, _CollapsePanel], {
         // description:
         //      Container for controls for toggling reference layers
         templateString: template,
