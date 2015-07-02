@@ -89,7 +89,7 @@ define([
             this.items.forEach(function (item) {
                 var lbl = domConstruct.create('label', {
                     'class': 'btn btn-default btn-xs',
-                    innerHTML: ' ' + item[0]
+                    innerHTML: item[0]
                 }, this.buttonContainer);
                 domConstruct.create('input', {
                     value: item[1],
