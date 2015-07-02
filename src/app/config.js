@@ -82,7 +82,7 @@ define([
         },
 
         queryByFeaturesTxt: ['POINT', 'LINE', 'POLY'].reduce(function (previousValue, currentValue) {
-            var query = dojoString.substitute('${0} IN (SELECT ${0} FROM ${1} WHERE {{query}})',
+            var query = dojoString.substitute('${0} IN(SELECT ${0} FROM ${1} WHERE {{query}})',
                 [Project_ID, currentValue]);
             if (!previousValue) {
                 return query;

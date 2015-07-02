@@ -158,12 +158,12 @@ define([
                     values = this.selectedValues;
                 }
                 if (this.any) {
-                    var where = this.fieldName + ' IN (' + values.join(', ') + ')';
+                    var where = this.fieldName + ' IN(' + values.join(',') + ')';
                     return this.getRelatedTableQuery(where);
                 } else {
                     var that = this;
                     return values.reduce(function (previousReturn, currentValue) {
-                        var where = that.fieldName + ' = ' + currentValue;
+                        var where = that.fieldName + '=' + currentValue;
                         if (!previousReturn) {
                             return that.getRelatedTableQuery(where);
                         } else {
