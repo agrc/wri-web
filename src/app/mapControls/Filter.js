@@ -89,13 +89,13 @@ define([
             this.items.forEach(function (item) {
                 var lbl = domConstruct.create('label', {
                     'class': 'btn btn-default btn-xs',
-                    innerHTML: item[0]
+                    innerHTML: item[0],
+                    'onclick': lang.partial(lang.hitch(this, 'itemClicked'), item[1])
                 }, this.buttonContainer);
                 domConstruct.create('input', {
                     value: item[1],
                     type: 'checkbox',
-                    autocomplete: 'off',
-                    'onclick': lang.partial(lang.hitch(this, 'itemClicked'), item[1])
+                    autocomplete: 'off'
                 }, lbl, 'first');
             }, this);
 
