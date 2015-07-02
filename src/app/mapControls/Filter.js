@@ -183,6 +183,8 @@ define([
             //      description
             console.log('app/mapControls/Filter:toggleAny', arguments);
 
+            // add this to the bottom of the event loop to make sure that
+            // bootstrap has added the 'active' class to the button
             var that = this;
             setTimeout(function () {
                 that.any = domClass.contains(that.anyBtn, 'active');

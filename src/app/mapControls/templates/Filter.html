@@ -20,18 +20,18 @@
                 data-dojo-attach-point='anyAllGroup'>
                 <label class='btn btn-default btn-xs active'
                     data-toggle='tooltip'
-                    title='show projects with <u><b>any</b></u> of these values'>
+                    title='show projects with <u><b>any</b></u> of these values'
+                    data-dojo-attach-event='click: toggleAny'
+                    data-dojo-attach-point='anyBtn'>
                     <input type='radio' name='${id}_any_all'
-                        autocomplete='off'
-                        data-dojo-attach-point='anyBtn'
-                        data-dojo-attach-event='click: toggleAny'> any
+                        autocomplete='off'> any
                 </label>
                 <label class='btn btn-default btn-xs'
                     data-toggle='tooltip'
-                    title='show projects with <u><b>all</b></u> of these values'>
+                    title='show projects with <u><b>all</b></u> of these values'
+                    data-dojo-attach-event='click: toggleAny'>
                     <input type='radio' name='${id}_any_all'
-                        autocomplete='off'
-                        data-dojo-attach-event='click: toggleAny'> all
+                        autocomplete='off'> all
                 </label>
             </div>
         </div>
