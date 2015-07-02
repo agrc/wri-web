@@ -46,7 +46,7 @@ define([
             this.filters = [
                 new Filter({
                     name: 'Project Status',
-                    items: config.lut.projectStatus.map(function (item) {
+                    items: config.domains.projectStatus.map(function (item) {
                         return [item, item];
                     }),
                     fieldName: config.fieldNames.Status,
@@ -54,7 +54,7 @@ define([
                 }, domConstruct.create('div', null, this.container)),
                 new Filter({
                     name: 'Feature Type',
-                    items: config.lut.featureType,
+                    items: config.domains.featureType,
                     fieldName: config.fieldNames.TypeCode,
                     fieldType: Filter.TYPE_NUMBER,
                     relatedTableQuery: true,

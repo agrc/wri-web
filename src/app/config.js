@@ -91,7 +91,7 @@ define([
             }
         }, false),
 
-        lut: {
+        domains: {
             projectStatus: [
                 'Cancelled',
                 'Complete',
