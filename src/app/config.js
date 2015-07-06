@@ -84,7 +84,7 @@ define([
         featureTypesInTables: {
             0: 'POLY',
             1: 'POLY',
-            2: 'POLY',
+            2: 'POINT',
             3: 'POLY',
             5: 'POLY',
             6: 'LINE',
