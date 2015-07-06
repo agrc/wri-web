@@ -70,6 +70,7 @@ define([
         urls: {
             mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
             centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
+            reference: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Reference'),
             api: gisServerBaseUrl + apiEndpoint + '/api'
         },
 
