@@ -89,6 +89,9 @@ define([
 
             var centroidButton = new CentroidSwitchButton({
             }).placeAt(toolbarNode, 'last');
+            homeButton.on('home', function () {
+                router.setHash();
+            });
 
             this.childWidgets.push(selector);
             this.childWidgets.push(homeButton);
