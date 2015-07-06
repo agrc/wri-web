@@ -81,15 +81,20 @@ define([
             TypeCode: 'TypeCode'
         },
 
-        queryByFeaturesTxt: ['POINT', 'LINE', 'POLY'].reduce(function (previousValue, currentValue) {
-            var query = dojoString.substitute('${0} IN(SELECT ${0} FROM ${1} WHERE {{query}})',
-                [Project_ID, currentValue]);
-            if (!previousValue) {
-                return query;
-            } else {
-                return previousValue + ' OR ' + query;
-            }
-        }, false),
+        featureTypesInTables: {
+            0: 'POLY',
+            1: 'POLY',
+            2: 'POLY',
+            3: 'POLY',
+            5: 'POLY',
+            6: 'LINE',
+            7: 'LINE',
+            8: 'LINE',
+            9: 'POINT',
+            10: 'POINT',
+            11: 'POINT',
+            12: 'POINT'
+        },
 
         domains: {
             projectStatus: [

@@ -49,6 +49,11 @@ define([
         //      any or all
         any: true,
 
+        relatedAnyTxt: ['{{fieldName}} IN(SELECT {{fieldName}} FROM POINT WHERE {{query}} ',
+            'union SELECT {{fieldName}} FROM LINE WHERE {{query}} ',
+            'union SELECT {{fieldName}} FROM POLY WHERE {{query}})'
+        ].join('').replace(/{{fieldName}}/g, config.fieldNames.Project_ID),
+
 
         // properties passed in via the constructor
 
@@ -159,17 +164,35 @@ define([
                 }
                 if (this.any) {
                     var where = this.fieldName + ' IN(' + values.join(',') + ')';
-                    return this.getRelatedTableQuery(where);
+                    return (!this.relatedTableQuery) ?
+                        where : this.relatedAnyTxt.replace(/{{query}}/g, where);
                 } else {
-                    var that = this;
-                    return values.reduce(function (previousReturn, currentValue) {
-                        var where = that.fieldName + '=' + currentValue;
-                        if (!previousReturn) {
-                            return that.getRelatedTableQuery(where);
-                        } else {
-                            return previousReturn + ' AND ' + that.getRelatedTableQuery(where);
-                        }
-                    }, false);
+                    if (this.relatedTableQuery) {
+                        var layerTypes = {};
+                        values.forEach(function (v) {
+                            var table = config.featureTypesInTables[v];
+                            if (!layerTypes[table]) {
+                                layerTypes[table] = [v];
+                            } else {
+                                layerTypes[table].push(v);
+                            }
+                        });
+                        var subQueries = Object.keys(layerTypes).map(function (table) {
+                            return 'SELECT ' + config.fieldNames.Project_ID + ' FROM ' + table +
+                                ' WHERE ' + this.fieldName + ' IN(' + layerTypes[table].join(',') + ')';
+                        }, this);
+                        return config.fieldNames.Project_ID + ' IN(' + subQueries.join(' intersect ') + ')';
+                    } else {
+                        var that = this;
+                        return values.reduce(function (previousReturn, currentValue) {
+                            var where = that.fieldName + '=' + currentValue;
+                            if (!previousReturn) {
+                                return where;
+                            } else {
+                                return previousReturn + ' AND ' + where;
+                            }
+                        }, false);
+                    }
                 }
             } else {
                 return undefined;
@@ -205,16 +228,6 @@ define([
             $(this.body).collapse('show');
 
             this.inherited(arguments);
-        },
-        getRelatedTableQuery: function (where) {
-            // summary:
-            //      Optionally wraps the where clause if it's applicable to the results table
-            // where: String
-            //      The original where clause
-            console.log('app/filters/_RelatedTableQuery:getRelatedTableQuery', arguments);
-
-            return (!this.relatedTableQuery) ?
-                where : config.queryByFeaturesTxt.replace(/{{query}}/g, where);
         }
     });
 

@@ -73,12 +73,42 @@ require([
 
                 expect(testWidget.getQuery()).toBe(expected);
             });
-            it('prepend related table queries', function () {
+            it('related table any query', function () {
                 testWidget.relatedTableQuery = true;
-                var expected = "Project_ID IN(SELECT Project_ID FROM POINT WHERE FieldName IN('1','2')) OR Project_ID IN(SELECT Project_ID FROM LINE WHERE FieldName IN('1','2')) OR Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN('1','2'))";
-
+                testWidget.any = true;
+                var expected = ["Project_ID IN(SELECT Project_ID FROM POINT WHERE FieldName IN('1','2') ",
+                                "union SELECT Project_ID FROM LINE WHERE FieldName IN('1','2') ",
+                                "union SELECT Project_ID FROM POLY WHERE FieldName IN('1','2'))"].join('');
                 testWidget.itemClicked('1');
                 testWidget.itemClicked('2');
+
+                expect(testWidget.getQuery()).toBe(expected);
+            });
+            it('related table all query two layers', function () {
+                testWidget.relatedTableQuery = true;
+                testWidget.fieldType = Filter.TYPE_NUMBER;
+                testWidget.any = false;
+                var expected = ["Project_ID IN(",
+                                "SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ",
+                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(7))"].join('');
+                testWidget.itemClicked(1); // POLY
+                testWidget.itemClicked(2); // POLY
+                testWidget.itemClicked(7); // LINE
+
+                expect(testWidget.getQuery()).toBe(expected);
+            });
+            it('related table all query all layers', function () {
+                testWidget.relatedTableQuery = true;
+                testWidget.fieldType = Filter.TYPE_NUMBER;
+                testWidget.any = false;
+                var expected = ["Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ",
+                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(7) ",
+                                "intersect SELECT Project_ID FROM POINT WHERE FieldName IN(10,12))"].join('');
+                testWidget.itemClicked(1); // POLY
+                testWidget.itemClicked(2); // POLY
+                testWidget.itemClicked(7); // LINE
+                testWidget.itemClicked(10); // POINT
+                testWidget.itemClicked(12); // POINT
 
                 expect(testWidget.getQuery()).toBe(expected);
             });
