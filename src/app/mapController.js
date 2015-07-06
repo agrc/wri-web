@@ -134,6 +134,8 @@ define([
                 // hide all other layers and clear all selections
                 // zoom to full extent
 
+                centroidController.enabled = true;
+
                 when(centroidController.ensureLayersLoaded(), lang.hitch(this, function (result) {
                     if (result !== true) {
                         this.addLayers({
@@ -175,6 +177,8 @@ define([
 
                 var q = new Query();
                 q.where = router.getProjectsWhereClause();
+
+                centroidController.enabled = false;
 
                 if (q.where === '1 = 1') {
                     return;
