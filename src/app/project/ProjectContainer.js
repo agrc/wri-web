@@ -1,7 +1,6 @@
 define([
     'app/config',
     'app/mapControls/LayerControls',
-    'app/mapControls/LayerItem',
     'app/project/FeatureDetails',
     'app/project/FeaturesGrid',
     'app/project/ProjectDetails',
@@ -22,7 +21,6 @@ define([
 ], function (
     config,
     LayerControls,
-    LayerItem,
     FeatureDetails,
     FeaturesGrid,
     ProjectDetails,
@@ -58,14 +56,7 @@ define([
 
             this.setupConnections();
 
-            var referenceLayers = new LayerControls({
-                layers: [
-                    new LayerItem({name: 'GNIS'}),
-                    new LayerItem({name: 'HUC'})
-                ]
-            }, this.referenceLayerNode);
-
-            this.childWidgets.push(referenceLayers);
+            this.childWidgets.push(new LayerControls({}, this.referenceLayerNode));
 
             this._resetHeight();
 

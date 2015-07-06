@@ -3,6 +3,7 @@
 @import '../../agrc/resources/map/BaseMapSelector.css';
 @import '../../seiyria-bootstrap-slider/css/bootstrap-slider.css';
 
+// bootstrap overrides
 $icon-font-path = '../../bootstrap-stylus/fonts/';
 $nav-tabs-active-link-hover-border-color = #fff
 $nav-tabs-border-color = #fff
@@ -29,6 +30,8 @@ $nav-tabs-border-color = #fff
 @require '../../bootstrap-stylus/bootstrap/navs';
 @require '../../bootstrap-stylus/bootstrap/input-groups';
 
+@require 'vars';
+@require 'mixins';
 @require '../project/resources/ProjectDetails';
 @require '../project/resources/FeaturesGrid';
 @require '../project/resources/ProjectContainer';
@@ -39,7 +42,7 @@ $nav-tabs-border-color = #fff
 @require '../mapControls/resources/CentroidSwitchButton';
 @require '../mapControls/resources/Filter';
 @require '../mapControls/resources/FiltersContainer';
-@require '../mapControls/resources/ReferenceLayers';
+@require '../mapControls/resources/MapReferenceData';
 @require '../mapControls/resources/_CollapsePanel.styl';
 
 html, body, .app

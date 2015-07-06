@@ -214,24 +214,6 @@ define([
                 that.any = domClass.contains(that.anyBtn, 'active');
                 that.emit('changed');
             }, 0);
-        },
-        remove: function () {
-            // summary:
-            //      removes widget from visible filters
-            console.log('app/mapControls/Filter:remove', arguments);
-
-            this.clear();
-
-            this.emit('removed', this);
-        },
-        open: function () {
-            // summary:
-            //      opens the body of the filter
-            console.log('app/mapControls/Filter:open', arguments);
-
-            $(this.body).collapse('show');
-
-            this.inherited(arguments);
         }
     });
 
