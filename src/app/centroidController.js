@@ -85,38 +85,27 @@ define([
             // extent: https://developers.arcgis.com/javascript/jsapi/map-amd.html#event-extent-change
             console.log('app.centroidController::onExtentChanged', arguments);
 
-            // if they are just panning don't worry about it
             // if the delta is null, it is the first load so
             // we need to show the centroids
-            if (!this.layersLoaded || !this.enabled || (!extent.levelChange && extent.delta)) {
-                return;
-            }
-
-            if (this.override) {
-                this.centroidsVisible = false;
-
-                this.showFeaturesFor(this.where);
-
-                Object.keys(this.explodedLayer).forEach(function (key) {
-                    var layer = this.explodedLayer[key];
-
-                    layer.setVisibility(true);
-                }, this);
-
-                this.centroidLayer.setVisibility(false);
-
+            if (!this.layersLoaded || !this.enabled) {
                 return;
             }
 
             this.centroidsVisible = extent.lod.level < this.scaleTrigger;
+
+            if (this.override) {
+                this.centroidsVisible = false;
+            }
 
             this.centroidLayer.setVisibility(this.centroidsVisible);
 
             Object.keys(this.explodedLayer).forEach(function (key) {
                 var layer = this.explodedLayer[key];
 
-                layer.setVisibility(extent.lod.level >= this.scaleTrigger);
+                layer.setVisibility(!this.centroidsVisible);
             }, this);
+
+            this.showFeaturesFor();
         },
         updateOverride: function (value) {
             // summary:
@@ -125,8 +114,6 @@ define([
             console.log('app.centroidController::updateOverride', arguments);
 
             this.override = value;
-
-            this._updateHash(null);
 
             topic.publish(config.topics.centroidController.updateVisibility, {});
         },
@@ -144,9 +131,9 @@ define([
                 var deferreds = [];
                 var d = new Deferred();
                 var typesLookup = {
-                    0: 'poly-exploded',
-                    1: 'line-exploded',
-                    2: 'point-exploded'
+                    0: 'polyExploded',
+                    1: 'lineExploded',
+                    2: 'pointExploded'
                 };
 
                 this.centroidLayer = new FeatureLayer(config.urls.centroidService, {
@@ -154,6 +141,7 @@ define([
                     mode: FeatureLayer.MODE_SELECTION,
                     outFields: ['Title', 'Status', 'Project_ID']
                 });
+                this.centroidLayer.__where__ = '';
 
                 this.centroidLayer.setVisibility(false);
                 this.centroidLayer.on('mouse-over', lang.hitch(this, lang.partial(this._showPopupForProject, true)));
@@ -171,6 +159,7 @@ define([
                     });
 
                     layer.setVisibility(false);
+                    layer.__where__ = '';
 
                     var deferred = new Deferred();
 
@@ -191,7 +180,7 @@ define([
         updateLayerVisibilityFor: function (extent) {
             // summary:
             //      mimics the extent change event to trigger the decision tree of whether to show or hide centroids
-            // extent: {5:type or return: type}
+            // extent: esri/Extent
             console.log('app.mapControls.centroidController::updateLayerVisibilityFor', arguments);
 
             if (!extent) {
@@ -209,16 +198,28 @@ define([
             var q = new Query();
             q.where = where || this.where;
 
-            this.where = where;
-
             var deferreds = [];
 
+            this.where = q.where;
+
+            // guards against extra queries for invisible layers
             if (this.centroidsVisible) {
+                if (this.centroidLayer.__where__ === this.where) {
+                    return;
+                }
+
                 deferreds.push(this.centroidLayer.selectFeatures(q));
+                this.centroidLayer.__where__ = this.where;
             } else {
+                if (this.explodedLayer.pointExploded.__where__ === this.where) {
+                    return;
+                }
+
                 Object.keys(this.explodedLayer).forEach(function (key) {
                     var layer = this.explodedLayer[key];
+
                     deferreds.push(layer.selectFeatures(q));
+                    layer.__where__ = this.where;
                 }, this);
             }
 
@@ -228,7 +229,7 @@ define([
 
             return all(deferreds).then(
                 function (graphics) {
-                    if (graphics === null) {
+                    if (!graphics || graphics.length === 0) {
                         // state of utah extent
                         return null;
                     } else {

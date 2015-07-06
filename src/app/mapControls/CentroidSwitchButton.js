@@ -42,19 +42,19 @@ define([
             //      wire events, and such
             console.log('app.mapControls.CentroidSwitchButton::setupConnections', arguments);
 
-            // this.own(
-            //     topic.subscribe(config.topics.projectIdsChanged,
-            //          lang.hitch(this, 'toggleSelf'))
-            // );
+            this.own(
+                topic.subscribe(config.topics.projectIdsChanged,
+                     lang.hitch(this, 'toggleSelf'))
+            );
         },
-        // toggleSelf: function (ids) {
-        //     // summary:
-        //     //      determines whether widget should be displayed or not
-        //     // ids: {5:type or return: type}
-        //     console.log('app.mapControls.CentroidSwitchButton::toggleSelf', arguments);
+        toggleSelf: function (ids) {
+            // summary:
+            //      determines whether widget should be displayed or not
+            // ids: {5:type or return: type}
+            console.log('app.mapControls.CentroidSwitchButton::toggleSelf', arguments);
 
-        //     // domClass.toggle(this.domNode, 'hidden', ids && ids.length === 1);
-        // },
+            domClass.toggle(this.domNode, 'hidden', ids && ids.length === 1);
+        },
         toggleCentroids: function (e) {
             // summary:
             //      wire events, and such
