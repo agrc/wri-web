@@ -57,7 +57,7 @@ define([
 
         // version.: String
         //      The version number.
-        version: '0.2.0',
+        version: '0.3.0',
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
