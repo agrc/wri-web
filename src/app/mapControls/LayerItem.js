@@ -17,7 +17,7 @@ define([
         // description:
         //      A layer item to be used in the LayerControls widget to display a legend and toggle visibility
         templateString: template,
-        baseClass: 'layer-item',
+        baseClass: 'layer-item btn btn-default btn-xs',
 
         // Properties to be sent into constructor
 

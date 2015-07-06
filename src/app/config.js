@@ -70,6 +70,7 @@ define([
         urls: {
             mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
             centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
+            reference: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Reference'),
             api: gisServerBaseUrl + apiEndpoint + '/api'
         },
 
@@ -180,7 +181,37 @@ define([
                     }
                 })
             }
-        }
+        },
+
+        referenceLayers: [{
+            name: 'UWRI Focus Areas',
+            searchFields: [],
+            index: 0
+        }, {
+            name: 'BLM Districts',
+            searchFields: [],
+            index: 1
+        }, {
+            name: 'Forest Service',
+            searchFields: [],
+            index: 2
+        }, {
+            name: 'HUC',
+            searchFields: [],
+            index: 3
+        }, {
+            name: 'Land Ownership',
+            searchFields: [],
+            index: 4
+        }, {
+            name: 'Sage Grouse Areas',
+            searchFields: [],
+            index: 5
+        }, {
+            name: 'UWRI Regions',
+            searchFields: [],
+            index: 6
+        }]
     };
 
     return window.AGRC;

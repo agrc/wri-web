@@ -39,12 +39,6 @@ define([
         //      container for holding custom child widgets
         childWidgets: null,
 
-        // projectContainer: ProjectContainer
-        projectContainer: null,
-
-        // filtersContainer: FiltersContainer
-        filtersContainer: null,
-
 
         constructor: function () {
             // summary:
@@ -66,8 +60,10 @@ define([
 
             mapController.initMap(this.mapDiv, this.toolbarNode);
 
-            this.projectContainer = new ProjectContainer({}, this.projectContainerNode);
-            this.childWidgets.push(this.projectContainer);
+            this.childWidgets.push(
+                new ProjectContainer({}, this.projectContainerNode),
+                new FiltersContainer({}, this.filtersContainerNode)
+            );
 
             this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);
             this.childWidgets.push(this.filtersContainer);

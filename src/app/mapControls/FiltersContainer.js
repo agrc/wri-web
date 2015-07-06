@@ -1,6 +1,7 @@
 define([
     'app/config',
     'app/mapControls/Filter',
+    'app/mapControls/MapReferenceData',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -14,6 +15,7 @@ define([
 ], function (
     config,
     Filter,
+    MapReferenceData,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -67,6 +69,10 @@ define([
                 this.own(f);
                 f.on('changed', lang.hitch(this, 'onFilterChange'));
             }, this);
+
+            var mapReferenceData = new MapReferenceData({}).placeAt(this.container);
+            this.own(mapReferenceData);
+            mapReferenceData.startup();
 
             this.setUpConnections();
 
