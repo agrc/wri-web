@@ -63,6 +63,11 @@ define([
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
+        // scaleTrigger: int
+        // summary:
+        //      the basemap level to toggle centroids
+        scaleTrigger: 8,
+
         urls: {
             mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
             centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',

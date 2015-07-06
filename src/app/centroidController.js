@@ -34,11 +34,6 @@ define([
     Query
 ) {
     return {
-        // scaleTrigger: int
-        // summary:
-        //      the trigger value to where the centroids explode to featureSelected
-        scaleTrigger: 8,
-
         // override: bool
         // summary:
         //      override the trigger
@@ -91,7 +86,7 @@ define([
                 return;
             }
 
-            this.centroidsVisible = extent.lod.level < this.scaleTrigger;
+            this.centroidsVisible = extent.lod.level < config.scaleTrigger;
 
             if (this.override) {
                 this.centroidsVisible = false;

@@ -44,7 +44,8 @@ define([
 
             this.own(
                 topic.subscribe(config.topics.projectIdsChanged,
-                     lang.hitch(this, 'toggleSelf'))
+                     lang.hitch(this, 'toggleSelf')),
+                topic.subscribe(config.topics.map.extentChanged, lang.hitch(this, '_onExtentChanged'))
             );
         },
         toggleSelf: function (ids) {
@@ -64,6 +65,14 @@ define([
             var hasClass = domClass.contains(e.target, 'toggle');
 
             topic.publish(config.topics.map.toggleCentroids, hasClass);
+        },
+        _onExtentChanged: function (extent) {
+            // summary:
+            //      hides and shows the button based on map extent
+            // extent
+            console.log('app.mapControls.CentroidSwitchButton::_onExtentChanged', arguments);
+
+            domClass.toggle(this.domNode, 'hidden', extent.lod.level >= config.scaleTrigger);
         }
     });
 });
