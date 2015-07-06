@@ -190,6 +190,7 @@ define([
 
                         [this.layers.poly, this.layers.line, this.layers.point].forEach(function (lyr) {
                             deferreds.push(lyr.selectFeatures(q));
+                            lyr.setVisibility(true);
                         });
 
                         var that = this;

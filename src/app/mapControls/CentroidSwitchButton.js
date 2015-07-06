@@ -58,11 +58,15 @@ define([
         },
         toggleCentroids: function (e) {
             // summary:
-            //      wire events, and such
+            //      turns on and off the centroids
             console.log('app.mapControls.CentroidSwitchButton::toggleCentroids', arguments);
 
             domClass.toggle(e.target, 'toggle');
             var hasClass = domClass.contains(e.target, 'toggle');
+
+            if (hasClass) {
+                config.scaleTrigger = this.level;
+            }
 
             topic.publish(config.topics.map.toggleCentroids, hasClass);
         },
@@ -71,6 +75,8 @@ define([
             //      hides and shows the button based on map extent
             // extent
             console.log('app.mapControls.CentroidSwitchButton::_onExtentChanged', arguments);
+
+            this.level = extent.lod.level;
 
             domClass.toggle(this.domNode, 'hidden', extent.lod.level >= config.scaleTrigger);
         }
