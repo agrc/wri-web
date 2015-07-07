@@ -222,7 +222,7 @@ define([
                 }, this);
             }
 
-            if (this.where === '1 = 1') {
+            if (this.where === '1=1') {
                 return null;
             }
 

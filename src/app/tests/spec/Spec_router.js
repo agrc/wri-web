@@ -57,5 +57,57 @@ require([
                 expect(router.onIdsChange).not.toHaveBeenCalled();
             });
         });
+        describe('getProjectIdWhereClause', function () {
+            it('handles no project id', function () {
+                router.projectIds = null;
+                expect(router.getProjectsWhereClause()).toEqual('1=1');
+                router.projectIds = [];
+                expect(router.getProjectsWhereClause()).toEqual('1=1');
+            });
+            it('handles bad project id', function () {
+                router.projectIds = 'abcde';
+                expect(router.getProjectsWhereClause()).toEqual('1=1');
+                router.projectIds = ['abcde'];
+                expect(router.getProjectsWhereClause()).toEqual('1=1');
+            });
+            it('handles single project id', function () {
+                router.projectIds = [1];
+                expect(router.getProjectsWhereClause()).toEqual('Project_ID IN(1)');
+            });
+            it('handles multiple project ids', function () {
+                router.projectIds = [1, 2];
+                expect(router.getProjectsWhereClause()).toEqual('Project_ID IN(1,2)');
+            });
+            it('handles single project id with negate arg', function () {
+                router.projectIds = [1];
+                expect(router.getProjectsWhereClause({
+                    negate: false
+                })).toEqual('Project_ID IN(1)');
+            });
+            it('handles multiple project ids with negate arg', function () {
+                router.projectIds = [1, 2];
+                expect(router.getProjectsWhereClause({
+                    negate: false
+                })).toEqual('Project_ID IN(1,2)');
+            });
+            it('can negate no project id', function () {
+                router.projectIds = null;
+                expect(router.getProjectsWhereClause({
+                    negate: true
+                })).toEqual('1=1');
+            });
+            it('can negate single project id', function () {
+                router.projectIds = [1];
+                expect(router.getProjectsWhereClause({
+                    negate: true
+                })).toEqual('Project_ID NOT IN(1)');
+            });
+            it('can negate multiple project ids', function () {
+                router.projectIds = [1, 2];
+                expect(router.getProjectsWhereClause({
+                    negate: true
+                })).toEqual('Project_ID NOT IN(1,2)');
+            });
+        });
     });
 });

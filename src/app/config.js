@@ -136,7 +136,8 @@ define([
                 toggleCentroids: 'wri/toggle',
                 setExtent: 'wri/setExtent',
                 setMap: 'wri/setMap',
-                rubberBandZoom: 'wri/rubberbanding'
+                rubberBandZoom: 'wri/rubberbanding',
+                toggleAdjacent: 'wri/toggleAdjacent'
             },
             layer: {
                 add: 'wri/add'

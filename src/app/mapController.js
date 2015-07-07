@@ -114,6 +114,7 @@ define([
             topic.subscribe(config.topics.opacityChanged, lang.hitch(this, 'changeOpacity'));
             topic.subscribe(config.topics.layer.add, lang.hitch(this, 'addLayers'));
             topic.subscribe(config.topics.map.setExtent, lang.hitch(this, 'setExtent'));
+            topic.subscribe(config.topics.map.toggleAdjacent, lang.hitch(this, 'toggleAdjacent'));
             topic.subscribe(config.topics.map.setMap, lang.hitch(this, '_setMap'));
             topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
 
@@ -190,7 +191,7 @@ define([
 
                 centroidController.enabled = false;
 
-                if (q.where === '1 = 1') {
+                if (q.where === '1=1') {
                     return;
                 }
 
@@ -392,6 +393,16 @@ define([
             };
 
             centroidController.updateLayerVisibilityFor(extent);
+        },
+        toggleAdjacent: function (enabled) {
+            // summary:
+            //      turns on the adjacent project features
+            // enabled
+            console.log('app/mapController::toggleAdjacent', arguments);
+
+            if (enabled) {
+                console.log(enabled);
+            }
         },
         _setMap: function (obj) {
             // summary:

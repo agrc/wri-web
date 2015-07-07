@@ -27,6 +27,16 @@ define([
         //      The id or id's of the currently displayed projects
         projectIds: null,
 
+        // inClause: string
+        // summary:
+        //      the in where clause template
+        inClause: '${0} IN(${1})',
+
+        // notInClause: string
+        // summary:
+        //      the inverse where clause template
+        notInClause: '${0} NOT IN(${1})',
+
         startup: function () {
             // summary:
             //      spin up and get everything set up
@@ -84,19 +94,32 @@ define([
 
             topic.publish(config.topics.projectIdsChanged, newIds);
         },
-        getProjectsWhereClause: function () {
+        getProjectsWhereClause: function (args) {
             // summary:
             //      returns a definition query containing the current project ids
+            // args: object { negate: bool}
             // returns: String
             console.log('app/router:getProjectsWhereClause', arguments);
 
-            if (this.projectIds.length === 0) {
-                return '1 = 1';
+            if (!this.projectIds || this.projectIds.length === 0 || !Array.isArray(this.projectIds)) {
+                return '1=1';
             }
-            var id_nums = this.projectIds.map(function (id) {
-                return parseInt(id, 10);
+
+            var id_nums = this.projectIds.filter(function (id) {
+                return !isNaN(parseInt(id, 10));
             });
-            return dojoString.substitute('${0} IN (${1})', [config.fieldNames.Project_ID, id_nums]);
+
+            if (!id_nums || id_nums.length === 0) {
+                return '1=1';
+            }
+
+            var template = this.inClause;
+
+            if (args && args.negate) {
+                template = this.notInClause;
+            }
+
+            return dojoString.substitute(template, [config.fieldNames.Project_ID, id_nums]);
         }
     };
 });

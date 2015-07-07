@@ -3,7 +3,7 @@
     <span id='projectStatus-${status}' class='projectStatus pull-right'>${status}</span>
     <div class="clearfix"></div>
     <p>
-        <a href='#' role='button' class="btn btn-primary" data-toggle="button">Adjacent Projects</a>
+        <button role='button' class="btn btn-primary" data-toggle="button" data-dojo-attach-event='click:toggleAdjacent' data-dojo-attach-point='toggleNode'>Adjacent Projects</button>
         <a href='../project/title.html?id=${projectId}' role='button' class="btn btn-primary">Application Details</a>
     </p>
 </div>
