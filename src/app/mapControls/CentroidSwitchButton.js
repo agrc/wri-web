@@ -62,13 +62,8 @@ define([
             console.log('app.mapControls.CentroidSwitchButton::toggleCentroids', arguments);
 
             domClass.toggle(e.target, 'toggle');
-            var hasClass = domClass.contains(e.target, 'toggle');
 
-            if (hasClass) {
-                config.scaleTrigger = this.level;
-            }
-
-            topic.publish(config.topics.map.toggleCentroids, hasClass);
+            topic.publish(config.topics.map.toggleCentroids, domClass.contains(e.target, 'toggle'));
         },
         _onExtentChanged: function (extent) {
             // summary:
