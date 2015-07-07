@@ -67,11 +67,6 @@ define([
 
             this.childWidgets.push(referenceLayers);
 
-            var details = new FeatureDetails(null, this.featureDetailsNode);
-            details.startup();
-
-            this.childWidgets.push(details);
-
             this._resetHeight();
 
             this.inherited(arguments);
@@ -121,21 +116,22 @@ define([
             // response
             console.log('app.project.ProjectContainer::_updateDetails', arguments);
 
-            if (this.projectDetails) {
-                this.projectDetails.destroy();
-                this.featuresGrid.destroy();
-
-                this.projectDetails = null;
-                this.featuresGrid = null;
+            if (this.featureDetails) {
+                [this.featureDetails, this.projectDetails, this.featuresGrid].forEach(function (widget) {
+                    widget.destroy();
+                    widget = null;
+                });
             }
 
             this.projectDetails = new ProjectDetails(response.project).placeAt(this.detailsNode);
+            this.featureDetails = new FeatureDetails(response.project).placeAt(this.featureDetailsNode);
             this.featuresGrid = new FeaturesGrid({
                 features: response.features
             }).placeAt(this.featureGridNode);
 
             domClass.remove(this.domNode, 'hidden');
 
+            this.featureDetails.startup();
             this.projectDetails.startup();
             this.featuresGrid.startup();
             this.featuresGrid.grid.startup();

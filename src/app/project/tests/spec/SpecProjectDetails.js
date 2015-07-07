@@ -1,12 +1,10 @@
 require([
     'app/project/ProjectDetails',
 
-    'dojo/dom-class',
     'dojo/dom-construct'
 ], function (
     WidgetUnderTest,
 
-    domClass,
     domConstruct
 ) {
     describe('app/ProjectDetails', function () {
@@ -40,22 +38,6 @@ require([
         describe('Sanity', function () {
             it('should create a ProjectDetails', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
-            });
-        });
-        describe('postCreate', function () {
-            it('hides stream miles if none are passed in', function () {
-                var widget2 = new WidgetUnderTest({
-                    title: 'asdf',
-                    projectId: 1234,
-                    status: 'aasdf',
-                    description: 'asdf',
-                    acres: 123,
-                    streamMiles: null,
-                    leadAgency: 'asdf',
-                    region: 'asdf',
-                    projectManagerName: 'asdf'
-                });
-                expect(domClass.contains(widget2.streamMilesDiv, 'hidden')).toBe(true);
             });
         });
     });
