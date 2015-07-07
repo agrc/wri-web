@@ -7,7 +7,6 @@
             <a href="#${id}_detailsTab" data-toggle='tab'>Details</a>
         </li>
     </ul>
-
     <div class="tab-content">
         <div class="tab-pane active" id="${id}_featureTab">
             <p>
@@ -17,7 +16,20 @@
             </p>
         </div>
         <div class="tab-pane" id="${id}_detailsTab">
-            <p>??</p>
+            <div class="project-information" id="${id}_projectDetails">
+                <label>Description</label>
+                <p>${description}</p>
+                <label>Lead Agency:</label> <span>${leadAgency}</span>
+                <br>
+                <label>Acres:</label> <span>{acres}</span>
+                <br>
+                <div data-dojo-attach-point="streamMilesDiv">
+                    <label>Stream Miles:</label> <span>{streamMiles}</span>
+                </div>
+                <label>Region:</label> <span>${region}</span>
+                <br>
+                <label>Project Manager:</label> <span>${projectManagerName}</span>
+            </div>
         </div>
     </div>
 </div>

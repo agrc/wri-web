@@ -3,10 +3,10 @@ define([
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
-    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/dom-class',
     'dojo/text!app/project/templates/FeatureDetails.html',
     'dojo/topic',
 
@@ -16,19 +16,18 @@ define([
 
     _TemplatedMixin,
     _WidgetBase,
-    _WidgetsInTemplateMixin,
 
     declare,
     lang,
+    domClass,
     template,
     topic
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin], {
         // description:
         //      Contains feature details and editing tools.
         templateString: template,
         baseClass: 'feature-details',
-        widgetsInTemplate: true,
 
         // Properties to be sent into constructor
 
@@ -38,6 +37,10 @@ define([
             console.log('app.project.FeatureDetails::postCreate', arguments);
 
             this.setupConnections();
+
+            if (!this.streamMiles) {
+                domClass.add(this.streamMilesDiv, 'hidden');
+            }
 
             this.inherited(arguments);
         },
