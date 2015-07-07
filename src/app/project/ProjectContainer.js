@@ -119,7 +119,6 @@ define([
             if (this.featureDetails) {
                 [this.featureDetails, this.projectDetails, this.featuresGrid].forEach(function (widget) {
                     widget.destroy();
-                    widget = null;
                 });
             }
 
