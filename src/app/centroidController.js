@@ -7,6 +7,7 @@ define([
     'dojo/Deferred',
     'dojo/dom-construct',
     'dojo/dom-style',
+    'dojo/on',
     'dojo/promise/all',
     'dojo/text!app/templates/projectPopupTemplate.html',
     'dojo/topic',
@@ -24,6 +25,7 @@ define([
     Deferred,
     domConstruct,
     domStyle,
+    on,
     all,
     projectPopupTemplate,
     topic,
@@ -67,6 +69,7 @@ define([
 
             topic.subscribe(config.topics.map.extentChanged, lang.hitch(this, 'onExtentChanged'));
             topic.subscribe(config.topics.map.toggleCentroids, lang.hitch(this, 'updateOverride'));
+            topic.subscribe(config.topics.map.rubberBandZoom, lang.hitch(this, '_pauseEvent'));
 
             this.dialog = new InfoWindowLite(null, domConstruct.create('div', null, document.body, 'last'));
             this.dialog._adjustContentArea = function () {};
@@ -139,9 +142,10 @@ define([
                 this.centroidLayer.__where__ = '';
 
                 this.centroidLayer.setVisibility(false);
-                this.centroidLayer.on('mouse-over', lang.hitch(this, lang.partial(this._showPopupForProject, true)));
+                this.centroidPopupHandler = on.pausable(this.centroidLayer, 'mouse-over', lang.hitch(this, lang.partial(this._showPopupForProject, true)));
                 this.centroidLayer.on('mouse-out', lang.hitch(this, lang.partial(this._showPopupForProject, false)));
                 this.centroidLayer.on('click', lang.hitch(this, '_updateHash'));
+                this.centroidLayer.on('mouse-down', lang.hitch(this, '_pauseEvent'));
 
                 this.centroidLayer.on('load', d.resolve);
 
@@ -265,6 +269,20 @@ define([
             router.setHash({
                 id: lang.getObject('graphic.attributes.Project_ID', null, e)
             });
+        },
+        _pauseEvent: function (dragging) {
+            // summary:
+            //      description
+            //
+            console.log('app.centroidController::_pauseEvent', arguments);
+
+            if (dragging) {
+                this.centroidPopupHandler.pause();
+
+                return;
+            }
+
+            this.centroidPopupHandler.resume();
         }
     };
 });

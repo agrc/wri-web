@@ -120,6 +120,16 @@ define([
             this.map.on('extent-change', function (change) {
                 topic.publish(config.topics.map.extentChanged, change);
             });
+            this.map.on('mouse-drag-start', function (evt) {
+                if (evt.shiftKey) {
+                    topic.publish(config.topics.map.rubberBandZoom, true);
+                }
+            });
+            this.map.on('mouse-drag-end', function (evt) {
+                if (evt.shiftKey) {
+                    topic.publish(config.topics.map.rubberBandZoom, false);
+                }
+            });
         },
         selectLayers: function (ids) {
             // summary:
