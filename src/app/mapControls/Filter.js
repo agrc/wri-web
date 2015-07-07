@@ -9,7 +9,6 @@ define([
     'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/dom-construct',
-    'dojo/on',
     'dojo/query',
     'dojo/text!app/mapControls/templates/Filter.html',
 
@@ -28,7 +27,6 @@ define([
     lang,
     domClass,
     domConstruct,
-    on,
     query,
     template
 ) {

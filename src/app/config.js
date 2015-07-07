@@ -1,7 +1,6 @@
 /* jshint maxlen:false */
 define([
     'dojo/has',
-    'dojo/string',
 
     'esri/config',
     'esri/symbols/SimpleFillSymbol',
@@ -11,7 +10,6 @@ define([
     'dojo/domReady!'
 ], function (
     has,
-    dojoString,
 
     esriConfig,
     SimpleFillSymbol,
