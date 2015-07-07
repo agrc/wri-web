@@ -401,8 +401,29 @@ define([
             console.log('app/mapController::toggleAdjacent', arguments);
 
             if (enabled) {
-                console.log(enabled);
+                when(centroidController.ensureLayersLoaded(), lang.hitch(this, function (result) {
+                    if (result !== true) {
+                        this.addLayers({
+                            graphicsLayers: result.map(function (layers) {
+                                return layers.layer;
+                            }),
+                            dynamicLayers: []
+                        });
+                    }
+
+                    centroidController.showAdjacentFeatures(router.getProjectsWhereClause({
+                        negate: true
+                    }));
+                }));
+
+                return;
             }
+
+            Object.keys(centroidController.explodedLayer).forEach(function (key) {
+                var layer = this.explodedLayer[key];
+
+                layer.setVisibility(false);
+            }, centroidController);
         },
         _setMap: function (obj) {
             // summary:

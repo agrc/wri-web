@@ -237,6 +237,33 @@ define([
                 }
             );
         },
+        showAdjacentFeatures: function (where) {
+            // summary:
+            //      selects features
+            // where
+            console.log('app.centroidController::showAdjacentFeatures', arguments);
+
+            if (where === '1=1') {
+                return null;
+            }
+
+            var q = new Query();
+            q.where = where;
+
+            var deferreds = [];
+
+            this.centroidLayer.setVisibility(false);
+
+            Object.keys(this.explodedLayer).forEach(function (key) {
+                var layer = this.explodedLayer[key];
+
+                layer.setVisibility(true);
+
+                deferreds.push(layer.selectFeatures(q));
+            }, this);
+
+            return all(deferreds);
+        },
         _showPopupForProject: function (show, evt) {
             // summary:
             //      shows the dialog popup
