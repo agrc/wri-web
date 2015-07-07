@@ -137,7 +137,8 @@ define([
                 extentChanged: 'wri/extentChanged',
                 toggleCentroids: 'wri/toggle',
                 setExtent: 'wri/setExtent',
-                setMap: 'wri/setMap'
+                setMap: 'wri/setMap',
+                rubberBandZoom: 'wri/rubberbanding'
             },
             layer: {
                 add: 'wri/add'
