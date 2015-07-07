@@ -14,7 +14,7 @@ profile = {
             return mid in {
                 'app/package': 1,
                 'app/tests/jasmineTestBootstrap': 1
-            };
+            } || /\.styl$/.test(filename);
         }
     }
 };

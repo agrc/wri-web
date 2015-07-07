@@ -1,5 +1,8 @@
 /*jshint unused:false */
 
+var trueFunc = function () {
+    return true;
+};
 var profile = {
     basePath: '../src',
     action: 'release',
