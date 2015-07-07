@@ -1,8 +1,6 @@
 /* global JasmineFaviconReporter, jasmineRequire */
 /*jshint unused:false*/
-var dojoConfig = {
-    // isDebug: false,
-    isJasmineTestRunner: true,
+require({
     packages: [{
         name: 'agrc-jasmine-matchers',
         location: 'agrc-jasmine-matchers/src'
@@ -13,8 +11,9 @@ var dojoConfig = {
     }],
     has: {
         'dojo-undef-api': true
-    }
-};
+    },
+    baseUrl: '/src/'
+});
 
 // for jasmine-favicon-reporter
 jasmine.getEnv().addReporter(new JasmineFaviconReporter());
