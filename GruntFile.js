@@ -372,7 +372,7 @@ module.exports = function (grunt) {
                 tasks: ['stylus']
             },
             built: {
-                files: 'dist/**/*.*'
+                files: 'dist/app/*.*'
             }
         }
     });
