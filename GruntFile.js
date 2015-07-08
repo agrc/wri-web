@@ -143,7 +143,12 @@ module.exports = function (grunt) {
             built: {
                 options: {
                     port: port,
-                    base: './dist',
+                    base: {
+                        path: './dist/map',
+                        options: {
+                            index: 'map.html'
+                        }
+                    },
                     logger: 'dev',
                     middleware: function (connect, options, defaultMiddleware) {
                         var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
