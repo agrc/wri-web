@@ -116,7 +116,12 @@ module.exports = function (grunt) {
             server: {
                 options: {
                     port: port,
-                    base: './src',
+                    base: {
+                        path: './src',
+                        options: {
+                            maxAge: 0
+                        }
+                    },
                     logger: 'dev',
                     middleware: function (connect, options, defaultMiddleware) {
                         var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
