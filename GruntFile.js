@@ -98,7 +98,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ['dist'],
+            build: ['dist/js/agrc', 'dist/map'],
             all: {
                 options: {
                     force: true
@@ -140,6 +140,38 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            built: {
+                options: {
+                    port: port,
+                    base: {
+                        path: './dist/map',
+                        options: {
+                            index: 'map.html'
+                        }
+                    },
+                    logger: 'dev',
+                    middleware: function (connect, options, defaultMiddleware) {
+                        var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                        return [proxy].concat(defaultMiddleware);
+                    }
+                },
+                proxies: [
+                    {
+                        context: '/arcgis',
+                        host: secrets.devHost,
+                        headers: {
+                            connection: 'keep-alive'
+                        }
+                    },
+                    {
+                        context: '/wri/api',
+                        host: secrets.devHost,
+                        headers: {
+                            connection: 'keep-alive'
+                        }
+                    }
+                ]
+            },
             jasmine: {
                 options: {
                     port: jasminePort,
@@ -158,7 +190,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'src/',
                     src: ['*.html'],
-                    dest: 'dist/'
+                    dest: 'dist/map/'
                 }]
             },
             all: {
@@ -190,14 +222,14 @@ module.exports = function (grunt) {
 
                     ],
                     dest: 'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/',
-                    cwd: 'dist/',
+                    cwd: 'dist/js/agrc/',
                     expand: true
                 }]
             },
             dts: {
                 files: {
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/dojo/dojo.js',
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/app/resources/App.css'
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/dojo/dojo.js',
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/js/agrc/app/resources/App.css'
                 }
             }
         },
@@ -218,7 +250,7 @@ module.exports = function (grunt) {
                 // You can also specify options to be used in all your tasks
                 dojo: 'src/dojo/dojo.js', // Path to dojo.js file in dojo source
                 load: 'build', // Optional: Utility to bootstrap (Default: 'build')
-                releaseDir: '../dist',
+                releaseDir: '../dist/js/agrc',
                 require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
                 basePath: './src'
             }
@@ -260,8 +292,8 @@ module.exports = function (grunt) {
                         'src/jasmine-favicon-reporter/vendor/favico.js',
                         'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
                         'src/jasmine-jsreporter/jasmine-jsreporter.js',
-                        'src/app/tests/jasmineTestBootstrap.js',
                         'src/dojo/dojo.js',
+                        'src/app/tests/jasmineTestBootstrap.js',
                         'src/app/tests/jsReporterSanitizer.js',
                         'src/app/tests/jasmineAMDErrorChecking.js'
                     ],
@@ -300,7 +332,7 @@ module.exports = function (grunt) {
             options: {},
             main: {
                 files: {
-                    'dist/index.html': ['src/index.html']
+                    'dist/map/map.html': ['src/index.html']
                 }
             }
         },
@@ -338,6 +370,9 @@ module.exports = function (grunt) {
             stylus: {
                 files: 'src/app/**/*.styl',
                 tasks: ['stylus']
+            },
+            built: {
+                files: 'dist/**/*.*'
             }
         }
     });
@@ -383,7 +418,8 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('sauce', [
         'jasmine:main:build',
-        'connect',
+        'connect:jasmine',
+        'connect:server',
         'saucelabs-jasmine'
     ]);
     grunt.registerTask('travis', [
@@ -392,5 +428,10 @@ module.exports = function (grunt) {
         'jscs:main',
         'sauce',
         'build-prod'
+    ]);
+    grunt.registerTask('serve-built', [
+        'configureProxies:built',
+        'connect:built',
+        'watch:built'
     ]);
 };

@@ -2,5 +2,6 @@
 var profile = {
     staticHasFeatures: {
         'agrc-build': '"stage"'
-    }
+    },
+    baseUrl: '../js/agrc/'
 };

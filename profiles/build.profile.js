@@ -1,5 +1,4 @@
 /*jshint unused:false */
-
 var profile = {
     basePath: '../src',
     action: 'release',
