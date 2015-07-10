@@ -1,9 +1,11 @@
 require([
+    'app/config',
     'app/mapControls/CentroidSwitchButton',
 
     'dojo/dom-construct',
     'dojo/dom-class'
 ], function (
+    config,
     WidgetUnderTest,
 
     domConstruct,
@@ -72,6 +74,46 @@ require([
                 widget.toggleSelf([1, 2, 3]);
 
                 expect(domClass.contains(widget.domNode, 'hidden')).toBeFalsy();
+            });
+            it('sets visible property', function () {
+                widget.toggleSelf([1]);
+
+                expect(widget.visible).toBe(false);
+
+                widget.toggleSelf([]);
+
+                expect(widget.visible).toBe(true);
+            });
+        });
+
+        describe('_onExtentChanged', function () {
+            it('sets this.level', function () {
+                var lvl = 5;
+                widget._onExtentChanged({lod: {level: lvl}});
+
+                expect(widget.level).toBe(lvl);
+            });
+            it('hides', function () {
+                var ext = {lod: {level: config.scaleTrigger}};
+
+                widget._onExtentChanged(ext);
+
+                expect(domClass.contains(widget.domNode, 'hidden')).toBe(true);
+            });
+            it('shows', function () {
+                var ext = {lod: {level: config.scaleTrigger - 1}};
+
+                widget._onExtentChanged(ext);
+
+                expect(domClass.contains(widget.domNode, 'hidden')).toBe(false);
+            });
+            it('is overriden by visible property', function () {
+                var ext = {lod: {level: config.scaleTrigger - 1}};
+                widget.visible = false;
+
+                widget._onExtentChanged(ext);
+
+                expect(domClass.contains(widget.domNode, 'hidden')).toBe(true);
             });
         });
     });

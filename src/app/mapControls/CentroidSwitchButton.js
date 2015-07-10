@@ -27,6 +27,10 @@ define([
         templateString: template,
         baseClass: 'centroid-switch-button',
 
+        // visible: Boolean
+        //      override for showing/hiding the button
+        visible: true,
+
         // Properties to be sent into constructor
         postCreate: function () {
             // summary:
@@ -54,7 +58,9 @@ define([
             // ids: {5:type or return: type}
             console.log('app.mapControls.CentroidSwitchButton::toggleSelf', arguments);
 
-            domClass.toggle(this.domNode, 'hidden', ids && ids.length === 1);
+            var hide = ids && ids.length === 1;
+            domClass.toggle(this.domNode, 'hidden', hide);
+            this.visible = !hide;
         },
         toggleCentroids: function (e) {
             // summary:
@@ -73,7 +79,8 @@ define([
 
             this.level = extent.lod.level;
 
-            domClass.toggle(this.domNode, 'hidden', extent.lod.level >= config.scaleTrigger);
+            var show = this.visible && extent.lod.level < config.scaleTrigger;
+            domClass.toggle(this.domNode, 'hidden', !show);
         }
     });
 });
