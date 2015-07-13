@@ -1,7 +1,8 @@
 define([
-    './config',
+    'app/config',
 
     'app/mapController',
+    'app/mapControls/FiltersContainer',
     'app/project/ProjectContainer',
     'app/router',
 
@@ -15,6 +16,7 @@ define([
     config,
 
     mapController,
+    FiltersContainer,
     ProjectContainer,
     router,
 
@@ -37,6 +39,13 @@ define([
         //      container for holding custom child widgets
         childWidgets: null,
 
+        // projectContainer: ProjectContainer
+        projectContainer: null,
+
+        // filtersContainer: FiltersContainer
+        filtersContainer: null,
+
+
         constructor: function () {
             // summary:
             //      first function to fire after page loads
@@ -57,10 +66,11 @@ define([
 
             mapController.initMap(this.mapDiv, this.toolbarNode);
 
-            this.projectContainer = new ProjectContainer({
-            }, this.projectContainerNode);
-
+            this.projectContainer = new ProjectContainer({}, this.projectContainerNode);
             this.childWidgets.push(this.projectContainer);
+
+            this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);
+            this.childWidgets.push(this.filtersContainer);
 
             this.setupConnections();
         },
