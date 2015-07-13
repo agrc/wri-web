@@ -149,9 +149,9 @@ module.exports = function (grunt) {
                 options: {
                     port: port,
                     base: {
-                        path: './dist/map',
+                        path: './dist',
                         options: {
-                            index: 'map.html'
+                            index: 'map/map.html'
                         }
                     },
                     logger: 'dev',
@@ -194,7 +194,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/',
-                    src: ['*.html'],
+                    src: ['*.html', '!index.html'],
                     dest: 'dist/map/'
                 }]
             },
