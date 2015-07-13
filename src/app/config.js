@@ -44,9 +44,8 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
     var selectionColor = [255, 255, 0];
     var serviceUrlTemplate = '/arcgis/rest/services/WRI/{{name}}/MapServer';
-    var Project_ID = 'Project_ID';
 
-    window.AGRC = {
+    var config = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
 
@@ -81,9 +80,14 @@ define([
         },
 
         fieldNames: {
-            Project_ID: Project_ID,
+            Project_ID: 'Project_ID',
             Status: 'Status',
-            TypeCode: 'TypeCode'
+            TypeCode: 'TypeCode',
+            Title: 'Title',
+            Name: 'Name',
+            DWR_REGION: 'DWR_REGION',
+            FO_NAME: 'FO_NAME',
+            LABEL_FEDERAL: 'LABEL_FEDERAL'
         },
 
         featureTypesInTables: {
@@ -145,7 +149,8 @@ define([
             },
             centroidController: {
                 updateVisibility: 'wri/thisFeelsBad'
-            }
+            },
+            toggleReferenceLayer: 'wri/toggleReferenceLayer'
         },
 
         symbols: {
@@ -181,38 +186,64 @@ define([
                     }
                 })
             }
-        },
-
-        referenceLayers: [{
-            name: 'UWRI Focus Areas',
-            searchFields: [],
-            index: 0
-        }, {
-            name: 'BLM Districts',
-            searchFields: [],
-            index: 1
-        }, {
-            name: 'Forest Service',
-            searchFields: [],
-            index: 2
-        }, {
-            name: 'HUC',
-            searchFields: [],
-            index: 3
-        }, {
-            name: 'Land Ownership',
-            searchFields: [],
-            index: 4
-        }, {
-            name: 'Sage Grouse Areas',
-            searchFields: [],
-            index: 5
-        }, {
-            name: 'UWRI Regions',
-            searchFields: [],
-            index: 6
-        }]
+        }
     };
+    var flds = config.fieldNames;
+    config.supportLayers = [{
+        name: 'UWRI Focus Areas',
+        reference: true,
+        url: config.urls.reference + '/0'
+    }, {
+        name: 'BLM Districts',
+        reference: true,
+        search: true,
+        url: config.urls.reference + '/1',
+        searchFields: [flds.FO_NAME],
+        displayField: flds.FO_NAME,
+        highlightSymbol: config.symbols.selected.poly
+    }, {
+        name: 'Forest Service',
+        reference: true,
+        search: true,
+        url: config.urls.reference + '/2',
+        searchFields: [flds.LABEL_FEDERAL],
+        displayField: flds.LABEL_FEDERAL,
+        highlightSymbol: config.symbols.selected.poly
+    }, {
+        name: 'HUC',
+        reference: true,
+        url: config.urls.reference + '/3'
+    }, {
+        name: 'Land Ownership',
+        reference: true,
+        url: config.urls.reference + '/4'
+    }, {
+        name: 'Sage Grouse Areas',
+        reference: true,
+        url: config.urls.reference + '/5'
+    }, {
+        name: 'UWRI Regions',
+        reference: true,
+        search: true,
+        url: config.urls.reference + '/6',
+        searchFields: [flds.DWR_REGION],
+        displayField: flds.DWR_REGION,
+        highlightSymbol: config.symbols.selected.poly
+    }, {
+        name: 'WRI Projects',
+        search: true,
+        url: config.urls.centroidService,
+        searchFields: [flds.Project_ID, flds.Title],
+        displayField: flds.Title,
+        highlightSymbol: config.symbols.selected.point
+    }, {
+        name: 'SGID Places',
+        search: true,
+        url: config.urls.reference + '/7',
+        searchFields: [flds.Name],
+        displayField: flds.Name,
+        highlightSymbol: config.symbols.selected.poly
+    }];
 
-    return window.AGRC;
+    return config;
 });

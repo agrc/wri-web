@@ -7,7 +7,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="app/resources/App.css">
+    <link rel="stylesheet" type="text/css" href="../../../dts/dnr-style.css">
+    <link rel="stylesheet" href="../../../app/resources/App.css">
     <style type='text/css'>
         body {
             padding: 50px;
@@ -22,22 +23,20 @@
 
         require({
             baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
+            packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
             {
                 name: 'jquery',
                 location: 'jquery/dist',
                 main: 'jquery'
-            },{
-                name: 'bootstrap',
-                location: 'bootstrap',
-                main: 'dist/js/bootstrap'
             }]
         }, [
+            'jquery',
             'app/mapControls/LayerItem',
 
             'dojo/domReady!'
-        ], function(Module) {
+        ], function($, Module) {
             widgetUnderTest = new Module({
+                name: 'Layer Name'
             }, 'node');
 
             widgetUnderTest.startup();
@@ -45,6 +44,8 @@
 </script>
 </head>
 <body>
-    <div id="node"></div>
+    <div class="btn-group" data-toggle="buttons">
+        <div id="node"></div>
+    </div>
 </body>
 </html>
