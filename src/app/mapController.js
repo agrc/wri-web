@@ -8,6 +8,7 @@ define([
     'app/centroidController',
     'app/mapControls/CentroidSwitchButton',
 
+    'dojo/_base/fx',
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/promise/all',
@@ -15,6 +16,7 @@ define([
     'dojo/topic',
 
     'esri/dijit/HomeButton',
+    'esri/dijit/Search',
     'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
     'esri/tasks/query'
@@ -28,6 +30,7 @@ define([
     centroidController,
     CentroidSwitchButton,
 
+    fx,
     lang,
     Deferred,
     all,
@@ -35,6 +38,7 @@ define([
     topic,
 
     HomeButton,
+    Search,
     Extent,
     FeatureLayer,
     Query
@@ -93,9 +97,57 @@ define([
                 router.setHash();
             });
 
+            var search = new Search({
+                enableButtonMode: true,
+                enableSourcesMenu: true, // missing css or something for menu
+                enableLabel: false,
+                enableInfoWindow: false,
+                showInfoWindowOnSelect: false,
+                autoNavigate: false,
+                autoSelect: true,
+                enableHighlight: true,
+                maxResults: 3,
+                sources: [],
+                map: this.map
+            }).placeAt(this.map.root, 'last');
+
+            var sources = config.supportLayers.filter(function (l) {
+                return l.search;
+            });
+            sources.forEach(function (l) {
+                l.featureLayer = new FeatureLayer(l.url);
+                l.exactMatch = false;
+                l.minCharacters = 3;
+            });
+
+            search.on('search-results', lang.hitch(this, function (result) {
+                if (result && result.numResults === 1) {
+                    var geometry = result.results[result.activeSourceIndex][0].feature.geometry;
+
+                    if (geometry.type === 'point') {
+                        this.map.centerAndZoom(geometry, config.scaleTrigger - 1);
+                    } else {
+                        this.map.setExtent(geometry.getExtent(), true);
+                    }
+
+                    var that = this;
+                    setTimeout(function () {
+                        // remove graphic after a period of time
+                        fx.fadeOut({
+                            node: search.highlightGraphic.getNode(),
+                            onEnd: function () {
+                                that.map.graphics.remove(search.highlightGraphic);
+                            }}).play();
+                    }, 3000);
+                }
+            }));
+
+            search.set('sources', sources);
+
             this.childWidgets.push(selector);
             this.childWidgets.push(homeButton);
             this.childWidgets.push(centroidButton);
+            this.childWidgets.push(search);
 
             // suspend base map layer until we get the initial extent
             // trying to save requests to the server

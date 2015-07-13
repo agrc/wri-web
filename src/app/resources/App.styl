@@ -76,7 +76,7 @@ html, body, .app
 
 .app .map-overlay
     position absolute
-    top 60px
+    top 92px
     left 20px
     width 450px
     z-index 1
@@ -90,18 +90,29 @@ html, body, .app
             position absolute
             top 20px
             z-index 50
+            left 90px
             .HomeButton
-                position inherit
-                left 90px
+                position relative
+                display inline-block !important
             .home, .toolbar-item
+                margin 0 1px
                 width 32px
                 height 32px
+                position relative
+                display inline-block
                 &:hover
                     background-color #333
                     background-color rgba(102, 102, 102, 0.90)
                 &:active
                     background-color #ccc
                     background-color rgba(102, 102, 102, 0.60)
+        .arcgisSearch
+            position absolute
+            top 55px
+            left 20px
+            // patch for 3.13 js api. remove when 3.14
+            .searchBtn
+                width 20px
         .agrc .selectorMain
             top 17px
             right 10px
