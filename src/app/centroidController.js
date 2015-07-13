@@ -47,6 +47,10 @@ define([
         //      for a certain collection of projects
         where: '',
 
+        // filter: String
+        //      the definition query set by the filters
+        filter: '',
+
         // centroidLayer: FeatureLayer
         // summary:
         //      the centroid feature layer
@@ -70,6 +74,7 @@ define([
             topic.subscribe(config.topics.map.extentChanged, lang.hitch(this, 'onExtentChanged'));
             topic.subscribe(config.topics.map.toggleCentroids, lang.hitch(this, 'updateOverride'));
             topic.subscribe(config.topics.map.rubberBandZoom, lang.hitch(this, '_pauseEvent'));
+            topic.subscribe(config.topics.filterQueryChanged, lang.hitch(this, 'onFilterQueryChanged'));
 
             this.dialog = new InfoWindowLite(null, domConstruct.create('div', null, document.body, 'last'));
             this.dialog._adjustContentArea = function () {};
@@ -196,21 +201,24 @@ define([
 
             var q = new Query();
             q.where = where || this.where;
+            this.where = q.where;
+
+            if (this.filter) {
+                q.where += ' AND ' + this.filter;
+            }
 
             var deferreds = [];
 
-            this.where = q.where;
-
             // guards against extra queries for invisible layers
             if (this.centroidsVisible) {
-                if (this.centroidLayer.__where__ === this.where) {
+                if (this.centroidLayer.__where__ === q.where) {
                     return;
                 }
 
                 deferreds.push(this.centroidLayer.selectFeatures(q));
-                this.centroidLayer.__where__ = this.where;
+                this.centroidLayer.__where__ = q.where;
             } else {
-                if (this.explodedLayer.pointExploded.__where__ === this.where) {
+                if (this.explodedLayer.pointExploded.__where__ === q.where) {
                     return;
                 }
 
@@ -218,11 +226,11 @@ define([
                     var layer = this.explodedLayer[key];
 
                     deferreds.push(layer.selectFeatures(q));
-                    layer.__where__ = this.where;
+                    layer.__where__ = q.where;
                 }, this);
             }
 
-            if (this.where === '1=1') {
+            if (q.where === '1=1') {
                 return null;
             }
 
@@ -310,6 +318,16 @@ define([
             }
 
             this.centroidPopupHandler.resume();
+        },
+        onFilterQueryChanged: function (newWhere) {
+            // summary:
+            //      updates the def queries for all layers based on the filters
+            // newWhere: String
+            console.log('app.centroidController:onFilterQueryChanged', arguments);
+
+            this.filter = newWhere;
+
+            this.showFeaturesFor();
         }
     };
 });

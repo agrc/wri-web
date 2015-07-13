@@ -102,7 +102,6 @@ define([
             });
             var where = (wheres.length) ? wheres.join(' AND ') : undefined;
             topic.publish(config.topics.filterQueryChanged, where);
-            console.log('where', where);
         }
     });
 });
