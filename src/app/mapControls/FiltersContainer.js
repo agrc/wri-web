@@ -49,7 +49,8 @@ define([
                         return [item, item];
                     }),
                     fieldName: config.fieldNames.Status,
-                    fieldType: Filter.TYPE_TEXT
+                    fieldType: Filter.TYPE_TEXT,
+                    cssClass: 'status'
                 }, domConstruct.create('div', null, this.container)),
                 new Filter({
                     name: 'Feature Type',
@@ -57,7 +58,8 @@ define([
                     fieldName: config.fieldNames.TypeCode,
                     fieldType: Filter.TYPE_NUMBER,
                     relatedTableQuery: true,
-                    anyAllToggle: true
+                    anyAllToggle: true,
+                    cssClass: 'feature-type'
                 }, domConstruct.create('div', null, this.container))
             ];
             this.filters.forEach(function (f) {

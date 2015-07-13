@@ -75,10 +75,16 @@ define([
         //      If true this is a query on related tables
         relatedTableQuery: false,
 
-        constructor: function () {
+        // cssClass: String
+        //      controls the color of the header
+        cssClass: null,
+
+        constructor: function (options) {
             // summary:
             //      apply base class
             console.log('app/mapControls/Filter:constructor', arguments);
+
+            this.baseClass += ' ' + options.cssClass;
 
             this.selectedValues = [];
         },
