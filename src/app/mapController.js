@@ -15,6 +15,7 @@ define([
     'dojo/topic',
 
     'esri/dijit/HomeButton',
+    'esri/dijit/Search',
     'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
     'esri/tasks/query'
@@ -35,6 +36,7 @@ define([
     topic,
 
     HomeButton,
+    Search,
     Extent,
     FeatureLayer,
     Query
@@ -93,9 +95,83 @@ define([
                 router.setHash();
             });
 
+            var search = new Search({
+                enableButtonMode: true,
+                enableSourcesMenu: true, // missing css or something for menu
+                enableLabel: false,
+                enableInfoWindow: false,
+                showInfoWindowOnSelect: false,
+                autoNavigate: false,
+                autoSelect: true,
+                enableHighlight: true,
+                maxResults: 3,
+                sources: [],
+                map: this.map
+            }).placeAt(this.map.root, 'last');
+
+            var sources = [{
+                name: 'WRI Projects',
+                featureLayer: new FeatureLayer(config.urls.centroidService),
+                searchFields: ['Project_ID', 'Title'],
+                displayField: 'Title',
+                exactMatch: false,
+                minCharacters: 3,
+                highlightSymbol: config.symbols.selected.point
+            }, {
+                name: 'SGID Places',
+                featureLayer: new FeatureLayer('http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Hillshade/MapServer/3'),
+                searchFields: ['Name'],
+                displayField: 'Name',
+                exactMatch: false,
+                minCharacters: 3,
+                highlightSymbol: config.symbols.selected.poly
+            }, {
+                name: 'UWRI Administrative Regions',
+                featureLayer: new FeatureLayer('/arcgis/rest/services/WRI/Reference/MapServer/6'),
+                searchFields: ['DWR_REGION'],
+                displayField: 'DWR_REGION',
+                exactMatch: false,
+                minCharacters: 3,
+                highlightSymbol: config.symbols.selected.poly
+            }, {
+                name: 'BLM Districts',
+                featureLayer: new FeatureLayer('/arcgis/rest/services/WRI/Reference/MapServer/1'),
+                searchFields: ['FO_NAME'],
+                displayField: 'FO_NAME',
+                exactMatch: false,
+                minCharacters: 3,
+                highlightSymbol: config.symbols.selected.poly
+            }, {
+                name: 'USFS Forests',
+                featureLayer: new FeatureLayer('/arcgis/rest/services/WRI/Reference/MapServer/2'),
+                searchFields: ['LABEL_FEDERAL'],
+                displayField: 'LABEL_FEDERAL',
+                exactMatch: false,
+                minCharacters: 3,
+                highlightSymbol: config.symbols.selected.poly
+            }];
+
+            search.on('search-results', lang.hitch(this, function (result) {
+                if (result && result.numResults === 1) {
+                    var geometry = result.results[0][0].feature.geometry;
+                    var point = geometry || geometry.getExtent();
+
+                    this.map.centerAndZoom(point, config.scaleTrigger - 1);
+
+                    var that = this;
+                    setTimeout(function () {
+                        // remove graphic after a period of time
+                        that.map.graphics.remove(search.highlightGraphic);
+                    }, 3000);
+                }
+            }));
+
+            search.set('sources', sources);
+
             this.childWidgets.push(selector);
             this.childWidgets.push(homeButton);
             this.childWidgets.push(centroidButton);
+            this.childWidgets.push(search);
 
             // suspend base map layer until we get the initial extent
             // trying to save requests to the server
