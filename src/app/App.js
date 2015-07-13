@@ -65,6 +65,9 @@ define([
                 new FiltersContainer({}, this.filtersContainerNode)
             );
 
+            this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);
+            this.childWidgets.push(this.filtersContainer);
+
             this.setupConnections();
         },
         setupConnections: function () {
