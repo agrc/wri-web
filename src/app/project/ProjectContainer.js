@@ -45,7 +45,7 @@ define([
         // description:
         //      The container to hold and manage all the widgets for working with projects
         templateString: template,
-        baseClass: 'project-container',
+        baseClass: 'project-container map-overlay',
 
         // Properties to be sent into constructor
 

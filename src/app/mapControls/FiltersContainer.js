@@ -7,6 +7,7 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/text!app/mapControls/templates/FiltersContainer.html',
     'dojo/topic'
@@ -19,6 +20,7 @@ define([
 
     declare,
     lang,
+    domClass,
     domConstruct,
     template,
     topic
@@ -27,7 +29,7 @@ define([
         // description:
         //      Holds filter widgets and coordinates their work
         templateString: template,
-        baseClass: 'filters-container',
+        baseClass: 'filters-container map-overlay',
 
         // filters: _Filter[]
         //      list of filters for this widget
@@ -47,7 +49,8 @@ define([
                         return [item, item];
                     }),
                     fieldName: config.fieldNames.Status,
-                    fieldType: Filter.TYPE_TEXT
+                    fieldType: Filter.TYPE_TEXT,
+                    cssClass: 'status'
                 }, domConstruct.create('div', null, this.container)),
                 new Filter({
                     name: 'Feature Type',
@@ -55,7 +58,8 @@ define([
                     fieldName: config.fieldNames.TypeCode,
                     fieldType: Filter.TYPE_NUMBER,
                     relatedTableQuery: true,
-                    anyAllToggle: true
+                    anyAllToggle: true,
+                    cssClass: 'feature-type'
                 }, domConstruct.create('div', null, this.container))
             ];
             this.filters.forEach(function (f) {
@@ -64,7 +68,27 @@ define([
                 f.on('changed', lang.hitch(this, 'onFilterChange'));
             }, this);
 
+            this.setUpConnections();
+
             this.inherited(arguments);
+        },
+        setUpConnections: function () {
+            // summary:
+            //      description
+            console.log('app.mapControls:setUpConnections', arguments);
+
+            this.own(topic.subscribe(config.topics.projectIdsChanged,
+                lang.hitch(this, 'onProjectIdsChanged')));
+        },
+        onProjectIdsChanged: function (ids) {
+            // summary:
+            //      hide or show this widget
+            // ids: String[]
+            console.log('app.mapControls:onProjectIdsChanged', arguments);
+
+            if (ids) {
+                domClass.toggle(this.domNode, 'hidden', (ids.length === 1));
+            }
         },
         onFilterChange: function () {
             // summary:
@@ -80,7 +104,6 @@ define([
             });
             var where = (wheres.length) ? wheres.join(' AND ') : undefined;
             topic.publish(config.topics.filterQueryChanged, where);
-            console.log('where', where);
         }
     });
 });
