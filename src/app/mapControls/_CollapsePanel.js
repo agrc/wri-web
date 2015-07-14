@@ -27,6 +27,15 @@ define([
             });
 
             this.inherited(arguments);
+        },
+        open: function () {
+            // summary:
+            //      opens the body of the filter
+            console.log('app/mapControls/Filter:open', arguments);
+
+            $(this.body).collapse('show');
+
+            this.inherited(arguments);
         }
     });
 });
