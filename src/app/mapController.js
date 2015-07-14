@@ -8,6 +8,7 @@ define([
     'app/centroidController',
     'app/mapControls/CentroidSwitchButton',
 
+    'dojo/_base/fx',
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/promise/all',
@@ -29,6 +30,7 @@ define([
     centroidController,
     CentroidSwitchButton,
 
+    fx,
     lang,
     Deferred,
     all,
@@ -109,59 +111,33 @@ define([
                 map: this.map
             }).placeAt(this.map.root, 'last');
 
-            var sources = [{
-                name: 'WRI Projects',
-                featureLayer: new FeatureLayer(config.urls.centroidService),
-                searchFields: ['Project_ID', 'Title'],
-                displayField: 'Title',
-                exactMatch: false,
-                minCharacters: 3,
-                highlightSymbol: config.symbols.selected.point
-            }, {
-                name: 'SGID Places',
-                featureLayer: new FeatureLayer('http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Hillshade/MapServer/3'),
-                searchFields: ['Name'],
-                displayField: 'Name',
-                exactMatch: false,
-                minCharacters: 3,
-                highlightSymbol: config.symbols.selected.poly
-            }, {
-                name: 'UWRI Administrative Regions',
-                featureLayer: new FeatureLayer('/arcgis/rest/services/WRI/Reference/MapServer/6'),
-                searchFields: ['DWR_REGION'],
-                displayField: 'DWR_REGION',
-                exactMatch: false,
-                minCharacters: 3,
-                highlightSymbol: config.symbols.selected.poly
-            }, {
-                name: 'BLM Districts',
-                featureLayer: new FeatureLayer('/arcgis/rest/services/WRI/Reference/MapServer/1'),
-                searchFields: ['FO_NAME'],
-                displayField: 'FO_NAME',
-                exactMatch: false,
-                minCharacters: 3,
-                highlightSymbol: config.symbols.selected.poly
-            }, {
-                name: 'USFS Forests',
-                featureLayer: new FeatureLayer('/arcgis/rest/services/WRI/Reference/MapServer/2'),
-                searchFields: ['LABEL_FEDERAL'],
-                displayField: 'LABEL_FEDERAL',
-                exactMatch: false,
-                minCharacters: 3,
-                highlightSymbol: config.symbols.selected.poly
-            }];
+            var sources = config.supportLayers.filter(function (l) {
+                return l.search;
+            });
+            sources.forEach(function (l) {
+                l.featureLayer = new FeatureLayer(l.url);
+                l.exactMatch = false;
+                l.minCharacters = 3;
+            });
 
             search.on('search-results', lang.hitch(this, function (result) {
                 if (result && result.numResults === 1) {
-                    var geometry = result.results[0][0].feature.geometry;
-                    var point = geometry || geometry.getExtent();
+                    var geometry = result.results[result.activeSourceIndex][0].feature.geometry;
 
-                    this.map.centerAndZoom(point, config.scaleTrigger - 1);
+                    if (geometry.type === 'point') {
+                        this.map.centerAndZoom(geometry, config.scaleTrigger - 1);
+                    } else {
+                        this.map.setExtent(geometry.getExtent(), true);
+                    }
 
                     var that = this;
                     setTimeout(function () {
                         // remove graphic after a period of time
-                        that.map.graphics.remove(search.highlightGraphic);
+                        fx.fadeOut({
+                            node: search.highlightGraphic.getNode(),
+                            onEnd: function () {
+                                that.map.graphics.remove(search.highlightGraphic);
+                            }}).play();
                     }, 3000);
                 }
             }));

@@ -19,9 +19,13 @@ function (
             //      add buttons
             console.log('app.mapControls._ReferenceLayersMixin:postCreate', arguments);
 
-            config.referenceLayers.forEach(function (rl) {
-                this.own(new LayerItem(rl, domConstruct.create('div', null, this.container)));
-            }, this);
+            config.supportLayers
+                .filter(function (l) {
+                    return l.reference;
+                })
+                .forEach(function (l) {
+                    this.own(new LayerItem(l, domConstruct.create('div', null, this.container)));
+                }, this);
 
             this.inherited(arguments);
         }
