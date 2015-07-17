@@ -193,6 +193,22 @@ define([
     };
     var flds = config.fieldNames;
     config.supportLayers = [{
+        name: 'Land Ownership',
+        reference: true,
+        url: config.urls.reference,
+        layerIndex: 4,
+        type: 'dynamic'
+    }, {
+        name: 'UWRI Regions',
+        reference: true,
+        search: true,
+        url: config.urls.reference,
+        layerIndex: 6,
+        type: 'dynamic',
+        searchFields: [flds.DWR_REGION],
+        displayField: flds.DWR_REGION,
+        highlightSymbol: config.symbols.selected.poly
+    }, {
         name: 'UWRI Focus Areas',
         reference: true,
         url: config.urls.reference,
@@ -219,33 +235,22 @@ define([
         displayField: flds.LABEL_FEDERAL,
         highlightSymbol: config.symbols.selected.poly
     }, {
-        name: 'HUC',
-        reference: true,
-        url: config.urls.reference,
-        layerIndex: 3,
-        type: 'dynamic'
-    }, {
-        name: 'Land Ownership',
-        reference: true,
-        url: config.urls.reference,
-        layerIndex: 4,
-        type: 'dynamic'
-    }, {
         name: 'Sage Grouse Areas',
         reference: true,
         url: config.urls.reference,
         layerIndex: 5,
         type: 'dynamic'
     }, {
-        name: 'UWRI Regions',
+        name: 'PLSS Sections',
         reference: true,
-        search: true,
+        url: config.urls.plss,
+        type: 'cached'
+    }, {
+        name: 'HUCs',
+        reference: true,
         url: config.urls.reference,
-        layerIndex: 6,
-        type: 'dynamic',
-        searchFields: [flds.DWR_REGION],
-        displayField: flds.DWR_REGION,
-        highlightSymbol: config.symbols.selected.poly
+        layerIndex: 3,
+        type: 'dynamic'
     }, {
         name: 'WRI Projects',
         search: true,
@@ -261,11 +266,6 @@ define([
         searchFields: [flds.Name],
         displayField: flds.Name,
         highlightSymbol: config.symbols.selected.poly
-    }, {
-        name: 'PLSS Sections',
-        reference: true,
-        url: config.urls.plss,
-        type: 'cached'
     }];
 
     return config;
