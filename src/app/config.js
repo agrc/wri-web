@@ -149,7 +149,8 @@ define([
             },
             centroidController: {
                 updateVisibility: 'wri/thisFeelsBad'
-            }
+            },
+            toggleReferenceLayer: 'wri/toggleReferenceLayer'
         },
 
         symbols: {

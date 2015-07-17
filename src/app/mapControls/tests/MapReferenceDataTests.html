@@ -44,10 +44,16 @@ require({
 
     widgetUnderTest.startup();
     widgetUnderTest.open();
+
+    widgetUnderTest2 = new Module({}, 'node2');
+
+    widgetUnderTest2.startup();
+    widgetUnderTest2.open();
 });
 </script>
 </head>
 <body>
     <div id="node"></div>
+    <div id="node2"></div>
 </body>
 </html>
