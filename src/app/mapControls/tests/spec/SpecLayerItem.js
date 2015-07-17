@@ -45,17 +45,18 @@ require([
         });
         describe('onToggleReferenceLayerTopic', function () {
             it('toggles button when relevant topic fires', function () {
+                var widgetWithSameName = {name: widget.name};
                 expect(widget.checkbox.checked).toBe(false);
 
-                topic.publish(config.topics.toggleReferenceLayer, 'anothername', true);
+                topic.publish(config.topics.toggleReferenceLayer, {}, true);
 
                 expect(widget.checkbox.checked).toBe(false);
 
-                topic.publish(config.topics.toggleReferenceLayer, widget.name, true);
+                topic.publish(config.topics.toggleReferenceLayer, widgetWithSameName, true);
 
                 expect(widget.checkbox.checked).toBe(true);
 
-                topic.publish(config.topics.toggleReferenceLayer, widget.name, false);
+                topic.publish(config.topics.toggleReferenceLayer, widgetWithSameName, false);
 
                 expect(widget.checkbox.checked).toBe(false);
             });
@@ -71,17 +72,11 @@ require([
             });
         });
         describe('toggleLayer', function () {
-            beforeEach(function () {
-                topics.listen(config.topics.toggleReferenceLayer);
-                widget.layer = {
-                    show: jasmine.createSpy('show'),
-                    hide: jasmine.createSpy('hide')
-                };
-            });
             it('fires the topic', function () {
+                topics.listen(config.topics.toggleReferenceLayer);
                 widget.toggleLayer(true);
 
-                expect(config.topics.toggleReferenceLayer).toHaveBeenPublishedWith(widget.name, true);
+                expect(config.topics.toggleReferenceLayer).toHaveBeenPublishedWith(widget, true);
             });
         });
     });

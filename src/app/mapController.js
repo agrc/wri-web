@@ -18,6 +18,8 @@ define([
     'esri/dijit/HomeButton',
     'esri/dijit/Search',
     'esri/geometry/Extent',
+    'esri/layers/ArcGISTiledMapServiceLayer',
+    'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/FeatureLayer',
     'esri/tasks/query'
 ], function (
@@ -40,6 +42,8 @@ define([
     HomeButton,
     Search,
     Extent,
+    ArcGISTiledMapServiceLayer,
+    ArcGISDynamicMapServiceLayer,
     FeatureLayer,
     Query
 ) {
@@ -55,6 +59,10 @@ define([
         // lastSelectedOriginalSymbol: Symbol
         //      Used to reapply the original symbol to the last selected graphic
         lastSelectedOriginalSymbol: null,
+
+        // referenceLayers: Object
+        //      Container to store reference layer objects
+        referenceLayers: {},
 
         initMap: function (mapDiv, toolbarNode) {
             // summary:
@@ -115,7 +123,7 @@ define([
                 return l.search;
             });
             sources.forEach(function (l) {
-                l.featureLayer = new FeatureLayer(l.url);
+                l.featureLayer = new FeatureLayer(l.url + '/' + l.layerIndex);
                 l.exactMatch = false;
                 l.minCharacters = 3;
             });
@@ -169,6 +177,7 @@ define([
             topic.subscribe(config.topics.map.toggleAdjacent, lang.hitch(this, 'toggleAdjacent'));
             topic.subscribe(config.topics.map.setMap, lang.hitch(this, '_setMap'));
             topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
+            topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
 
             this.map.on('extent-change', function (change) {
                 topic.publish(config.topics.map.extentChanged, change);
@@ -499,6 +508,39 @@ define([
             }, this);
 
             centroidController.startup();
+        },
+        toggleReferenceLayer: function (layerItem, show) {
+            // summary:
+            //      creates and toggles reference layer
+            // layerItem: LayerItem
+            // show: Boolean
+            console.log('app.mapController:toggleReferenceLayer', arguments);
+
+            var layerTypes = {
+                dynamic: {
+                    'class': ArcGISDynamicMapServiceLayer,
+                    options: {opacity: config.referenceLayerOpacity}
+                },
+                cached: {
+                    'class': ArcGISTiledMapServiceLayer,
+                    options: {}
+                }
+            };
+            var lyr;
+            if (!this.referenceLayers[layerItem.name]) {
+                var layerType = layerTypes[layerItem.type];
+                lyr = new layerType['class'](layerItem.url, layerType.options);
+                if (layerItem.layerIndex) {
+                    lyr.setVisibleLayers([layerItem.layerIndex]);
+                }
+                this.map.addLayer(lyr);
+                this.map.addLoaderToLayer(lyr);
+                this.referenceLayers[layerItem.name] = lyr;
+            } else {
+                lyr = this.referenceLayers[layerItem.name];
+            }
+
+            lyr.setVisibility(show);
         }
     };
 });

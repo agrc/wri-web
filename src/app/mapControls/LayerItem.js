@@ -40,6 +40,14 @@ define([
         //      the url to the service endpoint
         url: '',
 
+        // layerIndex: Number
+        //      the index of the layer with a dynamic map service
+        layerIndex: null,
+
+        // type: String (dynamic | cached)
+        //      the type of layer to create
+        type: '',
+
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -58,15 +66,17 @@ define([
                 topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'onToggleReferenceLayerTopic'))
             );
         },
-        onToggleReferenceLayerTopic: function (name, show) {
+        onToggleReferenceLayerTopic: function (layerItem, show) {
             // summary:
             //      callback for config.topics.toggleReferenceLayer
             //      updates the button state if the name matches this widget
-            // name: String
+            // layerItem: LayerItem
             // show: Boolean
             console.log('app.mapControls.LayerItems:onToggleReferenceLayerTopic', arguments);
 
-            if (name === this.name && this.checkbox.checked !== show) {
+            if (layerItem !== this &&
+                layerItem.name === this.name &&
+                this.checkbox.checked !== show) {
                 this.toggleBtn(show);
             }
         },
@@ -95,7 +105,7 @@ define([
             // show: Boolean
             console.log('app.mapControlls:toggleLayer', arguments);
 
-            topic.publish(config.topics.toggleReferenceLayer, this.name, show);
+            topic.publish(config.topics.toggleReferenceLayer, this, show);
         }
     });
 });
