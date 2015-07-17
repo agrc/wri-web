@@ -2,14 +2,18 @@ require([
     'app/config',
     'app/mapController',
 
-    'dojo/_base/lang'
+    'dojo/_base/lang',
+
+    'esri/layers/ArcGISDynamicMapServiceLayer'
 ],
 
 function (
     config,
     mapController,
 
-    lang
+    lang,
+
+    ArcGISDynamicMapServiceLayer
 ) {
     describe('app/mapController', function () {
         describe('selectFeature', function () {
@@ -99,6 +103,31 @@ function (
                 mapController.selectFeature(data);
 
                 expect(lastGraphic.setSymbol.calls.mostRecent().args[0].color.a).toBe(opacity);
+            });
+        });
+        describe('toggleReferenceLayer', function () {
+            beforeEach(function () {
+                mapController.referenceLayers = {};
+            });
+            it('creates a new layer if there is not an existing one for that name', function () {
+                mapController.toggleReferenceLayer({
+                    name: 'blah',
+                    type: 'dynamic',
+                    url: 'blahurl'
+                }, true);
+
+                expect(mapController.referenceLayers.blah).toEqual(jasmine.any(ArcGISDynamicMapServiceLayer));
+            });
+            it('calls show or hide', function () {
+                mapController.referenceLayers = {
+                    blah: {
+                        setVisibility: jasmine.createSpy('setVisibility')
+                    }
+                };
+
+                mapController.toggleReferenceLayer({name: 'blah'}, true);
+
+                expect(mapController.referenceLayers.blah.setVisibility).toHaveBeenCalledWith(true);
             });
         });
     });

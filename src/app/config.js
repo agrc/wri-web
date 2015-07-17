@@ -61,16 +61,22 @@ define([
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
-        // scaleTrigger: int
-        // summary:
+        // scaleTrigger: Number
         //      the basemap level to toggle centroids
         scaleTrigger: 8,
+
+        // popupDelay: Number
+        //      The delay (in milliseconds) that popups delay before showing
+        popupDelay: 250,
 
         urls: {
             mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
             centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
             reference: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Reference'),
-            api: gisServerBaseUrl + apiEndpoint + '/api'
+            api: gisServerBaseUrl + apiEndpoint + '/api',
+            plss: '//basemaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer',
+            rangeTrendApp: 'http://dwrapps.dev.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}'
+            // prod (late October): rangeTrendApp: 'http://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}'
         },
 
         layerIndices: {
@@ -87,7 +93,11 @@ define([
             Name: 'Name',
             DWR_REGION: 'DWR_REGION',
             FO_NAME: 'FO_NAME',
-            LABEL_FEDERAL: 'LABEL_FEDERAL'
+            LABEL_FEDERAL: 'LABEL_FEDERAL',
+
+            // range trend SiteInfo
+            GlobalID: 'GlobalID',
+            STUDY_NAME: 'STUDY_NAME'
         },
 
         featureTypesInTables: {
@@ -149,7 +159,8 @@ define([
             },
             centroidController: {
                 updateVisibility: 'wri/thisFeelsBad'
-            }
+            },
+            toggleReferenceLayer: 'wri/toggleReferenceLayer'
         },
 
         symbols: {
@@ -185,49 +196,80 @@ define([
                     }
                 })
             }
-        }
+        },
+
+        referenceLayerOpacity: 0.75
     };
     var flds = config.fieldNames;
     config.supportLayers = [{
-        name: 'UWRI Focus Areas',
-        reference: true,
-        url: config.urls.reference + '/0'
-    }, {
-        name: 'BLM Districts',
-        reference: true,
-        search: true,
-        url: config.urls.reference + '/1',
-        searchFields: [flds.FO_NAME],
-        displayField: flds.FO_NAME,
-        highlightSymbol: config.symbols.selected.poly
-    }, {
-        name: 'Forest Service',
-        reference: true,
-        search: true,
-        url: config.urls.reference + '/2',
-        searchFields: [flds.LABEL_FEDERAL],
-        displayField: flds.LABEL_FEDERAL,
-        highlightSymbol: config.symbols.selected.poly
-    }, {
-        name: 'HUC',
-        reference: true,
-        url: config.urls.reference + '/3'
-    }, {
         name: 'Land Ownership',
         reference: true,
-        url: config.urls.reference + '/4'
-    }, {
-        name: 'Sage Grouse Areas',
-        reference: true,
-        url: config.urls.reference + '/5'
+        url: config.urls.reference,
+        layerIndex: 4,
+        type: 'dynamic',
+        legend: true
     }, {
         name: 'UWRI Regions',
         reference: true,
         search: true,
-        url: config.urls.reference + '/6',
+        url: config.urls.reference,
+        layerIndex: 6,
+        type: 'dynamic',
         searchFields: [flds.DWR_REGION],
         displayField: flds.DWR_REGION,
         highlightSymbol: config.symbols.selected.poly
+    }, {
+        name: 'UWRI Focus Areas',
+        reference: true,
+        url: config.urls.reference,
+        layerIndex: 0,
+        type: 'dynamic',
+        legend: true
+    }, {
+        name: 'BLM Districts',
+        reference: true,
+        search: true,
+        url: config.urls.reference,
+        layerIndex: 1,
+        type: 'dynamic',
+        searchFields: [flds.FO_NAME],
+        displayField: flds.FO_NAME,
+        highlightSymbol: config.symbols.selected.poly,
+        legend: true
+    }, {
+        name: 'Forest Service',
+        reference: true,
+        search: true,
+        url: config.urls.reference,
+        layerIndex: 2,
+        type: 'dynamic',
+        searchFields: [flds.LABEL_FEDERAL],
+        displayField: flds.LABEL_FEDERAL,
+        highlightSymbol: config.symbols.selected.poly,
+        legend: true
+    }, {
+        name: 'Sage Grouse Areas',
+        reference: true,
+        url: config.urls.reference,
+        layerIndex: 5,
+        type: 'dynamic',
+        legend: true
+    }, {
+        name: 'PLSS Sections',
+        reference: true,
+        url: config.urls.plss,
+        type: 'cached'
+    }, {
+        name: 'HUCs',
+        reference: true,
+        url: config.urls.reference,
+        layerIndex: 3,
+        type: 'dynamic'
+    }, {
+        name: 'Range Trend Sites',
+        reference: true,
+        url: config.urls.reference + '/8',
+        type: 'range'
     }, {
         name: 'WRI Projects',
         search: true,
@@ -238,7 +280,8 @@ define([
     }, {
         name: 'SGID Places',
         search: true,
-        url: config.urls.reference + '/7',
+        url: config.urls.reference,
+        layerIndex: 7,
         searchFields: [flds.Name],
         displayField: flds.Name,
         highlightSymbol: config.symbols.selected.poly

@@ -1,4 +1,8 @@
-<label>
-    <input type='checkbox' autocomplete="off">
+<label data-dojo-attach-event="click: onClick">
+    <input type='checkbox' autocomplete="off"
+        data-dojo-attach-point='checkbox'>
     ${name}
+    <div data-toggle='tooltip' data-dojo-attach-point='legendTip'
+        <span class="glyphicon glyphicon-question-sign"></span>
+    </div>
 </label>

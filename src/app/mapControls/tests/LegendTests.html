@@ -30,20 +30,15 @@
                 main: 'jquery'
             }]
         }, [
-            'jquery',
-
             'app/config',
-            'app/mapControls/LayerItem',
+            'app/mapControls/Legend',
 
             'dojo/domReady!'
-        ], function($, config, Module) {
+        ], function(config, Module) {
             widgetUnderTest = new Module({
-                name: 'Land Ownership',
-                reference: true,
-                url: config.urls.reference,
-                layerIndex: 4,
-                type: 'dynamic',
-                legend: true
+                mapServiceUrl: config.urls.reference,
+                layerId: 0,
+                header: 'Test Header'
             }, 'node');
 
             widgetUnderTest.startup();
@@ -51,8 +46,6 @@
 </script>
 </head>
 <body>
-    <div class="btn-group" data-toggle="buttons">
-        <div id="node"></div>
-    </div>
+    <div id="node"></div>
 </body>
 </html>
