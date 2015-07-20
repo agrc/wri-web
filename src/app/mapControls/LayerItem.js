@@ -49,7 +49,7 @@ define([
         //      the index of the layer with a dynamic map service
         layerIndex: null,
 
-        // type: String (dynamic | cached)
+        // type: String (dynamic | cached | range)
         //      the type of layer to create
         type: '',
 

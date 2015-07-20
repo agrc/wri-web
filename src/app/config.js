@@ -74,7 +74,9 @@ define([
             centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
             reference: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Reference'),
             api: gisServerBaseUrl + apiEndpoint + '/api',
-            plss: '//basemaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer'
+            plss: '//basemaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer',
+            rangeTrendApp: 'http://dwrapps.dev.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}'
+            // prod (late October): rangeTrendApp: 'http://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}'
         },
 
         layerIndices: {
@@ -91,7 +93,11 @@ define([
             Name: 'Name',
             DWR_REGION: 'DWR_REGION',
             FO_NAME: 'FO_NAME',
-            LABEL_FEDERAL: 'LABEL_FEDERAL'
+            LABEL_FEDERAL: 'LABEL_FEDERAL',
+
+            // range trend SiteInfo
+            GlobalID: 'GlobalID',
+            STUDY_NAME: 'STUDY_NAME'
         },
 
         featureTypesInTables: {
@@ -259,6 +265,11 @@ define([
         url: config.urls.reference,
         layerIndex: 3,
         type: 'dynamic'
+    }, {
+        name: 'Range Trend Sites',
+        reference: true,
+        url: config.urls.reference + '/8',
+        type: 'range'
     }, {
         name: 'WRI Projects',
         search: true,

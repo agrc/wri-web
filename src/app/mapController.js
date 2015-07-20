@@ -18,6 +18,7 @@ define([
     'esri/dijit/HomeButton',
     'esri/dijit/Search',
     'esri/geometry/Extent',
+    'esri/InfoTemplate',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/FeatureLayer',
@@ -42,6 +43,7 @@ define([
     HomeButton,
     Search,
     Extent,
+    InfoTemplate,
     ArcGISTiledMapServiceLayer,
     ArcGISDynamicMapServiceLayer,
     FeatureLayer,
@@ -516,25 +518,38 @@ define([
             // show: Boolean
             console.log('app.mapController:toggleReferenceLayer', arguments);
 
-            var layerTypes = {
-                dynamic: {
-                    'class': ArcGISDynamicMapServiceLayer,
-                    options: {opacity: config.referenceLayerOpacity}
-                },
-                cached: {
-                    'class': ArcGISTiledMapServiceLayer,
-                    options: {}
-                }
-            };
             var lyr;
+            var that = this;
             if (!this.referenceLayers[layerItem.name]) {
+                var layerTypes = {
+                    dynamic: {
+                        'class': ArcGISDynamicMapServiceLayer,
+                        options: {opacity: config.referenceLayerOpacity}
+                    },
+                    cached: {
+                        'class': ArcGISTiledMapServiceLayer,
+                        options: {}
+                    },
+                    range: {
+                        'class': FeatureLayer,
+                        options: {
+                            outFields: [config.fieldNames.GlobalID, config.fieldNames.STUDY_NAME],
+                            infoTemplate: new InfoTemplate(
+                                '${' + config.fieldNames.STUDY_NAME + '}',
+                                '<a href="' + config.urls.rangeTrendApp + '" target="blank">Range Trend App</a>'
+                            )
+                        }
+                    }
+                };
                 var layerType = layerTypes[layerItem.type];
                 lyr = new layerType['class'](layerItem.url, layerType.options);
-                if (layerItem.layerIndex) {
+                if (layerItem.type === 'dynamic') {
                     lyr.setVisibleLayers([layerItem.layerIndex]);
                 }
-                this.map.addLayer(lyr);
-                this.map.addLoaderToLayer(lyr);
+                lyr.on('load', function () {
+                    that.map.addLayer(lyr);
+                    that.map.addLoaderToLayer(lyr);
+                });
                 this.referenceLayers[layerItem.name] = lyr;
             } else {
                 lyr = this.referenceLayers[layerItem.name];
