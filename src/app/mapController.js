@@ -71,6 +71,8 @@ define([
             //      Sets up the map and layers
             console.info('app/mapController/initMap', arguments);
 
+            var that = this;
+
             this.childWidgets = [];
 
             this.map = new BaseMap(mapDiv, {
@@ -140,7 +142,6 @@ define([
                         this.map.setExtent(geometry.getExtent(), true);
                     }
 
-                    var that = this;
                     setTimeout(function () {
                         // remove graphic after a period of time
                         fx.fadeOut({
@@ -165,6 +166,21 @@ define([
             this.baseLayer.suspend();
 
             this.setupConnections();
+            this.map.on('load', function () {
+                that.map.on('extent-change', function (change) {
+                    topic.publish(config.topics.map.extentChanged, change);
+                });
+                that.map.on('mouse-drag-start', function (evt) {
+                    if (evt.shiftKey) {
+                        topic.publish(config.topics.map.rubberBandZoom, true);
+                    }
+                });
+                that.map.on('mouse-drag-end', function (evt) {
+                    if (evt.shiftKey) {
+                        topic.publish(config.topics.map.rubberBandZoom, false);
+                    }
+                });
+            });
         },
         setupConnections: function () {
             // summary:
@@ -180,20 +196,6 @@ define([
             topic.subscribe(config.topics.map.setMap, lang.hitch(this, '_setMap'));
             topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
             topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
-
-            this.map.on('extent-change', function (change) {
-                topic.publish(config.topics.map.extentChanged, change);
-            });
-            this.map.on('mouse-drag-start', function (evt) {
-                if (evt.shiftKey) {
-                    topic.publish(config.topics.map.rubberBandZoom, true);
-                }
-            });
-            this.map.on('mouse-drag-end', function (evt) {
-                if (evt.shiftKey) {
-                    topic.publish(config.topics.map.rubberBandZoom, false);
-                }
-            });
         },
         selectLayers: function (ids) {
             // summary:

@@ -11,7 +11,7 @@ function (
                 centroidController.filter = 'blah';
                 centroidController.centroidsVisible = true;
                 centroidController.centroidLayer = {
-                    selectFeatures: function () {}
+                    setDefinitionExpression: function () {}
                 };
 
                 centroidController.showFeaturesFor('blah2');

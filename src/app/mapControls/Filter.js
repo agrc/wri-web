@@ -47,9 +47,9 @@ define([
         //      any or all
         any: true,
 
-        relatedAnyTxt: ['{{fieldName}} IN(SELECT {{fieldName}} FROM POINT WHERE {{query}} ',
-            'union SELECT {{fieldName}} FROM LINE WHERE {{query}} ',
-            'union SELECT {{fieldName}} FROM POLY WHERE {{query}})'
+        relatedAnyTxt: ['({{fieldName}} IN(SELECT {{fieldName}} FROM POINT WHERE {{query}}) OR ',
+            '{{fieldName}} IN(SELECT {{fieldName}} FROM LINE WHERE {{query}}) OR ',
+            '{{fieldName}} IN(SELECT {{fieldName}} FROM POLY WHERE {{query}}))'
         ].join('').replace(/{{fieldName}}/g, config.fieldNames.Project_ID),
 
 
@@ -83,6 +83,10 @@ define([
         //      the name of the icon that shows in the header
         iconName: '',
 
+        // defaultToSelected: String[]
+        //      the array of values that you want selected by default
+        defaultToSelected: null,
+
         constructor: function (options) {
             // summary:
             //      apply base class
@@ -99,10 +103,13 @@ define([
 
             this.items.forEach(function (item) {
                 var lbl = domConstruct.create('label', {
-                    'class': 'btn btn-default btn-xs',
+                    'class': 'btn btn-default btn-xs ' + item[0].replace(' ', ''),
                     innerHTML: item[0],
                     'onclick': lang.partial(lang.hitch(this, 'itemClicked'), item[1])
                 }, this.buttonContainer);
+                if (this.defaultToSelected && this.defaultToSelected.indexOf(item[1]) !== -1) {
+                    domClass.add(lbl, 'active');
+                }
                 domConstruct.create('input', {
                     type: 'checkbox',
                     autocomplete: 'off'
@@ -122,6 +129,11 @@ define([
                 html: true,
                 placement: 'bottom'
             });
+
+            if (this.defaultToSelected) {
+                this.selectedValues = this.defaultToSelected;
+            }
+
             this.inherited(arguments);
         },
         clear: function () {

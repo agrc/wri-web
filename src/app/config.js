@@ -117,13 +117,11 @@ define([
 
         domains: {
             projectStatus: [
-                'Cancelled',
-                'Complete',
+                'Proposed',
                 'Current',
-                'Pending Complet',
-                'Project',
-                'Proposal',
-                'Proposed'
+                'Pending Completed',
+                'Completed',
+                'Cancelled'
             ],
             featureType: [
                 ['Terrestrial', 0],

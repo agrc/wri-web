@@ -45,7 +45,7 @@ define([
         // summary:
         //      the expression used to hide the project being looked at or only show centroids
         //      for a certain collection of projects
-        where: '',
+        where: '1=1',
 
         // filter: String
         //      the definition query set by the filters
@@ -65,6 +65,11 @@ define([
         // summary:
         //      whether or not to care about this stuff
         enabled: true,
+
+        featureQueryTxt: '{{Project_ID}} IN(SELECT {{Project_ID}} FROM PROJECT WHERE {{query}})'
+            .replace(/{{Project_ID}}/g, config.fieldNames.Project_ID),
+
+        centroidsVisible: true,
 
         startup: function () {
             // summary:
@@ -141,7 +146,6 @@ define([
 
                 this.centroidLayer = new FeatureLayer(config.urls.centroidService, {
                     id: 'Centroid',
-                    mode: FeatureLayer.MODE_SELECTION,
                     outFields: ['Title', 'Status', 'Project_ID']
                 });
                 this.centroidLayer.__where__ = '';
@@ -158,8 +162,7 @@ define([
 
                 [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
                     var layer = new FeatureLayer(config.urls.mapService + '/' + layerIndex, {
-                        id: typesLookup[i],
-                        mode: FeatureLayer.MODE_SELECTION
+                        id: typesLookup[i]
                     });
 
                     layer.setVisibility(false);
@@ -196,54 +199,52 @@ define([
         showFeaturesFor: function (where) {
             // summary:
             //      selects features for the where clause
-            // where: {5:type or return: type}
+            // where: String
             console.log('app.centroidController::showFeaturesFor', arguments);
 
-            var q = new Query();
-            q.where = where || this.where;
-            this.where = q.where;
+            var defExpression = where || this.where;
+            this.where = defExpression;
 
             if (this.filter) {
-                q.where += ' AND ' + this.filter;
+                defExpression += ' AND ' + this.filter;
             }
 
             var deferreds = [];
 
             // guards against extra queries for invisible layers
             if (this.centroidsVisible) {
-                if (this.centroidLayer.__where__ === q.where) {
+                if (this.centroidLayer.__where__ === defExpression) {
                     return;
                 }
 
-                deferreds.push(this.centroidLayer.selectFeatures(q));
-                this.centroidLayer.__where__ = q.where;
+                deferreds.push(this.centroidLayer.setDefinitionExpression(defExpression));
+                this.centroidLayer.__where__ = defExpression;
             } else {
-                if (this.explodedLayer.pointExploded.__where__ === q.where) {
+                defExpression = this.featureQueryTxt.replace('{{query}}', defExpression);
+                if (this.explodedLayer.pointExploded.__where__ === defExpression) {
                     return;
                 }
 
                 Object.keys(this.explodedLayer).forEach(function (key) {
                     var layer = this.explodedLayer[key];
 
-                    deferreds.push(layer.selectFeatures(q));
-                    layer.__where__ = q.where;
+                    deferreds.push(layer.setDefinitionExpression(defExpression));
+                    layer.__where__ = defExpression;
                 }, this);
             }
 
-            if (q.where === '1=1') {
-                return null;
-            }
-
-            return all(deferreds).then(
-                function (graphics) {
-                    if (!graphics || graphics.length === 0) {
-                        // state of utah extent
-                        return null;
-                    } else {
-                        return graphicsUtils.unionGraphicsIntoExtent(graphics);
+            if (where && where !== '1=1') {
+                return all(deferreds).then(
+                    function (graphics) {
+                        if (!graphics || graphics.length === 0) {
+                            // state of utah extent
+                            return null;
+                        } else {
+                            return graphicsUtils.unionGraphicsIntoExtent(graphics);
+                        }
                     }
-                }
-            );
+                );
+            }
         },
         showAdjacentFeatures: function (where) {
             // summary:
