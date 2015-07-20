@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/mapControls/Legend',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -7,12 +8,15 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/dom-class',
+    'dojo/dom-construct',
     'dojo/topic',
 
     'dojo/text!app/mapControls/templates/LayerItem.html',
-    'bootstrap-stylus/js/button'
+    'bootstrap-stylus/js/button',
+    'bootstrap-stylus/js/tooltip'
 ], function (
     config,
+    Legend,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -20,6 +24,7 @@ define([
     declare,
     lang,
     domClass,
+    domConstruct,
     topic,
     template
 ) {
@@ -48,10 +53,36 @@ define([
         //      the type of layer to create
         type: '',
 
+        // legend: Boolean
+        //      display a legend tooltip
+        legend: false,
+
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             console.log('app.mapControls.LayerItem::postCreate', arguments);
+
+            if (this.legend) {
+                var legendContent = new Legend({
+                    mapServiceUrl: this.url,
+                    layerId: this.layerIndex,
+                    header: this.legendHeader || ''
+                });
+                legendContent.startup();
+
+                var that = this;
+                legendContent.on('loaded', function () {
+                    $(that.legendTip).tooltip({
+                        title: legendContent.domNode,
+                        html: true,
+                        placement: 'auto',
+                        delay: config.popupDelay,
+                        container: 'body'
+                    });
+                });
+            } else {
+                domConstruct.destroy(this.legendTip);
+            }
 
             this.setupConnections();
 

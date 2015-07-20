@@ -61,10 +61,13 @@ define([
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
-        // scaleTrigger: int
-        // summary:
+        // scaleTrigger: Number
         //      the basemap level to toggle centroids
         scaleTrigger: 8,
+
+        // popupDelay: Number
+        //      The delay (in milliseconds) that popups delay before showing
+        popupDelay: 250,
 
         urls: {
             mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
@@ -197,7 +200,8 @@ define([
         reference: true,
         url: config.urls.reference,
         layerIndex: 4,
-        type: 'dynamic'
+        type: 'dynamic',
+        legend: true
     }, {
         name: 'UWRI Regions',
         reference: true,
@@ -213,7 +217,8 @@ define([
         reference: true,
         url: config.urls.reference,
         layerIndex: 0,
-        type: 'dynamic'
+        type: 'dynamic',
+        legend: true
     }, {
         name: 'BLM Districts',
         reference: true,
@@ -223,7 +228,8 @@ define([
         type: 'dynamic',
         searchFields: [flds.FO_NAME],
         displayField: flds.FO_NAME,
-        highlightSymbol: config.symbols.selected.poly
+        highlightSymbol: config.symbols.selected.poly,
+        legend: true
     }, {
         name: 'Forest Service',
         reference: true,
@@ -233,13 +239,15 @@ define([
         type: 'dynamic',
         searchFields: [flds.LABEL_FEDERAL],
         displayField: flds.LABEL_FEDERAL,
-        highlightSymbol: config.symbols.selected.poly
+        highlightSymbol: config.symbols.selected.poly,
+        legend: true
     }, {
         name: 'Sage Grouse Areas',
         reference: true,
         url: config.urls.reference,
         layerIndex: 5,
-        type: 'dynamic'
+        type: 'dynamic',
+        legend: true
     }, {
         name: 'PLSS Sections',
         reference: true,
