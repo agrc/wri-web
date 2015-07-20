@@ -79,6 +79,10 @@ define([
         //      controls the color of the header
         cssClass: null,
 
+        // iconName: String
+        //      the name of the icon that shows in the header
+        iconName: '',
+
         constructor: function (options) {
             // summary:
             //      apply base class
