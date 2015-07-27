@@ -58,7 +58,7 @@ define([
         popupDelay: 250,
 
         urls: {
-            mapService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'MapService'),
+            featuresService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Features'),
             centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
             reference: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Reference'),
             api: gisServerBaseUrl + apiEndpoint + '/api',

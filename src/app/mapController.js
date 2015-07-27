@@ -303,7 +303,7 @@ define([
             };
 
             [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
-                var layer = new FeatureLayer(config.urls.mapService + '/' + layerIndex, {
+                var layer = new FeatureLayer(config.urls.featuresService + '/' + layerIndex, {
                     mode: FeatureLayer.MODE_SELECTION,
                     outFields: [config.fieldNames.FeatureID],
                     id: typesLookup[i]

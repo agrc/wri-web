@@ -161,7 +161,7 @@ define([
                 deferreds.push(d);
 
                 [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
-                    var layer = new FeatureLayer(config.urls.mapService + '/' + layerIndex, {
+                    var layer = new FeatureLayer(config.urls.featuresService + '/' + layerIndex, {
                         id: typesLookup[i]
                     });
 
