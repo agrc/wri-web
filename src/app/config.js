@@ -94,6 +94,7 @@ define([
             DWR_REGION: 'DWR_REGION',
             FO_NAME: 'FO_NAME',
             LABEL_FEDERAL: 'LABEL_FEDERAL',
+            FeatureID: 'FeatureID',
 
             // range trend SiteInfo
             GlobalID: 'GlobalID',

@@ -305,12 +305,20 @@ define([
             [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
                 var layer = new FeatureLayer(config.urls.mapService + '/' + layerIndex, {
                     mode: FeatureLayer.MODE_SELECTION,
+                    outFields: [config.fieldNames.FeatureID],
                     id: typesLookup[i]
                 });
 
                 var deferred = new Deferred();
 
+                var that = this;
                 layer.on('load', deferred.resolve);
+                layer.on('click', function (evt) {
+                    that.selectFeature({
+                        featureId: evt.graphic.attributes[config.fieldNames.FeatureID],
+                        origin: typesLookup[i]
+                    });
+                });
 
                 deferreds.push(deferred);
                 this.layers[typesLookup[i]] = layer;
