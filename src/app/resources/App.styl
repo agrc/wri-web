@@ -3,6 +3,7 @@
 @import '../../agrc/resources/map/BaseMapSelector.css';
 @import '../../seiyria-bootstrap-slider/css/bootstrap-slider.css';
 
+// bootstrap overrides
 $icon-font-path = '../../bootstrap-stylus/fonts/';
 $nav-tabs-active-link-hover-border-color = #fff
 $nav-tabs-border-color = #fff
@@ -29,6 +30,8 @@ $nav-tabs-border-color = #fff
 @require '../../bootstrap-stylus/bootstrap/navs';
 @require '../../bootstrap-stylus/bootstrap/input-groups';
 
+@require 'vars';
+@require 'mixins';
 @require '../project/resources/ProjectDetails';
 @require '../project/resources/FeaturesGrid';
 @require '../project/resources/ProjectContainer';
@@ -39,8 +42,9 @@ $nav-tabs-border-color = #fff
 @require '../mapControls/resources/CentroidSwitchButton';
 @require '../mapControls/resources/Filter';
 @require '../mapControls/resources/FiltersContainer';
-@require '../mapControls/resources/ReferenceLayers';
-@require '../mapControls/resources/_CollapsePanel.styl';
+@require '../mapControls/resources/MapReferenceData';
+@require '../mapControls/resources/_CollapsePanel';
+@require '../mapControls/resources/Legend';
 
 html, body, .app
     width 100%
@@ -73,7 +77,7 @@ html, body, .app
 
 .app .map-overlay
     position absolute
-    top 60px
+    top 92px
     left 20px
     width 450px
     z-index 1
@@ -87,18 +91,29 @@ html, body, .app
             position absolute
             top 20px
             z-index 50
+            left 90px
             .HomeButton
-                position inherit
-                left 90px
+                position relative
+                display inline-block !important
             .home, .toolbar-item
+                margin 0 1px
                 width 32px
                 height 32px
+                position relative
+                display inline-block
                 &:hover
                     background-color #333
                     background-color rgba(102, 102, 102, 0.90)
                 &:active
                     background-color #ccc
                     background-color rgba(102, 102, 102, 0.60)
+        .arcgisSearch
+            position absolute
+            top 55px
+            left 20px
+            // patch for 3.13 js api. remove when 3.14
+            .searchBtn
+                width 20px
         .agrc .selectorMain
             top 17px
             right 10px

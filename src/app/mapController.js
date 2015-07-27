@@ -8,6 +8,7 @@ define([
     'app/centroidController',
     'app/mapControls/CentroidSwitchButton',
 
+    'dojo/_base/fx',
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/promise/all',
@@ -15,7 +16,11 @@ define([
     'dojo/topic',
 
     'esri/dijit/HomeButton',
+    'esri/dijit/Search',
     'esri/geometry/Extent',
+    'esri/InfoTemplate',
+    'esri/layers/ArcGISTiledMapServiceLayer',
+    'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/FeatureLayer',
     'esri/tasks/query'
 ], function (
@@ -28,6 +33,7 @@ define([
     centroidController,
     CentroidSwitchButton,
 
+    fx,
     lang,
     Deferred,
     all,
@@ -35,7 +41,11 @@ define([
     topic,
 
     HomeButton,
+    Search,
     Extent,
+    InfoTemplate,
+    ArcGISTiledMapServiceLayer,
+    ArcGISDynamicMapServiceLayer,
     FeatureLayer,
     Query
 ) {
@@ -52,10 +62,16 @@ define([
         //      Used to reapply the original symbol to the last selected graphic
         lastSelectedOriginalSymbol: null,
 
+        // referenceLayers: Object
+        //      Container to store reference layer objects
+        referenceLayers: {},
+
         initMap: function (mapDiv, toolbarNode) {
             // summary:
             //      Sets up the map and layers
             console.info('app/mapController/initMap', arguments);
+
+            var that = this;
 
             this.childWidgets = [];
 
@@ -93,9 +109,56 @@ define([
                 router.setHash();
             });
 
+            var search = new Search({
+                enableButtonMode: true,
+                enableSourcesMenu: true, // missing css or something for menu
+                enableLabel: false,
+                enableInfoWindow: false,
+                showInfoWindowOnSelect: false,
+                autoNavigate: false,
+                autoSelect: true,
+                enableHighlight: true,
+                maxResults: 3,
+                sources: [],
+                map: this.map
+            }).placeAt(this.map.root, 'last');
+
+            var sources = config.supportLayers.filter(function (l) {
+                return l.search;
+            });
+            sources.forEach(function (l) {
+                l.featureLayer = new FeatureLayer(l.url + '/' + l.layerIndex);
+                l.exactMatch = false;
+                l.minCharacters = 3;
+            });
+
+            search.on('search-results', lang.hitch(this, function (result) {
+                if (result && result.numResults === 1) {
+                    var geometry = result.results[result.activeSourceIndex][0].feature.geometry;
+
+                    if (geometry.type === 'point') {
+                        this.map.centerAndZoom(geometry, config.scaleTrigger - 1);
+                    } else {
+                        this.map.setExtent(geometry.getExtent(), true);
+                    }
+
+                    setTimeout(function () {
+                        // remove graphic after a period of time
+                        fx.fadeOut({
+                            node: search.highlightGraphic.getNode(),
+                            onEnd: function () {
+                                that.map.graphics.remove(search.highlightGraphic);
+                            }}).play();
+                    }, 3000);
+                }
+            }));
+
+            search.set('sources', sources);
+
             this.childWidgets.push(selector);
             this.childWidgets.push(homeButton);
             this.childWidgets.push(centroidButton);
+            this.childWidgets.push(search);
 
             // suspend base map layer until we get the initial extent
             // trying to save requests to the server
@@ -103,6 +166,21 @@ define([
             this.baseLayer.suspend();
 
             this.setupConnections();
+            this.map.on('load', function () {
+                that.map.on('extent-change', function (change) {
+                    topic.publish(config.topics.map.extentChanged, change);
+                });
+                that.map.on('mouse-drag-start', function (evt) {
+                    if (evt.shiftKey) {
+                        topic.publish(config.topics.map.rubberBandZoom, true);
+                    }
+                });
+                that.map.on('mouse-drag-end', function (evt) {
+                    if (evt.shiftKey) {
+                        topic.publish(config.topics.map.rubberBandZoom, false);
+                    }
+                });
+            });
         },
         setupConnections: function () {
             // summary:
@@ -117,20 +195,7 @@ define([
             topic.subscribe(config.topics.map.toggleAdjacent, lang.hitch(this, 'toggleAdjacent'));
             topic.subscribe(config.topics.map.setMap, lang.hitch(this, '_setMap'));
             topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
-
-            this.map.on('extent-change', function (change) {
-                topic.publish(config.topics.map.extentChanged, change);
-            });
-            this.map.on('mouse-drag-start', function (evt) {
-                if (evt.shiftKey) {
-                    topic.publish(config.topics.map.rubberBandZoom, true);
-                }
-            });
-            this.map.on('mouse-drag-end', function (evt) {
-                if (evt.shiftKey) {
-                    topic.publish(config.topics.map.rubberBandZoom, false);
-                }
-            });
+            topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
         },
         selectLayers: function (ids) {
             // summary:
@@ -240,12 +305,20 @@ define([
             [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
                 var layer = new FeatureLayer(config.urls.mapService + '/' + layerIndex, {
                     mode: FeatureLayer.MODE_SELECTION,
+                    outFields: [config.fieldNames.FeatureID],
                     id: typesLookup[i]
                 });
 
                 var deferred = new Deferred();
 
+                var that = this;
                 layer.on('load', deferred.resolve);
+                layer.on('click', function (evt) {
+                    that.selectFeature({
+                        featureId: evt.graphic.attributes[config.fieldNames.FeatureID],
+                        origin: typesLookup[i]
+                    });
+                });
 
                 deferreds.push(deferred);
                 this.layers[typesLookup[i]] = layer;
@@ -447,6 +520,52 @@ define([
             }, this);
 
             centroidController.startup();
+        },
+        toggleReferenceLayer: function (layerItem, show) {
+            // summary:
+            //      creates and toggles reference layer
+            // layerItem: LayerItem
+            // show: Boolean
+            console.log('app.mapController:toggleReferenceLayer', arguments);
+
+            var lyr;
+            var that = this;
+            if (!this.referenceLayers[layerItem.name]) {
+                var layerTypes = {
+                    dynamic: {
+                        'class': ArcGISDynamicMapServiceLayer,
+                        options: {opacity: config.referenceLayerOpacity}
+                    },
+                    cached: {
+                        'class': ArcGISTiledMapServiceLayer,
+                        options: {}
+                    },
+                    range: {
+                        'class': FeatureLayer,
+                        options: {
+                            outFields: [config.fieldNames.GlobalID, config.fieldNames.STUDY_NAME],
+                            infoTemplate: new InfoTemplate(
+                                '${' + config.fieldNames.STUDY_NAME + '}',
+                                '<a href="' + config.urls.rangeTrendApp + '" target="blank">Range Trend App</a>'
+                            )
+                        }
+                    }
+                };
+                var layerType = layerTypes[layerItem.type];
+                lyr = new layerType['class'](layerItem.url, layerType.options);
+                if (layerItem.type === 'dynamic') {
+                    lyr.setVisibleLayers([layerItem.layerIndex]);
+                }
+                lyr.on('load', function () {
+                    that.map.addLayer(lyr);
+                    that.map.addLoaderToLayer(lyr);
+                });
+                this.referenceLayers[layerItem.name] = lyr;
+            } else {
+                lyr = this.referenceLayers[layerItem.name];
+            }
+
+            lyr.setVisibility(show);
         }
     };
 });

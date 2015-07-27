@@ -1,5 +1,5 @@
 require([
-    'app/mapControls/ReferenceLayers',
+    'app/mapControls/Legend',
 
     'dojo/dom-construct'
 ], function (
@@ -7,7 +7,7 @@ require([
 
     domConstruct
 ) {
-    describe('app/mapControls/ReferenceLayers', function () {
+    describe('app/map/Legend', function () {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
@@ -16,7 +16,6 @@ require([
 
         beforeEach(function () {
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
-            widget.startup();
         });
 
         afterEach(function () {
@@ -26,7 +25,7 @@ require([
         });
 
         describe('Sanity', function () {
-            it('should create a ReferenceLayers', function () {
+            it('should create a Legend', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });

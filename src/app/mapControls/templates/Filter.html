@@ -1,18 +1,13 @@
 <div>
     <div class="panel-heading" data-dojo-attach-point='heading'>
+        <span class="icon"></span>
         ${name}
         <div class="hidden">(<span data-dojo-attach-point='numSpan'>0</span>)</div>
-        <button type="button" class="close hidden" data-dismiss="alert" aria-label="Close"
-            data-dojo-attach-point='closeBtn'
-            data-dojo-attach-event='click: remove'>
-            <span aria-hidden="true"
-                data-dojo-attach-point='closeSpan'>&times;</span>
-        </button>
     </div>
     <div class="panel-collapse collapse" data-dojo-attach-point='body'>
         <div class="panel-body">
             <div data-dojo-attach-point="buttonContainer"
-                class='btn-group' data-toggle='buttons'></div>
+                class='btn-group toggle-buttons' data-toggle='buttons'></div>
             <button type='button' class='btn btn-xs btn-link pull-right'
                 data-dojo-attach-event='click: clear'>clear</button>
             <div class="btn-group pull-right hidden"

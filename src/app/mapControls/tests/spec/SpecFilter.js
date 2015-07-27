@@ -1,7 +1,13 @@
 require([
-    'app/mapControls/Filter'
+    'app/mapControls/Filter',
+
+    'dojo/dom-class',
+    'dojo/query'
 ], function (
-    Filter
+    Filter,
+
+    domClass,
+    query
 ) {
     describe('app/filters/Filter', function () {
         var testWidget;
@@ -33,6 +39,24 @@ require([
         describe('postCreate', function () {
             it('creates bubbles', function () {
                 expect(testWidget.buttonContainer.children.length).toBe(3);
+            });
+        });
+        describe('startup', function () {
+            it('honor default to selected', function () {
+                var testWidget2 = new Filter({
+                    items: [
+                        ['desc1', 'value1'],
+                        ['desc2', 'value2'],
+                        ['desc3', 'value3']
+                    ],
+                    fieldName: 'FieldName',
+                    fieldType: Filter.TYPE_TEXT,
+                    anyAllToggle: true,
+                    name: 'Name',
+                    defaultToSelected: ['value1', 'value3']
+                });
+
+                expect(query('label.active', testWidget2.buttonContainer).length).toBe(2);
             });
         });
         describe('itemClicked', function () {
@@ -76,9 +100,9 @@ require([
             it('related table any query', function () {
                 testWidget.relatedTableQuery = true;
                 testWidget.any = true;
-                var expected = ["Project_ID IN(SELECT Project_ID FROM POINT WHERE FieldName IN('1','2') ",
-                                "union SELECT Project_ID FROM LINE WHERE FieldName IN('1','2') ",
-                                "union SELECT Project_ID FROM POLY WHERE FieldName IN('1','2'))"].join('');
+                var expected = ["(Project_ID IN(SELECT Project_ID FROM POINT WHERE FieldName IN('1','2')) OR ",
+                                "Project_ID IN(SELECT Project_ID FROM LINE WHERE FieldName IN('1','2')) OR ",
+                                "Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN('1','2')))"].join('');
                 testWidget.itemClicked('1');
                 testWidget.itemClicked('2');
 

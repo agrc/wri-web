@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ReferenceLayers Tests</title>
+    <title>MapReferenceData Tests</title>
 
     <!-- META TAGS -->
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -36,18 +36,24 @@ require({
     }]
 }, [
     'jquery',
-    'app/mapControls/ReferenceLayers',
+    'app/mapControls/MapReferenceData',
 
     'dojo/domReady!'
 ], function ($, Module) {
-    widgetUnderTest = new Module({
-    }, 'node');
+    widgetUnderTest = new Module({}, 'node');
 
     widgetUnderTest.startup();
+    widgetUnderTest.open();
+
+    widgetUnderTest2 = new Module({}, 'node2');
+
+    widgetUnderTest2.startup();
+    widgetUnderTest2.open();
 });
 </script>
 </head>
 <body>
     <div id="node"></div>
+    <div id="node2"></div>
 </body>
 </html>

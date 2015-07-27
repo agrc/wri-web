@@ -1,6 +1,8 @@
 define([
+    'app/centroidController',
     'app/config',
     'app/mapControls/Filter',
+    'app/mapControls/MapReferenceData',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -12,8 +14,10 @@ define([
     'dojo/text!app/mapControls/templates/FiltersContainer.html',
     'dojo/topic'
 ], function (
+    centroidController,
     config,
     Filter,
+    MapReferenceData,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -50,7 +54,10 @@ define([
                     }),
                     fieldName: config.fieldNames.Status,
                     fieldType: Filter.TYPE_TEXT,
-                    cssClass: 'status'
+                    cssClass: 'status',
+                    defaultToSelected: config.domains.projectStatus.filter(function (s) {
+                        return s !== 'Cancelled';
+                    })
                 }, domConstruct.create('div', null, this.container)),
                 new Filter({
                     name: 'Feature Type',
@@ -63,10 +70,16 @@ define([
                 }, domConstruct.create('div', null, this.container))
             ];
             this.filters.forEach(function (f) {
+                f.on('changed', lang.hitch(this, 'onFilterChange'));
                 f.startup();
                 this.own(f);
-                f.on('changed', lang.hitch(this, 'onFilterChange'));
             }, this);
+
+            centroidController.filter = this.onFilterChange();
+
+            var mapReferenceData = new MapReferenceData({}).placeAt(this.container);
+            this.own(mapReferenceData);
+            mapReferenceData.startup();
 
             this.setUpConnections();
 
@@ -104,6 +117,7 @@ define([
             });
             var where = (wheres.length) ? wheres.join(' AND ') : undefined;
             topic.publish(config.topics.filterQueryChanged, where);
+            return where;
         }
     });
 });
