@@ -22,33 +22,25 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
     esriConfig.defaults.map.zoomSymbol.outline.color = [18, 192, 236, 255];
 
-    var apiKey;
     var gisServerBaseUrl;
     var apiEndpoint;
+    var serviceUrlTemplate = '/arcgis/rest/services/WRI/{{name}}/MapServer';
+
     if (has('agrc-build') === 'prod') {
-        // mapserv.utah.gov
-        apiKey = 'AGRC-A94B063C533889';
         gisServerBaseUrl = 'https://wrimaps.utah.gov';
         apiEndpoint = '';
     } else if (has('agrc-build') === 'stage') {
-        // test.mapserv.utah.gov
-        apiKey = 'AGRC-AC122FA9671436';
         gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
-        apiEndpoint = '';
+        apiEndpoint = '__WRI_CONFIGURATION__';
+        serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/MapServer';
     } else {
-        // localhost
-        apiKey = 'AGRC-E5B94F99865799';
         gisServerBaseUrl = '';
         apiEndpoint = '/wri';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
     var selectionColor = [255, 255, 0];
-    var serviceUrlTemplate = '/arcgis/rest/services/WRI/{{name}}/MapServer';
 
     var config = {
-        // errorLogger: ijit.modules.ErrorLogger
-        errorLogger: null,
-
         // app: app.App
         //      global reference to App
         app: null,
@@ -56,10 +48,6 @@ define([
         // version.: String
         //      The version number.
         version: '0.3.0',
-
-        // apiKey: String
-        //      The api key used for services on api.mapserv.utah.gov
-        apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
         // scaleTrigger: Number
         //      the basemap level to toggle centroids
@@ -75,8 +63,7 @@ define([
             reference: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Reference'),
             api: gisServerBaseUrl + apiEndpoint + '/api',
             plss: '//basemaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer',
-            rangeTrendApp: 'http://dwrapps.dev.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}'
-            // prod (late October): rangeTrendApp: 'http://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}'
+            rangeTrendApp: 'http://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}'
         },
 
         layerIndices: {
