@@ -15,6 +15,8 @@ define([
     'dojo/when',
     'dojo/topic',
 
+    'dojo/dom-class',
+
     'esri/dijit/HomeButton',
     'esri/dijit/Search',
     'esri/geometry/Extent',
@@ -40,6 +42,8 @@ define([
     all,
     when,
     topic,
+
+    domClass,
 
     HomeButton,
     Search,
@@ -86,6 +90,18 @@ define([
                 sliderOrientation: 'horizontal'
             });
 
+            this.map.on('load', function () {
+                var btn = that.map.addButton(that.map.buttons.back, {
+                    placeAt: toolbarNode
+                });
+                domClass.add(btn, 'toolbar-item');
+
+                btn = that.map.addButton(that.map.buttons.forward, {
+                    placeAt: toolbarNode
+                });
+                domClass.add(btn, 'toolbar-item');
+            });
+
             var selector = new BaseMapSelector({
                 map: this.map,
                 id: 'tundra',
@@ -106,10 +122,13 @@ define([
                         wkid: 26912
                     }
                 })
-            }).placeAt(toolbarNode, 'first');
+            }).placeAt(toolbarNode);
+
+            domClass.add(homeButton.domNode, 'pull-left');
 
             var centroidButton = new CentroidSwitchButton({
             }).placeAt(toolbarNode, 'last');
+
             homeButton.on('home', function () {
                 router.setHash();
             });
