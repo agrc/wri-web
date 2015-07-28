@@ -53,7 +53,7 @@ define([
 
             var that = this;
             var requestObj = {
-                url: this.featuresService + '/legend',
+                url: this.mapServiceUrl + '/legend',
                 content: {f: 'json'}
             };
             request(requestObj).then(function (response) {
