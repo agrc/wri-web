@@ -5,8 +5,9 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/declare',
+    'dojo/on',
     'dojo/text!app/mapControls/templates/MapReferenceData.html',
+    'dojo/_base/declare',
 
     'bootstrap-stylus/js/collapse',
     'bootstrap-stylus/js/transition'
@@ -17,8 +18,9 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    declare,
-    template
+    on,
+    template,
+    declare
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _CollapsePanel, _ReferenceLayersMixin], {
         // description:
@@ -32,6 +34,8 @@ define([
             // summary:
             //      Overrides method of same name in dijit._Widget.
             console.log('app.mapControls.MapReferenceData::postCreate', arguments);
+
+            this.preventToggleElements.push(this.labelsBtn);
 
             this.inherited(arguments);
         }
