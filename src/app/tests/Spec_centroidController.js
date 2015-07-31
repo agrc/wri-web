@@ -11,7 +11,10 @@ function (
                 centroidController.filter = 'blah';
                 centroidController.centroidsVisible = true;
                 centroidController.centroidLayer = {
-                    setDefinitionExpression: function () {}
+                    setDefinitionExpression: function () {},
+                    queryExtent: function () {
+                        return {then: function () {}};
+                    }
                 };
 
                 centroidController.showFeaturesFor('blah2');
