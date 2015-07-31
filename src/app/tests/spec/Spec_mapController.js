@@ -116,18 +116,70 @@ function (
                     url: 'blahurl'
                 }, true);
 
-                expect(mapController.referenceLayers.blah).toEqual(jasmine.any(ArcGISDynamicMapServiceLayer));
+                expect(mapController.referenceLayers.blah.layer).toEqual(jasmine.any(ArcGISDynamicMapServiceLayer));
             });
             it('calls show or hide', function () {
                 mapController.referenceLayers = {
                     blah: {
-                        setVisibility: jasmine.createSpy('setVisibility')
+                        layer: {
+                            setVisibility: jasmine.createSpy('setVisibility')
+                        }
                     }
                 };
 
                 mapController.toggleReferenceLayer({name: 'blah'}, true);
 
-                expect(mapController.referenceLayers.blah.setVisibility).toHaveBeenCalledWith(true);
+                expect(mapController.referenceLayers.blah.layer.setVisibility).toHaveBeenCalledWith(true);
+            });
+        });
+        describe('toggleReferenceLayerLabels', function () {
+            var setVisibleLayersSpy;
+            beforeEach(function () {
+                setVisibleLayersSpy = jasmine.createSpy('setVisibleLayers');
+                mapController.referenceLayers = {
+                    layerone: {
+                        type: 'dynamic',
+                        layer: {
+                            setVisibleLayers: setVisibleLayersSpy
+                        }
+                    },
+                    layertwo: {
+                        type: 'somethingelse',
+                        layer: {
+                            setVisibleLayers: setVisibleLayersSpy
+                        }
+                    },
+                    layerthree: {
+                        type: 'dynamic',
+                        layerIndex: 1,
+                        labelsIndex: 2,
+                        layer: {
+                            setVisibleLayers: setVisibleLayersSpy
+                        }
+                    }
+                };
+            });
+            it('sets the showReferenceLayerLabels property', function () {
+                mapController.showReferenceLayerLabels = false;
+
+                mapController.toggleReferenceLayerLabels(true);
+
+                expect(mapController.showReferenceLayerLabels).toBe(true);
+
+                mapController.toggleReferenceLayerLabels(false);
+
+                expect(mapController.showReferenceLayerLabels).toBe(false);
+            });
+            it('loop through existing reference layers and set visible layers', function () {
+                mapController.toggleReferenceLayerLabels(true);
+
+                expect(setVisibleLayersSpy.calls.count()).toBe(2);
+                expect(setVisibleLayersSpy.calls.mostRecent().args)
+                    .toEqual([[1, 2]]);
+
+                mapController.toggleReferenceLayerLabels(false);
+
+                expect(setVisibleLayersSpy.calls.mostRecent().args).toEqual([[1]]);
             });
         });
     });

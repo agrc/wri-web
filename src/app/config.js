@@ -146,7 +146,8 @@ define([
             centroidController: {
                 updateVisibility: 'wri/thisFeelsBad'
             },
-            toggleReferenceLayer: 'wri/toggleReferenceLayer'
+            toggleReferenceLayer: 'wri/toggleReferenceLayer',
+            toggleReferenceLayerLabels: 'wri/toggleReferenceLayerLabels'
         },
 
         symbols: {
@@ -200,6 +201,7 @@ define([
         search: true,
         url: config.urls.reference,
         layerIndex: 6,
+        labelsIndex: 9,
         type: 'dynamic',
         searchFields: [flds.DWR_REGION],
         displayField: flds.DWR_REGION,
@@ -217,6 +219,7 @@ define([
         search: true,
         url: config.urls.reference,
         layerIndex: 1,
+        labelsIndex: 10,
         type: 'dynamic',
         searchFields: [flds.FO_NAME],
         displayField: flds.FO_NAME,
@@ -228,6 +231,7 @@ define([
         search: true,
         url: config.urls.reference,
         layerIndex: 2,
+        labelsIndex: 11,
         type: 'dynamic',
         searchFields: [flds.LABEL_FEDERAL],
         displayField: flds.LABEL_FEDERAL,
@@ -238,6 +242,7 @@ define([
         reference: true,
         url: config.urls.reference,
         layerIndex: 5,
+        labelsIndex: 5,
         type: 'dynamic',
         legend: true
     }, {
@@ -250,6 +255,7 @@ define([
         reference: true,
         url: config.urls.reference,
         layerIndex: 3,
+        labelsIndex: 13,
         type: 'dynamic'
     }, {
         name: 'Range Trend Sites',
