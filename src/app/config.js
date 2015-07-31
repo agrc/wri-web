@@ -147,7 +147,8 @@ define([
                 updateVisibility: 'wri/thisFeelsBad'
             },
             toggleReferenceLayer: 'wri/toggleReferenceLayer',
-            toggleReferenceLayerLabels: 'wri/toggleReferenceLayerLabels'
+            toggleReferenceLayerLabels: 'wri/toggleReferenceLayerLabels',
+            error: 'wri/error'
         },
 
         symbols: {
