@@ -66,6 +66,9 @@ define([
         //      Container to store reference layer objects
         referenceLayers: {},
 
+        // showReferenceLayerLabels: Boolean
+        showReferenceLayerLabels: true,
+
         initMap: function (mapDiv, toolbarNode) {
             // summary:
             //      Sets up the map and layers
@@ -196,6 +199,7 @@ define([
             topic.subscribe(config.topics.map.setMap, lang.hitch(this, '_setMap'));
             topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
             topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
+            topic.subscribe(config.topics.toggleReferenceLayerLabels, lang.hitch(this, 'toggleReferenceLayerLabels'));
         },
         selectLayers: function (ids) {
             // summary:
@@ -554,18 +558,44 @@ define([
                 var layerType = layerTypes[layerItem.type];
                 lyr = new layerType['class'](layerItem.url, layerType.options);
                 if (layerItem.type === 'dynamic') {
-                    lyr.setVisibleLayers([layerItem.layerIndex]);
+                    var vLayers = [layerItem.layerIndex];
+                    if (layerItem.labelsIndex && this.showReferenceLayerLabels) {
+                        vLayers.push(layerItem.labelsIndex);
+                    }
+                    lyr.setVisibleLayers(vLayers);
                 }
                 lyr.on('load', function () {
                     that.map.addLayer(lyr);
                     that.map.addLoaderToLayer(lyr);
                 });
-                this.referenceLayers[layerItem.name] = lyr;
+                layerItem.layer = lyr;
+                this.referenceLayers[layerItem.name] = layerItem;
             } else {
-                lyr = this.referenceLayers[layerItem.name];
+                lyr = this.referenceLayers[layerItem.name].layer;
             }
 
             lyr.setVisibility(show);
+        },
+        toggleReferenceLayerLabels: function (show) {
+            // summary:
+            //      toggles the labels for the visible reference layers
+            // show: Boolean
+            console.log('app.mapController:toggleReferenceLayerLabels', arguments);
+
+            for (var layerName in this.referenceLayers) {
+                if (this.referenceLayers.hasOwnProperty(layerName)) {
+                    var layerItem = this.referenceLayers[layerName];
+                    if (layerItem.type === 'dynamic') {
+                        var vLayers = [layerItem.layerIndex];
+                        if (show) {
+                            vLayers.push(layerItem.labelsIndex);
+                        }
+                        layerItem.layer.setVisibleLayers(vLayers);
+                    }
+                }
+            }
+
+            this.showReferenceLayerLabels = show;
         }
     };
 });
