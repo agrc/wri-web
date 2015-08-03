@@ -18,6 +18,7 @@ define([
     'esri/dijit/HomeButton',
     'esri/dijit/Search',
     'esri/geometry/Extent',
+    'esri/geometry/Point',
     'esri/InfoTemplate',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/ArcGISDynamicMapServiceLayer',
@@ -43,6 +44,7 @@ define([
     HomeButton,
     Search,
     Extent,
+    Point,
     InfoTemplate,
     ArcGISTiledMapServiceLayer,
     ArcGISDynamicMapServiceLayer,
@@ -446,6 +448,13 @@ define([
                 });
 
                 this.map.setExtent(extent, false);
+
+                return extent;
+            }
+
+            if (!extent.getWidth() && !extent.getHeight()) {
+                // we are looking at the extent of a point
+                this.map.centerAndZoom(new Point(extent.xmin, extent.ymin, this.map.spatialReference), 12);
 
                 return extent;
             }
