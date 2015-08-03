@@ -3,7 +3,6 @@ define([
     'app/graphicsUtils',
     'app/router',
 
-    'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/dom-construct',
     'dojo/dom-style',
@@ -11,8 +10,10 @@ define([
     'dojo/promise/all',
     'dojo/text!app/templates/projectPopupTemplate.html',
     'dojo/topic',
+    'dojo/_base/lang',
 
     'esri/dijit/InfoWindowLite',
+    'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
     'esri/SpatialReference',
     'esri/tasks/query'
@@ -21,7 +22,6 @@ define([
     graphicsUtils,
     router,
 
-    lang,
     Deferred,
     domConstruct,
     domStyle,
@@ -29,8 +29,10 @@ define([
     all,
     projectPopupTemplate,
     topic,
+    lang,
 
     InfoWindowLite,
+    Extent,
     FeatureLayer,
     SpatialReference,
     Query
@@ -209,15 +211,13 @@ define([
                 defExpression += ' AND ' + this.filter;
             }
 
-            var deferreds = [];
-
             // guards against extra queries for invisible layers
             if (this.centroidsVisible) {
                 if (this.centroidLayer.__where__ === defExpression) {
                     return;
                 }
 
-                deferreds.push(this.centroidLayer.setDefinitionExpression(defExpression));
+                this.centroidLayer.setDefinitionExpression(defExpression);
                 this.centroidLayer.__where__ = defExpression;
             } else {
                 defExpression = this.featureQueryTxt.replace('{{query}}', defExpression);
@@ -228,22 +228,17 @@ define([
                 Object.keys(this.explodedLayer).forEach(function (key) {
                     var layer = this.explodedLayer[key];
 
-                    deferreds.push(layer.setDefinitionExpression(defExpression));
+                    layer.setDefinitionExpression(defExpression);
                     layer.__where__ = defExpression;
                 }, this);
             }
 
             if (where && where !== '1=1') {
-                return all(deferreds).then(
-                    function (graphics) {
-                        if (!graphics || graphics.length === 0) {
-                            // state of utah extent
-                            return null;
-                        } else {
-                            return graphicsUtils.unionGraphicsIntoExtent(graphics);
-                        }
-                    }
-                );
+                var query = new Query();
+                query.where = defExpression;
+                return this.centroidLayer.queryExtent(query).then(function (response) {
+                    return new Extent(response.extent);
+                });
             }
         },
         showAdjacentFeatures: function (where) {
