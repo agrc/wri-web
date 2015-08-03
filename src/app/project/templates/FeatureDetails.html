@@ -1,21 +1,17 @@
 <div>
     <ul class="nav nav-tabs" role="tablist">
-        <li class="active" role='presentation'>
-            <a href="#${id}_featureTab" data-toggle='tab'>Feature</a>
+        <li class="hidden" role='presentation'>
+            <a href="#${id}_featureTab" data-toggle='tab'
+                data-dojo-attach-point='featureTabLink'>Feature</a>
         </li>
-        <li>
+        <li class='active'>
             <a href="#${id}_detailsTab" data-toggle='tab'>Details</a>
         </li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="${id}_featureTab">
-            <p>
-                <select class="form-control">
-                    <option>Select a Treatment Area</option>
-                </select>
-            </p>
-        </div>
-        <div class="tab-pane" id="${id}_detailsTab">
+        <div class="tab-pane hidden" id="${id}_featureTab"
+            data-dojo-attach-point='featureTabContents'></div>
+        <div class="tab-pane active" id="${id}_detailsTab">
             <div class="project-information" id="${id}_projectDetails">
                 <label>Description</label>
                 <p>${description}</p>

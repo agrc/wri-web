@@ -58,5 +58,26 @@ require([
                 expect(domClass.contains(widget2.streamMilesDiv, 'hidden')).toBe(true);
             });
         });
+        describe('onFeatureSelected', function () {
+            it('places template in contents', function () {
+                widget.onFeatureSelected({});
+
+                expect(widget.featureTabContents.innerHTML.length).toBeGreaterThan(5);
+            });
+            it('shows the feature tab', function () {
+                expect(domClass.contains(widget.featureTabContents, 'hidden')).toBe(true);
+
+                widget.onFeatureSelected({});
+
+                expect(domClass.contains(widget.featureTabContents, 'hidden')).toBe(false);
+            });
+            it('clears out any previous data', function () {
+                widget.featureTabContents.innerHTML = 'test';
+
+                widget.onFeatureSelected({});
+
+                expect(widget.featureTabContents.innerHTML).not.toContain('test');
+            });
+        });
     });
 });

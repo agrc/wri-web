@@ -9,15 +9,18 @@ define([
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/aspect',
     'dojo/dom-class',
+    'dojo/query',
     'dojo/text!app/project/templates/FeaturesGrid.html',
     'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
     'dstore/Memory',
-    'dstore/Tree'
+    'dstore/Tree',
+
+    'dojo/NodeList-dom'
 ], function (
     config,
     OpacitySlider,
@@ -29,12 +32,13 @@ define([
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    declare,
-    lang,
     aspect,
     domClass,
+    query,
     template,
     topic,
+    declare,
+    lang,
 
     Memory,
     DStoreTree
@@ -131,10 +135,28 @@ define([
             this.own(
                 this.grid.on('.dgrid-row.selectable:click', function (evt) {
                     if (evt.target.tagName === 'TD') {
+                        // use topic instead of calling onRowSelected directly since
+                        // on click for feature layer in mapController also needs the topic
                         topic.publish(config.topics.featureSelected, that.grid.row(evt).data);
                     }
+                }),
+                topic.subscribe(config.topics.featureSelected, function (data) {
+                    that.grid.collection.filter(data).forEach(function (item) {
+                        that.onRowSelected(that.grid.row(item.id));
+                    });
                 })
             );
+        },
+        onRowSelected: function (row) {
+            // summary:
+            //      publishes the event and applies the css class
+            // row: dgrid row
+            console.log('app/project/FeaturesGrid:onRowSelected', arguments);
+
+            var className = 'selected';
+
+            query('.dgrid-row.selectable', this.domNode).removeClass(className);
+            domClass.add(row.element, className);
         }
     });
 });

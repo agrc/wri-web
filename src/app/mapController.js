@@ -336,10 +336,9 @@ define([
 
                 var deferred = new Deferred();
 
-                var that = this;
                 layer.on('load', deferred.resolve);
                 layer.on('click', function (evt) {
-                    that.selectFeature({
+                    topic.publish(config.topics.featureSelected, {
                         featureId: evt.graphic.attributes[config.fieldNames.FeatureID],
                         origin: typesLookup[i]
                     });
@@ -385,8 +384,7 @@ define([
             var graphic = this.getGraphicById(data.featureId, data.origin);
 
             if (this.lastSelectedGraphic) {
-                var resetSymbol = this.lastSelectedOriginalSymbol ||
-                    lang.clone(this.layers[data.origin].renderer.getSymbol(this.lastSelectedGraphic));
+                var resetSymbol = this.lastSelectedOriginalSymbol;
                 if (this.lastSelectedGraphic.symbol) {
                     resetSymbol.color.a = this.lastSelectedGraphic.symbol.color.a;
                 }
@@ -402,7 +400,8 @@ define([
             }
 
             // store so that we can reset these on next selection
-            this.lastSelectedOriginalSymbol = lang.clone(graphic.symbol);
+            this.lastSelectedOriginalSymbol = lang.clone(graphic.symbol ||
+                this.layers[data.origin].renderer.getSymbol(graphic));
             this.lastSelectedGraphic = graphic;
 
             graphic.setSymbol(newSelectionSymbol);

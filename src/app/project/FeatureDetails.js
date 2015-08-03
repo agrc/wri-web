@@ -4,24 +4,35 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/dom-class',
+    'dojo/dom-construct',
+    'dojo/query',
+    'dojo/text!app/project/templates/FeatureData.html',
     'dojo/text!app/project/templates/FeatureDetails.html',
     'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
-    'bootstrap-stylus/js/tab'
+    'mustache/mustache',
+
+    'bootstrap-stylus/js/tab',
+    'dojo/NodeList-dom'
 ], function (
     config,
 
     _TemplatedMixin,
     _WidgetBase,
 
+    domClass,
+    domConstruct,
+    query,
+    featureDataTxt,
+    template,
+    topic,
     declare,
     lang,
-    domClass,
-    template,
-    topic
+
+    mustache
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -49,7 +60,9 @@ define([
             //      wire events, and such
             console.log('app.project.FeatureDetails::setupConnections', arguments);
 
-            topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected'));
+            this.own(
+                topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected'))
+            );
         },
         onFeatureSelected: function (rowData) {
             // summary:
@@ -57,7 +70,13 @@ define([
             // rowData: Object
             console.log('app/project/FeatureDetails:onFeatureSelected', arguments);
 
-            console.log('rowData', rowData);
+            domConstruct.empty(this.featureTabContents);
+            domConstruct.place(domConstruct.toDom(mustache.render(featureDataTxt, rowData)),
+                this.featureTabContents);
+
+            // show feature tab
+            query('.hidden', this.domNode).removeClass('hidden');
+            this.featureTabLink.click();
         }
     });
 });

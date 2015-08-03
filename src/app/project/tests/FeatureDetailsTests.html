@@ -7,8 +7,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="https://wri.dev.utah.gov/wri/css/dnr-style.css">
     <link rel="stylesheet" href="../../../app/resources/App.css">
-    <link rel="stylesheet" href="../../../dts/dnr-style.css">
     <style type='text/css'>
         body {
             padding: 50px;
@@ -24,7 +24,7 @@ var widgetUnderTest;
 
 require({
     baseUrl: baseUrl,
-    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
+    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', 'mustache',
     {
         name: 'jquery',
         location: 'jquery/dist',
@@ -38,16 +38,59 @@ require({
     'jquery',
     'app/project/FeatureDetails',
 
+    'dojo/_base/lang',
+    'dojo/on',
     'dojo/domReady!'
-], function ($, Module) {
+], function ($, Module, lang, on) {
     widgetUnderTest = new Module({
+        description: 'description text',
+        leadAgency: 'Lead Agency',
+        region: 'Region',
+        projectManagerName: 'Project Manager'
     }, 'node');
 
     widgetUnderTest.startup();
+
+    on(document.getElementById('point'), 'click', lang.hitch(widgetUnderTest,
+        lang.partial(widgetUnderTest.onFeatureSelected, {
+            action: null,
+            featureId: 5,
+            origin: 'point',
+            size: null,
+            subType: null,
+            type: 'Other'
+        }))
+    );
+    on(document.getElementById('line'), 'click', lang.hitch(widgetUnderTest,
+        lang.partial(widgetUnderTest.onFeatureSelected, {
+            action: null,
+            featureId: 4,
+            origin: 'line',
+            size: '2124.51 ft',
+            subType: null,
+            type: 'Pipeline'
+        }))
+    );
+    on(document.getElementById('poly'), 'click', lang.hitch(widgetUnderTest,
+        lang.partial(widgetUnderTest.onFeatureSelected, {
+            action: null,
+            featureId: 1351,
+            origin: 'poly',
+            size: '163.08 mi2',
+            subType: null,
+            type: 'Terrestrial'
+        }))
+    );
+
+    document.getElementById('point').click();
 });
 </script>
 </head>
 <body>
     <div id="node"></div>
+
+    <button id="point" class='btn'>point</button>
+    <button id="line" class='btn'>line</button>
+    <button id="poly" class='btn'>poly</button>
 </body>
 </html>
