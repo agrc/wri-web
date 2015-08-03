@@ -18,10 +18,13 @@
             border none
             .dgrid-expando-icon
                 display none
-        .dgrid-row.selectable:hover td
-            background-color #E2DEC0
-            cursor pointer
         .dgrid-row
             border-right solid 1px #e8e8e8
             border-left solid 1px #e8e8e8
             border-bottom solid 1px #e8e8e8
+            &.selectable
+                &.selected td
+                    background-color #FFDC00
+                &:hover td
+                    background-color #E2DEC0
+                    cursor pointer
