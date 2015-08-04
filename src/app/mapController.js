@@ -457,10 +457,10 @@ define([
 
             if (!extent) {
                 extent = new Extent({
-                    xmin: 281733.5490938501,
-                    ymin: 4272960.122663616,
-                    xmax: 621725.4509061502,
-                    ymax: 4474753.877336384,
+                    xmax: 696328,
+                    xmin: 207131,
+                    ymax: 4785283,
+                    ymin: 3962431,
                     spatialReference: {
                         wkid: 26912
                     }
