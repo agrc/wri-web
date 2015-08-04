@@ -38,7 +38,7 @@ define([
         apiEndpoint = '/wri';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
-    var selectionColor = [255, 255, 0];
+    var selectionColor = [255, 220, 0];
 
     var config = {
         // app: app.App
