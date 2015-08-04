@@ -10,17 +10,17 @@
         background-image url('./images/type.png')
 .filter.status
     label
-        color white
         text-shadow none
+        box-shadow none
         &.active
-            box-shadow inset 0 3px 5px rgba(0, 0, 0, 0.5)
-        &.Proposed
-            background-color $proposed
-        &.Current
-            background-color $current
-        &.PendingCompleted
-            background-color $pendingCompleted
-        &.Completed
-            background-color $completed
-        &.Cancelled
-            background-color $cancelled
+            color white
+            &.Proposed
+                background-color $proposed
+            &.Current
+                background-color $current
+            &.PendingCompleted
+                background-color $pendingCompleted
+            &.Completed
+                background-color $completed
+            &.Cancelled
+                background-color $cancelled
