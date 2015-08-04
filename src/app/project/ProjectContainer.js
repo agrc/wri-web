@@ -8,8 +8,6 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/dom-style',
     'dojo/on',
@@ -17,7 +15,9 @@ define([
     'dojo/request/xhr',
     'dojo/text!app/project/templates/ProjectContainer.html',
     'dojo/topic',
-    'dojo/window'
+    'dojo/window',
+    'dojo/_base/declare',
+    'dojo/_base/lang'
 ], function (
     config,
     LayerControls,
@@ -28,8 +28,6 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    declare,
-    lang,
     domClass,
     domStyle,
     on,
@@ -37,7 +35,9 @@ define([
     xhr,
     template,
     topic,
-    win
+    win,
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -84,6 +84,8 @@ define([
                 return;
             }
 
+            this.currentProject = ids[0];
+
             this._queryForProjectDetails(ids[0]).then(
                 lang.hitch(this, '_updateDetails'),
                 function handleError(response) {
@@ -96,9 +98,30 @@ define([
             // id
             console.log('app.project.ProjectContainer::_queryForProjectDetails', arguments);
 
+            var that = this;
+            var timer = setTimeout(function () {
+                domClass.remove(that.loadingNode, 'hidden');
+                domClass.remove(that.domNode, 'hidden');
+            }, 500);
+
+            domClass.add(this.errorNode, 'hidden');
+            domClass.add(this.contentNode, 'hidden');
+
+            if (this.featureDetails) {
+                [this.featureDetails, this.projectDetails, this.featuresGrid].forEach(function (widget) {
+                    widget.destroy();
+                });
+            }
+
             return xhr.get(config.urls.api + '/project/' + id, {
                 handleAs: 'json',
                 headers: { 'Accept': 'application/json' }
+            }).then(function (response) {
+                if (timer) {
+                    clearTimeout(timer);
+                }
+
+                return response;
             });
         },
         _updateDetails: function (response) {
@@ -107,10 +130,14 @@ define([
             // response
             console.log('app.project.ProjectContainer::_updateDetails', arguments);
 
-            if (this.featureDetails) {
-                [this.featureDetails, this.projectDetails, this.featuresGrid].forEach(function (widget) {
-                    widget.destroy();
-                });
+            domClass.toggle(this.errorNode, 'hidden', response.project);
+            domClass.add(this.loadingNode, 'hidden');
+            domClass.remove(this.domNode, 'hidden');
+
+            if (!response.project) {
+                this.errorNode.innerHTML = 'We could not find a project with the id: ' + this.currentProject + '.';
+
+                return;
             }
 
             this.projectDetails = new ProjectDetails(response.project).placeAt(this.detailsNode);
@@ -119,7 +146,7 @@ define([
                 features: response.features
             }).placeAt(this.featureGridNode);
 
-            domClass.remove(this.domNode, 'hidden');
+            domClass.remove(this.contentNode, 'hidden');
 
             this.featureDetails.startup();
             this.projectDetails.startup();
