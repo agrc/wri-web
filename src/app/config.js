@@ -31,8 +31,8 @@ define([
         apiEndpoint = '';
     } else if (has('agrc-build') === 'stage') {
         gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
-        apiEndpoint = '__WRI_CONFIGURATION__';
-        serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/MapServer';
+        apiEndpoint = '/__WRI_CONFIGURATION__';
+        serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{{name}}/MapServer';
     } else {
         gisServerBaseUrl = '';
         apiEndpoint = '/wri';
