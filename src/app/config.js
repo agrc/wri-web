@@ -113,18 +113,19 @@ define([
                 'Cancelled'
             ],
             featureType: [
-                ['Terrestrial', 0],
-                ['Aquatic/Riparian', 1],
-                ['Fish Passage Structure', 2],
-                ['Easement/Aquisition', 3],
-                ['Affected Area', 5],
-                ['Dam', 6],
-                ['Pipeline', 7],
-                ['Fence', 8],
-                ['Guzzler', 9],
-                ['Trough', 10],
-                ['Water Control Structure', 11],
-                ['Other', 12]
+                ['Terrestrial', 1],
+                ['Aquatic/Riparian', 2],
+                ['Affected Area', 3],
+                ['Easement/Aquisition', 4],
+                ['Guzzler', 5],
+                ['Trough', 6],
+                ['Water Control Structure', 7],
+                ['Other', 8],
+                ['Fish Passage Structure', 9],
+                ['Fence', 10],
+                ['Pipeline', 11],
+                ['Dam', 12],
+                ['Research', 13]
             ]
         },
 
