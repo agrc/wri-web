@@ -140,7 +140,8 @@ define([
                 setExtent: 'wri/setExtent',
                 setMap: 'wri/setMap',
                 rubberBandZoom: 'wri/rubberbanding',
-                toggleAdjacent: 'wri/toggleAdjacent'
+                toggleAdjacent: 'wri/toggleAdjacent',
+                featureSelected: 'wri/mapFeatureSelected'
             },
             layer: {
                 add: 'wri/add'

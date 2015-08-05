@@ -338,7 +338,7 @@ define([
 
                 layer.on('load', deferred.resolve);
                 layer.on('click', function (evt) {
-                    topic.publish(config.topics.featureSelected, {
+                    topic.publish(config.topics.map.featureSelected, {
                         featureId: evt.graphic.attributes[config.fieldNames.FeatureID],
                         origin: typesLookup[i]
                     });

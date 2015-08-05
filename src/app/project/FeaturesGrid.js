@@ -135,12 +135,10 @@ define([
             this.own(
                 this.grid.on('.dgrid-row.selectable:click', function (evt) {
                     if (evt.target.tagName === 'TD') {
-                        // use topic instead of calling onRowSelected directly since
-                        // on click for feature layer in mapController also needs the topic
-                        topic.publish(config.topics.featureSelected, that.grid.row(evt).data);
+                        that.onRowSelected(that.grid.row(evt));
                     }
                 }),
-                topic.subscribe(config.topics.featureSelected, function (data) {
+                topic.subscribe(config.topics.map.featureSelected, function (data) {
                     that.grid.collection.filter(data).forEach(function (item) {
                         that.onRowSelected(that.grid.row(item.id));
                     });
@@ -152,6 +150,8 @@ define([
             //      publishes the event and applies the css class
             // row: dgrid row
             console.log('app/project/FeaturesGrid:onRowSelected', arguments);
+
+            topic.publish(config.topics.featureSelected, row.data);
 
             var className = 'selected';
 

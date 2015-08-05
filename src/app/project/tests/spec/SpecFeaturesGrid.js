@@ -46,11 +46,17 @@ require([
             it('applies the selected css class to the clicked on row', function () {
                 expect(query('.dgrid-row.selectable.selected', widget.domNode).length).toBe(0);
 
-                widget.onRowSelected({element: query('.dgrid-row.selectable', widget.domNode)[0]});
+                widget.onRowSelected({
+                    element: query('.dgrid-row.selectable', widget.domNode)[0],
+                    data: {}
+                });
 
                 expect(query('.dgrid-row.selectable.selected', widget.domNode).length).toBe(1);
 
-                widget.onRowSelected({element: query('.dgrid-row.selectable', widget.domNode)[1]});
+                widget.onRowSelected({
+                    element: query('.dgrid-row.selectable', widget.domNode)[1],
+                    data: {}
+                });
 
                 expect(query('.dgrid-row.selectable.selected', widget.domNode).length).toBe(1);
             });
