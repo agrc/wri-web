@@ -46,6 +46,7 @@ define([
             //      Overrides method of same name in dijit._Widget.
             console.log('app.mapControls.FiltersContainer::postCreate', arguments);
 
+            var statuses = config.domains.projectStatus;
             this.filters = [
                 new Filter({
                     name: 'Project Status',
@@ -55,8 +56,9 @@ define([
                     fieldName: config.fieldNames.Status,
                     fieldType: Filter.TYPE_TEXT,
                     cssClass: 'status',
-                    defaultToSelected: config.domains.projectStatus.filter(function (s) {
-                        return s !== 'Cancelled';
+                    defaultToSelected: statuses.filter(function (s) {
+                        // cancelled and draft should be off by default
+                        return s !== statuses[0] && s !== statuses[5];
                     })
                 }, domConstruct.create('div', null, this.container)),
                 new Filter({

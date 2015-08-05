@@ -105,6 +105,7 @@ define([
 
         domains: {
             projectStatus: [
+                'Draft',
                 'Proposed',
                 'Current',
                 'Pending Completed',
