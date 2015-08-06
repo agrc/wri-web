@@ -5,6 +5,7 @@ define([
     'app/mapControls/FiltersContainer',
     'app/project/ProjectContainer',
     'app/router',
+    'app/Toaster',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -19,6 +20,7 @@ define([
     FiltersContainer,
     ProjectContainer,
     router,
+    Toaster,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -62,8 +64,12 @@ define([
 
             this.childWidgets.push(
                 new ProjectContainer({}, this.projectContainerNode),
-                new FiltersContainer({}, this.filtersContainerNode)
+                new FiltersContainer({}, this.filtersContainerNode),
+                new Toaster({
+                    topic: config.topics.toast
+                }, this.toasterNode)
             );
+
 
             this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);
             this.childWidgets.push(this.filtersContainer);

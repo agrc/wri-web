@@ -1,6 +1,5 @@
 define([
     'app/config',
-    'app/graphicsUtils',
     'app/router',
 
     'dojo/Deferred',
@@ -19,7 +18,6 @@ define([
     'esri/tasks/query'
 ], function (
     config,
-    graphicsUtils,
     router,
 
     Deferred,
@@ -239,7 +237,7 @@ define([
                     if (response.count > 0) {
                         return new Extent(response.extent);
                     } else {
-                        topic.publish(config.topics.error, 'No project extents found!');
+                        topic.publish(config.topics.toast, { message: 'No project extents found!', type: 'danger' });
                     }
                 });
             }
