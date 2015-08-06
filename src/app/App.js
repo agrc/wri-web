@@ -1,31 +1,33 @@
 define([
     'app/config',
-
     'app/mapController',
     'app/mapControls/FiltersContainer',
     'app/project/ProjectContainer',
     'app/router',
+    'app/Toaster',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
-    'dojo/_base/declare',
-    'dojo/text!app/templates/App.html'
+    'dojo/dom-construct',
+    'dojo/text!app/templates/App.html',
+    'dojo/_base/declare'
 ], function (
     config,
-
     mapController,
     FiltersContainer,
     ProjectContainer,
     router,
+    Toaster,
 
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    declare,
-    template
+    domConstruct,
+    template,
+    declare
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -62,8 +64,12 @@ define([
 
             this.childWidgets.push(
                 new ProjectContainer({}, this.projectContainerNode),
-                new FiltersContainer({}, this.filtersContainerNode)
+                new FiltersContainer({}, this.filtersContainerNode),
+                new Toaster({
+                    topic: config.topics.toast
+                }, domConstruct.create('div', {}, document.body))
             );
+
 
             this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);
             this.childWidgets.push(this.filtersContainer);

@@ -151,7 +151,7 @@ define([
             },
             toggleReferenceLayer: 'wri/toggleReferenceLayer',
             toggleReferenceLayerLabels: 'wri/toggleReferenceLayerLabels',
-            error: 'wri/error'
+            toast: 'wri/toast'
         },
 
         symbols: {
