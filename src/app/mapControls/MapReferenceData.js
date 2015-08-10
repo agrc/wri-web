@@ -5,7 +5,6 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/on',
     'dojo/text!app/mapControls/templates/MapReferenceData.html',
     'dojo/_base/declare',
 
@@ -18,7 +17,6 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    on,
     template,
     declare
 ) {
