@@ -152,7 +152,7 @@ define([
 
                 this.centroidLayer.setVisibility(false);
                 this.centroidPopupHandler = on.pausable(this.centroidLayer, 'mouse-over', lang.hitch(this, lang.partial(this._showPopupForProject, true)));
-                this.centroidLayer.on('mouse-out', lang.hitch(this, lang.partial(this._showPopupForProject, false)));
+                this.centroidPopupHandlerHide = on.pausable(this.centroidLayer, 'mouse-out', lang.hitch(this, lang.partial(this._showPopupForProject, false)));
                 this.centroidLayer.on('click', lang.hitch(this, '_updateHash'));
                 this.centroidLayer.on('mouse-down', lang.hitch(this, '_pauseEvent'));
 
@@ -275,13 +275,19 @@ define([
             // evt: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
             console.log('app.centroidController::_showPopupForProject', arguments);
 
+            if (!show) {
+                this.dialog.hide();
+
+                domStyle.set(evt.target, {
+                    cursor: ''
+                });
+
+                return;
+            }
+
             domStyle.set(evt.target, {
                 cursor: 'pointer'
             });
-            if (!show) {
-                this.dialog.hide();
-                return;
-            }
 
             var point = evt.graphic.geometry;
             point.setSpatialReference(new SpatialReference(26912));
@@ -304,17 +310,19 @@ define([
         },
         _pauseEvent: function (dragging) {
             // summary:
-            //      description
-            //
+            //      pauses the popup handlers if rubber band zooming.
+            // dragging: bool, if rubber band zooming is true
             console.log('app.centroidController::_pauseEvent', arguments);
 
-            if (dragging) {
+            if (dragging === true) {
                 this.centroidPopupHandler.pause();
+                this.centroidPopupHandlerHide.pause();
 
                 return;
             }
 
             this.centroidPopupHandler.resume();
+            this.centroidPopupHandlerHide.resume();
         },
         onFilterQueryChanged: function (newWhere) {
             // summary:
