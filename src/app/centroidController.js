@@ -1,39 +1,39 @@
 define([
-    'app/config',
-    'app/router',
+	'app/config',
+	'app/router',
 
-    'dojo/Deferred',
-    'dojo/dom-construct',
-    'dojo/dom-style',
-    'dojo/on',
-    'dojo/promise/all',
-    'dojo/text!app/templates/projectPopupTemplate.html',
-    'dojo/topic',
-    'dojo/_base/lang',
+	'dojo/Deferred',
+	'dojo/dom-construct',
+	'dojo/dom-style',
+	'dojo/on',
+	'dojo/promise/all',
+	'dojo/text!app/templates/projectPopupTemplate.html',
+	'dojo/topic',
+	'dojo/_base/lang',
 
-    'esri/dijit/InfoWindowLite',
-    'esri/geometry/Extent',
-    'esri/layers/FeatureLayer',
-    'esri/SpatialReference',
-    'esri/tasks/query'
+	'esri/dijit/InfoWindowLite',
+	'esri/geometry/Extent',
+	'esri/layers/FeatureLayer',
+	'esri/SpatialReference',
+	'esri/tasks/query'
 ], function (
-    config,
-    router,
+	config,
+	router,
 
-    Deferred,
-    domConstruct,
-    domStyle,
-    on,
-    all,
-    projectPopupTemplate,
-    topic,
-    lang,
+	Deferred,
+	domConstruct,
+	domStyle,
+	on,
+	all,
+	projectPopupTemplate,
+	topic,
+	lang,
 
-    InfoWindowLite,
-    Extent,
-    FeatureLayer,
-    SpatialReference,
-    Query
+	InfoWindowLite,
+	Extent,
+	FeatureLayer,
+	SpatialReference,
+	Query
 ) {
     return {
         // override: bool
@@ -252,22 +252,23 @@ define([
                 return null;
             }
 
-            var q = new Query();
-            q.where = where;
-
-            var deferreds = [];
-
             this.centroidLayer.setVisibility(false);
 
             Object.keys(this.explodedLayer).forEach(function (key) {
                 var layer = this.explodedLayer[key];
 
+                var cssClass = 'adjacent';
+
+                if (key === 'lineExploded') {
+                    cssClass = 'adjacent-line';
+                }
+
+                layer.getNode().setAttribute('class', cssClass);
+
+                layer.setDefinitionExpression(where);
                 layer.setVisibility(true);
 
-                deferreds.push(layer.selectFeatures(q));
             }, this);
-
-            return all(deferreds);
         },
         _showPopupForProject: function (show, evt) {
             // summary:

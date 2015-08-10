@@ -247,6 +247,8 @@ define([
                         });
                     }
 
+                    this._resetAdjacentProjectFilters();
+
                     this.map.graphicsLayerIds.forEach(function (id) {
                         this.map.getLayer(id).setVisibility(false);
                     }, this);
@@ -280,6 +282,8 @@ define([
                 q.where = router.getProjectsWhereClause();
 
                 centroidController.enabled = false;
+
+                this._resetAdjacentProjectFilters();
 
                 if (q.where === '1=1') {
                     return;
@@ -525,8 +529,9 @@ define([
 
             Object.keys(centroidController.explodedLayer).forEach(function (key) {
                 var layer = this.explodedLayer[key];
-
+                layer.getNode().setAttribute('class', '');
                 layer.setVisibility(false);
+                layer.setDefinitionExpression('');
             }, centroidController);
         },
         _setMap: function (obj) {
@@ -540,6 +545,19 @@ define([
             }
 
             obj.setMap(this.map);
+        },
+        _resetAdjacentProjectFilters: function () {
+            // summary:
+            //      removes any definition expression
+            //      removes any classes to change style
+            console.log('app.mapController:_resetAdjacentProjectFilters', arguments);
+
+            Object.keys(centroidController.explodedLayer).forEach(function (key) {
+                var layer = this.explodedLayer[key];
+                layer.getNode().removeAttribute('class');
+                layer.setVisibility(false);
+                layer.setDefinitionExpression('');
+            }, centroidController);
         },
         startup: function () {
             // summary:
