@@ -353,7 +353,12 @@ define([
             }, this);
 
             var lyrs = this.layers;
-            this.map.addLayers([lyrs.poly, lyrs.line, lyrs.point]);
+            var layerList = [lyrs.poly, lyrs.line, lyrs.point];
+            this.map.addLayers(layerList);
+
+            layerList.forEach(function (layer) {
+                this.map.addLoaderToLayer(layer);
+            }, this);
 
             this.layersLoaded = true;
 
@@ -439,6 +444,7 @@ define([
 
                 if (!loaded) {
                     this.map.addLayer(layer);
+                    this.map.addLoaderToLayer(layer);
                 }
             }, this);
 
@@ -449,6 +455,7 @@ define([
 
                 if (!loaded) {
                     this.map.addLayer(layer);
+                    this.map.addLoaderToLayer(layer);
                 }
             }, this);
         },
