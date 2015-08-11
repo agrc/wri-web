@@ -1,5 +1,9 @@
 <div>
     <div class="alert ${cssPrefix}${cssClass}" role="alert">
         <span>${message}</span>
+        <button type="button" class="close" aria-label="Close"
+            data-dojo-attach-event='click: hide'>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 </div>

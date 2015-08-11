@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="app/resources/App.css">
+    <link rel="stylesheet" href="../../app/resources/App.css">
     <style type='text/css'>
         body {
             padding: 50px;
@@ -19,6 +19,7 @@
     <script type="text/javascript">
         var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../';
         var widgetUnderTest;
+        var widgetUnderTest2;
 
         require({
             baseUrl: baseUrl,
@@ -38,13 +39,25 @@
             'dojo/domReady!'
         ], function(Module) {
             widgetUnderTest = new Module({
+                message: 'message text',
+                cssClass: 'info'
             }, 'node');
 
             widgetUnderTest.startup();
+            widgetUnderTest.show();
+
+            widgetUnderTest2 = new Module({
+                message: 'sticky message text',
+                cssClass: 'danger'
+            }, 'node2');
+
+            widgetUnderTest2.startup();
+            widgetUnderTest2.show();
         });
 </script>
 </head>
 <body>
     <div id="node"></div>
+    <div id="node2"></div>
 </body>
 </html>
