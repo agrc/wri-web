@@ -1,39 +1,39 @@
 define([
-	'app/config',
-	'app/router',
+    'app/config',
+    'app/router',
 
-	'dojo/Deferred',
-	'dojo/dom-construct',
-	'dojo/dom-style',
-	'dojo/on',
-	'dojo/promise/all',
-	'dojo/text!app/templates/projectPopupTemplate.html',
-	'dojo/topic',
-	'dojo/_base/lang',
+    'dojo/Deferred',
+    'dojo/dom-construct',
+    'dojo/dom-style',
+    'dojo/on',
+    'dojo/promise/all',
+    'dojo/text!app/templates/featurePopupTemplate.html',
+    'dojo/text!app/templates/projectPopupTemplate.html',
+    'dojo/topic',
+    'dojo/_base/lang',
 
-	'esri/dijit/InfoWindowLite',
-	'esri/geometry/Extent',
-	'esri/layers/FeatureLayer',
-	'esri/SpatialReference',
-	'esri/tasks/query'
+    'esri/dijit/InfoWindowLite',
+    'esri/geometry/Extent',
+    'esri/layers/FeatureLayer',
+    'esri/tasks/query'
 ], function (
-	config,
-	router,
+    config,
+    router,
 
-	Deferred,
-	domConstruct,
-	domStyle,
-	on,
-	all,
-	projectPopupTemplate,
-	topic,
-	lang,
+    Deferred,
+    domConstruct,
+    domStyle,
+    on,
+    all,
+    featurePopupTemplate,
+    projectPopupTemplate,
+    topic,
+    lang,
 
-	InfoWindowLite,
-	Extent,
-	FeatureLayer,
-	SpatialReference,
-	Query
+    InfoWindowLite,
+    Extent,
+    FeatureLayer,
+    Query
 ) {
     return {
         // override: bool
@@ -65,6 +65,10 @@ define([
         // summary:
         //      whether or not to care about this stuff
         enabled: true,
+
+        // pausables: array
+        //      an array of pausable event handlers
+        pausables: [],
 
         featureQueryTxt: '{{Project_ID}} IN(SELECT {{Project_ID}} FROM PROJECT WHERE {{query}})'
             .replace(/{{Project_ID}}/g, config.fieldNames.Project_ID),
@@ -151,8 +155,9 @@ define([
                 this.centroidLayer.__where__ = '';
 
                 this.centroidLayer.setVisibility(false);
-                this.centroidPopupHandler = on.pausable(this.centroidLayer, 'mouse-over', lang.hitch(this, lang.partial(this._showPopupForProject, true)));
-                this.centroidPopupHandlerHide = on.pausable(this.centroidLayer, 'mouse-out', lang.hitch(this, lang.partial(this._showPopupForProject, false)));
+                this.pausables.push(on.pausable(this.centroidLayer, 'mouse-over', lang.hitch(this, lang.partial(this._showPopupFor, true, true))));
+                this.pausables.push(on.pausable(this.centroidLayer, 'mouse-out', lang.hitch(this, lang.partial(this._showPopupFor, false, true))));
+
                 this.centroidLayer.on('click', lang.hitch(this, '_updateHash'));
                 this.centroidLayer.on('mouse-down', lang.hitch(this, '_pauseEvent'));
 
@@ -162,7 +167,8 @@ define([
 
                 [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
                     var layer = new FeatureLayer(config.urls.featuresService + '/' + layerIndex, {
-                        id: typesLookup[i]
+                        id: typesLookup[i],
+                        outFields: ['StatusDescription', 'Project_ID']
                     });
 
                     layer.setVisibility(false);
@@ -171,6 +177,10 @@ define([
                     var deferred = new Deferred();
 
                     layer.on('load', deferred.resolve);
+                    this.pausables.push(on.pausable(layer, 'mouse-over', lang.hitch(this, lang.partial(this._showPopupFor, true, false))));
+                    this.pausables.push(on.pausable(layer, 'mouse-out', lang.hitch(this, lang.partial(this._showPopupFor, false, false))));
+                    layer.on('click', lang.hitch(this, '_updateHash'));
+                    layer.on('mouse-down', lang.hitch(this, '_pauseEvent'));
 
                     deferreds.push(deferred);
 
@@ -270,12 +280,7 @@ define([
 
             }, this);
         },
-        _showPopupForProject: function (show, evt) {
-            // summary:
-            //      shows the dialog popup
-            // evt: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
-            console.log('app.centroidController::_showPopupForProject', arguments);
-
+        _showPopupFor: function (show, isProject, evt) {
             if (!show) {
                 this.dialog.hide();
 
@@ -290,12 +295,15 @@ define([
                 cursor: 'pointer'
             });
 
-            var point = evt.graphic.geometry;
-            point.setSpatialReference(new SpatialReference(26912));
+            if (isProject) {
+                this.dialog.setTitle(lang.replace('<strong>{graphic.attributes.Title}</strong>', evt));
+                this.dialog.setContent(lang.replace(projectPopupTemplate, evt));
+            } else {
+                this.dialog.setTitle(lang.replace('<strong>Project Id: {graphic.attributes.Project_ID}</strong>', evt));
+                this.dialog.setContent(lang.replace(featurePopupTemplate, evt));
+            }
 
-            this.dialog.setTitle(lang.replace('<strong>{graphic.attributes.Title}</strong>', evt));
-            this.dialog.setContent(lang.replace(projectPopupTemplate, evt));
-            this.dialog.show(point, point);
+            this.dialog.show(evt.mapPoint, evt.mapPoint);
         },
         _updateHash: function (e) {
             // summary:
@@ -316,14 +324,16 @@ define([
             console.log('app.centroidController::_pauseEvent', arguments);
 
             if (dragging === true) {
-                this.centroidPopupHandler.pause();
-                this.centroidPopupHandlerHide.pause();
+                this.pausables.forEach(function (pausable) {
+                    pausable.pause();
+                });
 
                 return;
             }
 
-            this.centroidPopupHandler.resume();
-            this.centroidPopupHandlerHide.resume();
+            this.pausables.forEach(function (pausable) {
+                pausable.resume();
+            });
         },
         onFilterQueryChanged: function (newWhere) {
             // summary:
