@@ -296,9 +296,15 @@ define([
             });
 
             if (isProject) {
+                // take space out of Pending Completed status
+                evt.graphic.attributes.statusClass = evt.graphic.attributes.Status.replace(' ', '');
+
                 this.dialog.setTitle(lang.replace('<strong>{graphic.attributes.Title}</strong>', evt));
                 this.dialog.setContent(lang.replace(projectPopupTemplate, evt));
             } else {
+                // take space out of Pending Completed status
+                evt.graphic.attributes.statusClass = evt.graphic.attributes.StatusDescription.replace(' ', '');
+
                 this.dialog.setTitle(lang.replace('<strong>Project Id: {graphic.attributes.Project_ID}</strong>', evt));
                 this.dialog.setContent(lang.replace(featurePopupTemplate, evt));
             }

@@ -27,6 +27,14 @@ define([
         templateString: template,
         baseClass: 'project-details',
 
+        constructor: function (params) {
+            // summary:
+            //      overrides same function in _WidgetBase
+            // params: Object
+            console.log('app.project.ProjectDetails:constructor', arguments);
+
+            this.statusClass = params.status.replace(' ', '');
+        },
         toggleAdjacent: function () {
             // summary:
             //      toggles the adjacent projects
