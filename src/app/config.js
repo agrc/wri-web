@@ -1,6 +1,7 @@
 /* jshint maxlen:false */
 define([
     'dojo/has',
+    'dojo/_base/lang',
 
     'esri/config',
     'esri/geometry/Extent',
@@ -11,6 +12,7 @@ define([
     'dojo/domReady!'
 ], function (
     has,
+    lang,
 
     esriConfig,
     Extent,
@@ -26,7 +28,7 @@ define([
 
     var gisServerBaseUrl;
     var apiEndpoint;
-    var serviceUrlTemplate = '/arcgis/rest/services/WRI/{{name}}/MapServer';
+    var serviceUrlTemplate = '/arcgis/rest/services/WRI/{name}/{type}Server';
     var googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/delete-prefix-stretch-giant/';
 
     if (has('agrc-build') === 'prod') {
@@ -35,9 +37,9 @@ define([
     } else if (has('agrc-build') === 'stage') {
         gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
         apiEndpoint = '/__WRI_CONFIGURATION__';
-        serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{{name}}/MapServer';
+        serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{name}/{type}Server';
     } else {
-        gisServerBaseUrl = '';
+        gisServerBaseUrl = 'http://' + window.location.host;
         apiEndpoint = '/wri';
         googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/';
     }
@@ -78,16 +80,17 @@ define([
         }),
 
         urls: {
-            featuresService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Features'),
-            centroidService: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Projects') + '/0',
-            reference: gisServerBaseUrl + serviceUrlTemplate.replace('{{name}}', 'Reference'),
+            featuresService: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Features', type: 'Map' }),
+            centroidService: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Projects', type: 'Map' }) + '/0',
+            reference: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Reference', type: 'Map' }),
             api: gisServerBaseUrl + apiEndpoint + '/api',
             plss: '//basemaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer',
             rangeTrendApp: 'http://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}',
             esriImagery: 'http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
             esriLabels: 'http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
             esriTransLabels: 'http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer',
-            googleImagery: googleImageryUrl
+            googleImagery: googleImageryUrl,
+            print: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Print', type: 'GP' }) + '/Export%20Web%20Map'
         },
 
         layerIndices: {
