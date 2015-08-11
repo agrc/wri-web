@@ -52,11 +52,18 @@
                     topic.publish('app/Toaster', Math.floor(Math.random() * 10).toString());
                 }, 1000);
             });
+            on(document.getElementById('error'), 'click', function () {
+                topic.publish('app/Toaster', {
+                    message: 'There was an error!',
+                    type: 'danger'
+                });
+            });
         });
 </script>
 </head>
 <body>
     <div id="node"></div>
     <button id='start'>Test</button>
+    <button id='error'>Test Error</button>
 </body>
 </html>
