@@ -1,0 +1,14 @@
+<div>
+    <input class="form-control" data-dojo-attach-point='titleNode'
+           placeholder="PDF Map Title" />
+    <button data-dojo-attach-event='click: print'
+        data-dojo-attach-point='printBtn'
+        class="btn btn-primary btn-block">Create PDF Map</button>
+    <div data-dojo-attach-point='downloadLinkAlert'
+        class="alert alert-info text-center hidden">
+        <a href="" download="wri.pdf" data-dojo-attach-point="downloadLink">
+            Click to download.</a>
+    </div>
+    <div data-dojo-attach-point='errMsg'
+        class="alert alert-danger hidden">error message</div>
+</div>

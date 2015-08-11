@@ -5,6 +5,7 @@ define([
     'app/config',
     'app/graphicsUtils',
     'app/mapControls/CentroidSwitchButton',
+    'app/mapControls/PrintButton',
     'app/router',
 
     'dojo/Deferred',
@@ -31,6 +32,7 @@ define([
     config,
     graphicsUtils,
     CentroidSwitchButton,
+    PrintButton,
     router,
 
     Deferred,
@@ -131,6 +133,7 @@ define([
             domClass.add(homeButton.domNode, 'pull-left');
 
             var centroidButton = new CentroidSwitchButton({}).placeAt(toolbarNode, 'last');
+            var printButton = new PrintButton({}).placeAt(toolbarNode, 'last');
 
             homeButton.on('home', function () {
                 router.setHash();
@@ -187,6 +190,7 @@ define([
             search.set('sources', sources);
 
             this.childWidgets.push(homeButton);
+            this.childWidgets.push(printButton);
             this.childWidgets.push(centroidButton);
             this.childWidgets.push(search);
 
