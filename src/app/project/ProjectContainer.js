@@ -45,6 +45,11 @@ define([
         templateString: template,
         baseClass: 'project-container map-overlay',
 
+        // displayTimer: Number
+        //      The timer that delays the display of the progress bar
+        displayTimer: null,
+
+
         // Properties to be sent into constructor
 
         postCreate: function () {
@@ -86,11 +91,27 @@ define([
 
             this.currentProject = ids[0];
 
+            var that = this;
             this._queryForProjectDetails(ids[0]).then(
                 lang.hitch(this, '_updateDetails'),
-                function handleError(response) {
+                function (response) {
                     console.warn('wri web api request failed ' + response);
+                    topic.publish(config.topics.toast, {
+                        message: 'There was an error getting project details!',
+                        type: 'danger'
+                    });
+                    that.clearTimer();
+                    domClass.add(that.domNode, 'hidden');
                 });
+        },
+        clearTimer: function () {
+            // summary:
+            //      clears the display timer if it exists
+            console.log('app.project.ProjectContainer:clearTimer', arguments);
+
+            if (this.displayTimer) {
+                window.clearTimeout(this.displayTimer);
+            }
         },
         _queryForProjectDetails: function (id) {
             // summary:
@@ -99,7 +120,7 @@ define([
             console.log('app.project.ProjectContainer::_queryForProjectDetails', arguments);
 
             var that = this;
-            var timer = setTimeout(function () {
+            this.displayTimer = window.setTimeout(function () {
                 domClass.remove(that.loadingNode, 'hidden');
                 domClass.remove(that.domNode, 'hidden');
             }, 500);
@@ -117,9 +138,7 @@ define([
                 handleAs: 'json',
                 headers: { 'Accept': 'application/json' }
             }).then(function (response) {
-                if (timer) {
-                    clearTimeout(timer);
-                }
+                that.clearTimer();
 
                 return response;
             });
