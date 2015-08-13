@@ -1,13 +1,13 @@
 require([
-	'app/Toaster',
+    'app/Toaster',
 
-	'dojo/dom-construct',
-	'dojo/topic'
+    'dojo/dom-construct',
+    'dojo/topic'
 ], function (
-	WidgetUnderTest,
+    WidgetUnderTest,
 
-	domConstruct,
-	topic
+    domConstruct,
+    topic
 ) {
     describe('app/Toaster', function () {
         var widget;
@@ -69,15 +69,23 @@ require([
                 widget.handleMessage({message: 'message', type: 'danger'});
 
                 expect(widget.setContent.calls.count()).toBe(1);
-                expect(widget.setContent.calls.mostRecent().args).toEqual(['message', 'danger']);
+                expect(widget.setContent.calls.mostRecent().args).toEqual(['message', 'danger', undefined]);
             });
-            it('sets class to default when no in allowableClasses', function () {
+            it('sets class to default when not in allowableClasses', function () {
                 widget.setContent = jasmine.createSpy('setContent');
 
                 widget.handleMessage({message: 'message', type: 'not there'});
 
                 expect(widget.setContent.calls.count()).toBe(1);
-                expect(widget.setContent.calls.mostRecent().args).toEqual(['message', widget.defaultClass]);
+                expect(widget.setContent.calls.mostRecent().args).toEqual(['message', widget.defaultClass, undefined]);
+            });
+            it('passes along the sticky value', function () {
+                widget.setContent = jasmine.createSpy('setContent');
+
+                widget.handleMessage({message: 'message', type: 'danger', sticky: true});
+
+                expect(widget.setContent.calls.count()).toBe(1);
+                expect(widget.setContent.calls.mostRecent().args).toEqual(['message', 'danger', true]);
             });
         });
         describe('setContent', function () {
