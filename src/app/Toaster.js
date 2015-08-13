@@ -79,7 +79,7 @@ define([
         handleMessage: function (message) {
             // summary:
             //      handles the message and sets default arguments
-            // {message: type:}
+            // {message: type: sticky:}
             console.log('app.Toaster:handleMessage', arguments);
 
             if (lang.isString(message)) {
@@ -90,10 +90,10 @@ define([
                     cssClass = this.defaultClass;
                 }
 
-                this.setContent(message.message, cssClass);
+                this.setContent(message.message, cssClass, message.sticky);
             }
         },
-        setContent: function (message, cssClass) {
+        setContent: function (message, cssClass, sticky) {
             // summary:
             //      description
             // the message and it's css class
@@ -106,9 +106,9 @@ define([
 
                 var item = new ToasterItem({
                     message: message,
-                    cssClass: cssClass
+                    cssClass: cssClass,
+					sticky: sticky
                 }).placeAt(this.domNode, 'first');
-
 
                 if (this.toasterItems.length >= this.maxItems) {
                     var entry = this.toasterItems[0];
