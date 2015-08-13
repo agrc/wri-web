@@ -1,25 +1,25 @@
 define([
-	'dijit/_TemplatedMixin',
-	'dijit/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
 
-	'app/ToasterItem',
+    'app/ToasterItem',
 
-	'dojo/aspect',
-	'dojo/text!app/templates/Toaster.html',
-	'dojo/topic',
-	'dojo/_base/declare',
-	'dojo/_base/lang'
+    'dojo/aspect',
+    'dojo/text!app/templates/Toaster.html',
+    'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang'
 ], function (
-	_TemplatedMixin,
-	_WidgetBase,
+    _TemplatedMixin,
+    _WidgetBase,
 
-	ToasterItem,
+    ToasterItem,
 
-	aspect,
-	template,
-	topic,
-	declare,
-	lang
+    aspect,
+    template,
+    topic,
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -107,7 +107,7 @@ define([
                 var item = new ToasterItem({
                     message: message,
                     cssClass: cssClass,
-					sticky: sticky
+                    sticky: sticky
                 }).placeAt(this.domNode, 'first');
 
                 if (this.toasterItems.length >= this.maxItems) {
