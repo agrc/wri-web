@@ -154,7 +154,11 @@ define([
                 return l.search;
             });
             sources.forEach(function (l) {
-                l.featureLayer = new FeatureLayer(l.url + '/' + l.layerIndex);
+                var url = l.url;
+                if (l.layerIndex) {
+                    url += '/' + l.layerIndex;
+                }
+                l.featureLayer = new FeatureLayer(url);
                 l.exactMatch = false;
                 l.minCharacters = 3;
             });
