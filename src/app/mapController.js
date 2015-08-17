@@ -1,58 +1,54 @@
 define([
     'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
 
-    'app/config',
-    'app/router',
-    'app/graphicsUtils',
     'app/centroidController',
+    'app/config',
+    'app/graphicsUtils',
     'app/mapControls/CentroidSwitchButton',
+    'app/router',
 
+    'dojo/Deferred',
+    'dojo/dom-class',
+    'dojo/promise/all',
+    'dojo/topic',
+    'dojo/when',
     'dojo/_base/fx',
     'dojo/_base/lang',
-    'dojo/Deferred',
-    'dojo/promise/all',
-    'dojo/when',
-    'dojo/topic',
-
-    'dojo/dom-class',
 
     'esri/dijit/HomeButton',
     'esri/dijit/Search',
-    'esri/geometry/Extent',
     'esri/geometry/Point',
     'esri/InfoTemplate',
-    'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/ArcGISDynamicMapServiceLayer',
+    'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
+    'esri/layers/WebTiledLayer',
     'esri/tasks/query'
 ], function (
     BaseMap,
-    BaseMapSelector,
 
-    config,
-    router,
-    graphicsUtils,
     centroidController,
+    config,
+    graphicsUtils,
     CentroidSwitchButton,
+    router,
 
+    Deferred,
+    domClass,
+    all,
+    topic,
+    when,
     fx,
     lang,
-    Deferred,
-    all,
-    when,
-    topic,
-
-    domClass,
 
     HomeButton,
     Search,
-    Extent,
     Point,
     InfoTemplate,
-    ArcGISTiledMapServiceLayer,
     ArcGISDynamicMapServiceLayer,
+    ArcGISTiledMapServiceLayer,
     FeatureLayer,
+    WebTiledLayer,
     Query
 ) {
     return {
@@ -75,6 +71,10 @@ define([
         // showReferenceLayerLabels: Boolean
         showReferenceLayerLabels: true,
 
+        // baseMapLayers: Layer[]
+        //      The list of layers that make up the base map
+        baseMapLayers: null,
+
         initMap: function (mapDiv, toolbarNode) {
             // summary:
             //      Sets up the map and layers
@@ -87,8 +87,27 @@ define([
             this.map = new BaseMap(mapDiv, {
                 showAttribution: false,
                 useDefaultBaseMap: false,
-                sliderOrientation: 'horizontal'
+                sliderOrientation: 'horizontal',
+                extent: config.defaultExtent
             });
+
+            var googleImageryLyr = new WebTiledLayer(
+                config.urls.googleImagery + 'tiles/utah/${level}/${col}/${row}',
+                { minScale: config.switchToGoogleScale });
+            var esriImageryLyr = new ArcGISTiledMapServiceLayer(
+                config.urls.esriImagery,
+                { maxScale: config.switchToGoogleScale }
+            );
+            var esriLabelsLyr = new ArcGISTiledMapServiceLayer(
+                config.urls.esriLabels,
+                { maxScale: config.switchToGoogleScale }
+            );
+            var esriTransLabelsLyr = new ArcGISTiledMapServiceLayer(
+                config.urls.esriTransLabels,
+                { maxScale: config.switchToGoogleScale }
+            );
+            this.baseLayers = [googleImageryLyr, esriImageryLyr, esriLabelsLyr, esriTransLabelsLyr];
+            this.map.addLayers(this.baseLayers);
 
             this.map.on('load', function () {
                 var btn = that.map.addButton(that.map.buttons.back, {
@@ -102,32 +121,16 @@ define([
                 domClass.add(btn, 'toolbar-item');
             });
 
-            var selector = new BaseMapSelector({
-                map: this.map,
-                id: 'tundra',
-                position: 'TR',
-                defaultThemeLabel: 'Hybrid'
-            });
-
             var homeButton = new HomeButton({
                 map: this.map,
                 // hard-wire state of utah extent in case the
                 // initial page load is not utah
-                extent: new Extent({
-                    xmax: 696328,
-                    xmin: 207131,
-                    ymax: 4785283,
-                    ymin: 3962431,
-                    spatialReference: {
-                        wkid: 26912
-                    }
-                })
+                extent: config.defaultExtent
             }).placeAt(toolbarNode);
 
             domClass.add(homeButton.domNode, 'pull-left');
 
-            var centroidButton = new CentroidSwitchButton({
-            }).placeAt(toolbarNode, 'last');
+            var centroidButton = new CentroidSwitchButton({}).placeAt(toolbarNode, 'last');
 
             homeButton.on('home', function () {
                 router.setHash();
@@ -179,15 +182,13 @@ define([
 
             search.set('sources', sources);
 
-            this.childWidgets.push(selector);
             this.childWidgets.push(homeButton);
             this.childWidgets.push(centroidButton);
             this.childWidgets.push(search);
 
-            // suspend base map layer until we get the initial extent
+            // suspend base map layers until we get the initial extent
             // trying to save requests to the server
-            this.baseLayer = this.map.getLayer(this.map.layerIds[0]);
-            this.baseLayer.suspend();
+            this.toggleBaseLayers('suspend');
 
             this.setupConnections();
             this.map.on('load', function () {
@@ -262,7 +263,7 @@ define([
                                 this.setExtent(extent);
                             }
 
-                            this.baseLayer.resume();
+                            this.toggleBaseLayers('resume');
 
                             this.updateCentroidVisibility();
                         }
@@ -308,7 +309,7 @@ define([
                                 that.setExtent(extent);
                             }
 
-                            that.baseLayer.resume();
+                            that.toggleBaseLayers('resume');
                         });
                     })
                 );
@@ -466,15 +467,7 @@ define([
             console.log('app/mapController::setExtent', arguments);
 
             if (!extent) {
-                extent = new Extent({
-                    xmax: 696328,
-                    xmin: 207131,
-                    ymax: 4785283,
-                    ymin: 3962431,
-                    spatialReference: {
-                        wkid: 26912
-                    }
-                });
+                extent = config.defaultExtent;
 
                 this.map.setExtent(extent, false);
 
@@ -561,7 +554,9 @@ define([
 
             Object.keys(centroidController.explodedLayer).forEach(function (key) {
                 var layer = this.explodedLayer[key];
-                layer.getNode().removeAttribute('class');
+                if (layer.getNode()) {
+                    layer.getNode().removeAttribute('class');
+                }
                 layer.setVisibility(false);
                 layer.setDefinitionExpression('');
             }, centroidController);
@@ -648,6 +643,16 @@ define([
             }
 
             this.showReferenceLayerLabels = show;
+        },
+        toggleBaseLayers: function (action) {
+            // summary:
+            //      suspends or resumes group layers
+            // action: String (suspend | resume)
+            console.log('app.mapController:toggleBaseLayers', arguments);
+
+            this.baseLayers.forEach(function (l) {
+                l[action]();
+            });
         }
     };
 });
