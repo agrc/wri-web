@@ -24,16 +24,20 @@ define([
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('wrimaps.utah.gov');
     esriConfig.defaults.map.zoomSymbol.outline.color = [18, 192, 236, 255];
 
     var gisServerBaseUrl;
     var apiEndpoint;
     var serviceUrlTemplate = '/arcgis/rest/services/WRI/{name}/{type}Server';
     var googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/delete-prefix-stretch-giant/';
+    var plssUrl = 'https://wrimaps.at.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
 
     if (has('agrc-build') === 'prod') {
         gisServerBaseUrl = 'https://wrimaps.utah.gov';
         apiEndpoint = '';
+        plssUrl = 'https://wrimaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
     } else if (has('agrc-build') === 'stage') {
         gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
         apiEndpoint = '/__WRI_CONFIGURATION__';
@@ -84,7 +88,7 @@ define([
             centroidService: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Projects', type: 'Map' }) + '/0',
             reference: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Reference', type: 'Map' }),
             api: gisServerBaseUrl + apiEndpoint + '/api',
-            plss: '//basemaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer',
+            plss: plssUrl,
             rangeTrendApp: 'http://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}',
             esriImagery: 'http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
             esriLabels: 'http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
