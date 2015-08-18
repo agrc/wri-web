@@ -55,23 +55,27 @@ require([
             });
         });
         describe('show', function () {
-            it('hides destroys itself after timeout', function (done) {
+            beforeEach(function () {
+                jasmine.clock().install();
+            });
+            afterEach(function () {
+                jasmine.clock().uninstall();
+            });
+            it('hides destroys itself after timeout', function () {
                 widget = new WidgetUnderTest({
                     message: 'test',
                     cssClass: 'info',
                     duration: 1
                 }, domConstruct.create('div', null, document.body));
                 widget.startup();
+                spyOn(widget.hideAnim, 'play');
 
                 widget.show();
+                jasmine.clock().tick(2);
 
-                window.setTimeout(function () {
-                    expect(widget.domNode).toBeNull();
-
-                    done();
-                }, 1200);
+                expect(widget.hideAnim.play).toHaveBeenCalled();
             });
-            it('sticky doesn\'t auto hide', function (done) {
+            it('sticky doesn\'t auto hide', function () {
                 widget = new WidgetUnderTest({
                     message: 'test',
                     cssClass: 'info',
@@ -79,14 +83,12 @@ require([
                     sticky: true
                 }, domConstruct.create('div', null, document.body));
                 widget.startup();
+                spyOn(widget.hideAnim, 'play');
 
                 widget.show();
+                jasmine.clock().tick(2);
 
-                window.setTimeout(function () {
-                    expect(widget.domNode).not.toBeNull();
-
-                    done();
-                }, 1200);
+                expect(widget.hideAnim.play).not.toHaveBeenCalled();
             });
         });
     });
