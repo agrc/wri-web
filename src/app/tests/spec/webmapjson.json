@@ -1,0 +1,310 @@
+{
+    "mapOptions": {
+        "showAttribution": false,
+        "extent": {
+            "xmin": -12638779.58489648,
+            "ymin": 4836122.88385952,
+            "xmax": -12450591.621258305,
+            "ymax": 4914853.022993282,
+            "spatialReference": {
+                "wkid": 3857
+            }
+        },
+        "spatialReference": {
+            "wkid": 3857
+        },
+        "scale": 577790.5542889977
+    },
+    "operationalLayers": [
+        {
+            "id": "layer0",
+            "title": "layer0",
+            "opacity": 1,
+            "minScale": 4000,
+            "maxScale": 1128.497176,
+            "url": "https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/tiles/utah/${level}/${col}/${row}",
+            "type": "WebTiledLayer",
+            "urlTemplate": "https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/tiles/utah/{level}/{col}/{row}",
+            "credits": ""
+        },
+        {
+            "id": "layer1",
+            "title": "layer1",
+            "opacity": 1,
+            "minScale": 591657527.591555,
+            "maxScale": 4000,
+            "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+        },
+        {
+            "id": "layer2",
+            "title": "layer2",
+            "opacity": 1,
+            "minScale": 591657527.591555,
+            "maxScale": 4000,
+            "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"
+        },
+        {
+            "id": "layer3",
+            "title": "layer3",
+            "opacity": 1,
+            "minScale": 591657527.591555,
+            "maxScale": 4000,
+            "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer"
+        },
+        {
+            "id": "layer4",
+            "title": "layer4",
+            "opacity": 0.75,
+            "minScale": 0,
+            "maxScale": 0,
+            "url": "https://localhost:8000/arcgis/rest/services/WRI/Reference/MapServer",
+            "visibleLayers": [
+                0
+            ]
+        },
+        {
+            "id": "Centroid",
+            "title": "Centroid",
+            "opacity": 1,
+            "minScale": 0,
+            "maxScale": 0,
+            "layerDefinition": {
+                "drawingInfo": {
+                    "renderer": {
+                        "type": "uniqueValue",
+                        "field1": "Status",
+                        "field2": null,
+                        "field3": null,
+                        "fieldDelimiter": ", ",
+                        "defaultSymbol": null,
+                        "defaultLabel": null,
+                        "uniqueValueInfos": [
+                            {
+                                "symbol": {
+                                    "color": [
+                                        131,
+                                        142,
+                                        142,
+                                        255
+                                    ],
+                                    "size": 6.999999999999999,
+                                    "angle": 0,
+                                    "xoffset": 0,
+                                    "yoffset": 0,
+                                    "type": "esriSMS",
+                                    "style": "esriSMSCircle",
+                                    "outline": {
+                                        "color": [
+                                            0,
+                                            0,
+                                            0,
+                                            255
+                                        ],
+                                        "width": 1,
+                                        "type": "esriSLS",
+                                        "style": "esriSLSSolid"
+                                    }
+                                },
+                                "value": "Draft",
+                                "label": "Draft",
+                                "description": ""
+                            },
+                            {
+                                "symbol": {
+                                    "color": [
+                                        0,
+                                        0,
+                                        0,
+                                        255
+                                    ],
+                                    "size": 6.999999999999999,
+                                    "angle": 0,
+                                    "xoffset": 0,
+                                    "yoffset": 0,
+                                    "type": "esriSMS",
+                                    "style": "esriSMSCircle",
+                                    "outline": {
+                                        "color": [
+                                            0,
+                                            0,
+                                            0,
+                                            255
+                                        ],
+                                        "width": 1,
+                                        "type": "esriSLS",
+                                        "style": "esriSLSSolid"
+                                    }
+                                },
+                                "value": "Proposed",
+                                "label": "Proposed",
+                                "description": ""
+                            },
+                            {
+                                "symbol": {
+                                    "color": [
+                                        33,
+                                        145,
+                                        174,
+                                        255
+                                    ],
+                                    "size": 6.999999999999999,
+                                    "angle": 0,
+                                    "xoffset": 0,
+                                    "yoffset": 0,
+                                    "type": "esriSMS",
+                                    "style": "esriSMSCircle",
+                                    "outline": {
+                                        "color": [
+                                            0,
+                                            0,
+                                            0,
+                                            255
+                                        ],
+                                        "width": 1,
+                                        "type": "esriSLS",
+                                        "style": "esriSLSSolid"
+                                    }
+                                },
+                                "value": "Current",
+                                "label": "Current",
+                                "description": ""
+                            },
+                            {
+                                "symbol": {
+                                    "color": [
+                                        38,
+                                        147,
+                                        69,
+                                        255
+                                    ],
+                                    "size": 6.999999999999999,
+                                    "angle": 0,
+                                    "xoffset": 0,
+                                    "yoffset": 0,
+                                    "type": "esriSMS",
+                                    "style": "esriSMSCircle",
+                                    "outline": {
+                                        "color": [
+                                            0,
+                                            0,
+                                            0,
+                                            255
+                                        ],
+                                        "width": 1,
+                                        "type": "esriSLS",
+                                        "style": "esriSLSSolid"
+                                    }
+                                },
+                                "value": "Completed",
+                                "label": "Completed",
+                                "description": ""
+                            },
+                            {
+                                "symbol": {
+                                    "color": [
+                                        204,
+                                        159,
+                                        43,
+                                        255
+                                    ],
+                                    "size": 6.999999999999999,
+                                    "angle": 0,
+                                    "xoffset": 0,
+                                    "yoffset": 0,
+                                    "type": "esriSMS",
+                                    "style": "esriSMSCircle",
+                                    "outline": {
+                                        "color": [
+                                            0,
+                                            0,
+                                            0,
+                                            255
+                                        ],
+                                        "width": 1,
+                                        "type": "esriSLS",
+                                        "style": "esriSLSSolid"
+                                    }
+                                },
+                                "value": "Pending Completed",
+                                "label": "Pending Completed",
+                                "description": ""
+                            },
+                            {
+                                "symbol": {
+                                    "color": [
+                                        190,
+                                        30,
+                                        45,
+                                        255
+                                    ],
+                                    "size": 6.999999999999999,
+                                    "angle": 0,
+                                    "xoffset": 0,
+                                    "yoffset": 0,
+                                    "type": "esriSMS",
+                                    "style": "esriSMSCircle",
+                                    "outline": {
+                                        "color": [
+                                            0,
+                                            0,
+                                            0,
+                                            255
+                                        ],
+                                        "width": 1,
+                                        "type": "esriSLS",
+                                        "style": "esriSLSSolid"
+                                    }
+                                },
+                                "value": "Cancelled",
+                                "label": "Cancelled",
+                                "description": ""
+                            }
+                        ]
+                    }
+                },
+                "definitionExpression": "1=1 AND Status IN('Proposed','Current','Pending Completed','Completed')"
+            },
+            "url": "https://localhost:8000/arcgis/rest/services/WRI/Projects/MapServer/0"
+        },
+        {
+            "id": "dijit.Destroyable_0_graphics",
+            "opacity": 1,
+            "minScale": 0,
+            "maxScale": 0,
+            "featureCollection": {
+                "layers": []
+            }
+        }
+    ],
+    "exportOptions": {
+        "outputSize": [
+            800,
+            1100
+        ],
+        "dpi": 96
+    },
+    "layoutOptions": {
+        "customTextElements": [
+            {
+                "title": "https"
+            }
+        ],
+        "scaleBarOptions": {},
+        "legendOptions": {
+            "operationalLayers": [
+                {
+                    "id": "Centroid"
+                },
+                {
+                    "id": "polyExploded"
+                },
+                {
+                    "id": "lineExploded"
+                },
+                {
+                    "id": "pointExploded"
+                }
+            ]
+        }
+    }
+}

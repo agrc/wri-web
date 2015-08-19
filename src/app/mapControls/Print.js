@@ -4,18 +4,14 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/aspect',
     'dojo/dom-class',
-    'dojo/dom-construct',
-    'dojo/query',
     'dojo/text!app/mapControls/templates/Print.html',
     'dojo/topic',
     'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/lang',
 
-    'esri/tasks/Geoprocessor',
-    'esri/tasks/LegendLayer',
+    'esri/request',
     'esri/tasks/PrintParameters',
     'esri/tasks/PrintTask',
     'esri/tasks/PrintTemplate'
@@ -25,18 +21,14 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    aspect,
     domClass,
-    domConstruct,
-    query,
     template,
     topic,
     array,
     declare,
     lang,
 
-    Geoprocessor,
-    LegendLayer,
+    esriRequest,
     PrintParameters,
     PrintTask,
     PrintTemplate
@@ -98,11 +90,54 @@ define([
 
             this.inherited(arguments);
         },
+        setRequestPreCallback: function (patch) {
+            // summary:
+            //      set the function to inspect the print request
+            // patch: bool whether to patch or noop the precallback
+            console.log('app.mapControls.Print:setRequestPreCallback', arguments);
+
+            var precallback;
+            if (patch) {
+                precallback = lang.hitch(this, lang.hitch(this, 'patchMapServiceUrls'));
+            }
+
+            esriRequest.setRequestPreCallback(precallback);
+        },
+        patchMapServiceUrls: function (ioArgs) {
+            // summary:
+            //      patch gp request with https urls
+            // {url, content}
+            console.log('app.mapControls.Print:patchMapServiceUrls', arguments);
+
+            if (config.urls.print + '/submitJob' !== ioArgs.url) {
+                return ioArgs;
+            }
+
+            var json = JSON.parse(ioArgs.content.Web_Map_as_JSON);
+            json.operationalLayers = json.operationalLayers.map(function (layer) {
+                if (!layer.url) {
+                    return layer;
+                }
+
+                if (layer.urlTemplate) {
+                    layer.urlTemplate = layer.urlTemplate.replace(/^https/, 'http');
+                }
+
+                layer.url = layer.url.replace(/^https/, 'http');
+
+                return layer;
+            });
+
+            ioArgs.content.Web_Map_as_JSON = JSON.stringify(json);
+
+            return ioArgs;
+        },
         print: function () {
             // summary:
             //      sends data to print service
             console.log('app.map.Print::print', arguments);
 
+            this.setRequestPreCallback(true);
             this.hideLink();
             this.showLoader('Processing');
 
@@ -124,6 +159,7 @@ define([
             this.params.template.layoutOptions.legendLayers = legendLayers;
 
             this.task.execute(this.params);
+            this.setRequestPreCallback(false);
         },
         onComplete: function (evt) {
             // summary:
