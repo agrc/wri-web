@@ -66,8 +66,7 @@ define([
             this.btnText = this.printBtn.innerHTML;
 
             var template = new PrintTemplate();
-            // template.layout = 'Portrait';
-            // template.format = 'PDF';
+
             template.layoutOptions = {
                 customTextElements: [
                     {
