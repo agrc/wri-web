@@ -11,7 +11,6 @@ define([
     'dojo/dom-class',
     'dojo/dom-style',
     'dojo/on',
-    'dojo/on/throttle',
     'dojo/request/xhr',
     'dojo/text!app/project/templates/ProjectContainer.html',
     'dojo/topic',
@@ -31,7 +30,6 @@ define([
     domClass,
     domStyle,
     on,
-    throttle,
     xhr,
     template,
     topic,
@@ -75,7 +73,7 @@ define([
             this.own(
                 topic.subscribe(config.topics.projectIdsChanged,
                      lang.hitch(this, 'showDetailsForProject')),
-                on(window, throttle('resize', 1000), lang.hitch(this, '_resetHeight'))
+                on(window, 'resize', lang.hitch(this, '_resetHeight'))
             );
         },
         showDetailsForProject: function (ids) {
