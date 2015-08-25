@@ -7,7 +7,6 @@ define([
     'dojo/dom-style',
     'dojo/on',
     'dojo/promise/all',
-    'dojo/text!app/templates/featurePopupTemplate.html',
     'dojo/text!app/templates/projectPopupTemplate.html',
     'dojo/topic',
     'dojo/_base/lang',
@@ -25,7 +24,6 @@ define([
     domStyle,
     on,
     all,
-    featurePopupTemplate,
     projectPopupTemplate,
     topic,
     lang,
@@ -168,7 +166,7 @@ define([
                 [li.poly, li.line, li.point].forEach(function (layerIndex, i) {
                     var layer = new FeatureLayer(config.urls.featuresService + '/' + layerIndex, {
                         id: typesLookup[i],
-                        outFields: ['StatusDescription', 'Project_ID']
+                        outFields: ['StatusDescription', 'Project_ID', 'Title']
                     });
 
                     layer.setVisibility(false);
@@ -295,19 +293,18 @@ define([
                 cursor: 'pointer'
             });
 
-            if (isProject) {
-                // take space out of Pending Completed status
+            // take space out of Pending Completed status
+            if (evt.graphic.attributes.Status) {
                 evt.graphic.attributes.statusClass = evt.graphic.attributes.Status.replace(' ', '');
-
-                this.dialog.setTitle(lang.replace('<strong>{graphic.attributes.Title}</strong>', evt));
-                this.dialog.setContent(lang.replace(projectPopupTemplate, evt));
-            } else {
-                // take space out of Pending Completed status
-                evt.graphic.attributes.statusClass = evt.graphic.attributes.StatusDescription.replace(' ', '');
-
-                this.dialog.setTitle(lang.replace('<strong>Project Id: {graphic.attributes.Project_ID}</strong>', evt));
-                this.dialog.setContent(lang.replace(featurePopupTemplate, evt));
             }
+
+            if (evt.graphic.attributes.StatusDescription) {
+                evt.graphic.attributes.statusClass = evt.graphic.attributes.StatusDescription.replace(' ', '');
+                evt.graphic.attributes.Status = evt.graphic.attributes.StatusDescription;
+            }
+
+            this.dialog.setTitle(lang.replace('<strong>{graphic.attributes.Title}</strong>', evt));
+            this.dialog.setContent(lang.replace(projectPopupTemplate, evt));
 
             this.dialog.show(evt.mapPoint, evt.mapPoint);
         },
