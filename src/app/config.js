@@ -26,6 +26,7 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('wrimaps.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('maps.ffsl.utah.gov');
     esriConfig.defaults.map.zoomSymbol.outline.color = [18, 192, 236, 255];
 
     var gisServerBaseUrl;
@@ -89,6 +90,7 @@ define([
             reference: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Reference', type: 'Map' }),
             api: gisServerBaseUrl + apiEndpoint + '/api',
             plss: plssUrl,
+            fireThreatIndex: 'https://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireThreatIndex/MapServer',
             rangeTrendApp: 'https://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}',
             esriImagery: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
             esriLabels: 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
@@ -297,6 +299,13 @@ define([
         reference: true,
         url: config.urls.reference + '/8',
         type: 'range'
+    }, {
+        name: 'Fire Threat Index',
+        reference: true,
+        url: config.urls.fireThreatIndex,
+        type: 'cached',
+        legend: true,
+        layerIndex: 0
     }, {
         name: 'WRI Projects',
         search: true,
