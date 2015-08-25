@@ -30,5 +30,17 @@ require([
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
+        describe('showDetailsForProject', function () {
+            it('destroys child widgets', function () {
+                var destroySpy = jasmine.createSpy('destroy');
+                widget.featureDetails = {destroy: destroySpy};
+                widget.projectDetails = {destroy: destroySpy};
+                widget.featuresGrid = {destroy: destroySpy};
+
+                widget.showDetailsForProject();
+
+                expect(destroySpy.calls.count()).toBe(3);
+            });
+        });
     });
 });

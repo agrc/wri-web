@@ -84,8 +84,15 @@ define([
             // ids: an array of project id's
             console.log('app.project.ProjectContainer::showDetailsForProject', arguments);
 
+            [this.featureDetails, this.projectDetails, this.featuresGrid].forEach(function (widget) {
+                if (widget) {
+                    widget.destroy();
+                }
+            });
+
             if (!ids || ids.length !== 1) {
                 domClass.toggle(this.domNode, 'hidden', ids && ids.length !== 1);
+
                 return;
             }
 
@@ -127,12 +134,6 @@ define([
 
             domClass.add(this.errorNode, 'hidden');
             domClass.add(this.contentNode, 'hidden');
-
-            if (this.featureDetails) {
-                [this.featureDetails, this.projectDetails, this.featuresGrid].forEach(function (widget) {
-                    widget.destroy();
-                });
-            }
 
             return xhr.get(config.urls.api + '/project/' + id, {
                 handleAs: 'json',

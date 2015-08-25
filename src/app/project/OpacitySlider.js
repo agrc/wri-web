@@ -69,6 +69,13 @@ define([
             console.log('app/project/OpacitySlider:onChange', arguments);
 
             topic.publish(config.topics.opacityChanged, evt.value.newValue, this.origin, this.featureId);
+        },
+        destroy: function () {
+            // summary:
+            //      destroy the popover
+            console.log('app.project.OpacitySlider:destroy', arguments);
+
+            $(this.button).popover('destroy');
         }
     });
 });

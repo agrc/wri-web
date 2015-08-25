@@ -94,6 +94,7 @@ define([
                     return true;
                 }
             }, this.gridDiv);
+            this.own(this.grid);
 
             aspect.after(this.grid, 'renderRow', function (row, args) {
                 if (!args[0].hasChildren) {
@@ -123,6 +124,7 @@ define([
                 delete stripped.id;
                 var slider = new OpacitySlider(stripped);
                 slider.startup();
+                this.own(slider);
                 return slider.domNode;
             }
         },
