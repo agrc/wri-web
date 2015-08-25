@@ -109,6 +109,16 @@ define([
                     domClass.add(that.domNode, 'hidden');
                 });
         },
+        hide: function () {
+            // summary:
+            //      hides the container to be able to view the map
+            //
+            console.log('app.project.ProjectContainer:hide', arguments);
+
+            domClass.toggle(this.domNode, 'mini');
+            domClass.toggle(this.closeNode, 'mini');
+            domClass.toggle(this.contentNode, 'hidden');
+        },
         clearTimer: function () {
             // summary:
             //      clears the display timer if it exists
@@ -132,6 +142,7 @@ define([
 
             domClass.add(this.errorNode, 'hidden');
             domClass.add(this.contentNode, 'hidden');
+            domClass.add(this.closeNode, 'hidden');
 
             return xhr.get(config.urls.api + '/project/' + id, {
                 handleAs: 'json',
@@ -150,6 +161,7 @@ define([
 
             domClass.toggle(this.errorNode, 'hidden', response.project);
             domClass.add(this.loadingNode, 'hidden');
+            domClass.remove(this.closeNode, 'hidden');
             domClass.remove(this.domNode, 'hidden');
 
             if (!response.project) {

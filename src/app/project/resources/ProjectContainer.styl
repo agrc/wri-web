@@ -4,3 +4,28 @@
     background $projectBackground
     border 1px $projectBorder solid
     overflow-y auto
+    max-width 450px
+    .close
+        margin-top -7px
+        padding-left 10px
+        &.mini
+            -webkit-transform rotate(45deg)
+            -moz-transform rotate(45deg)
+            -ms-transform rotate(45deg)
+            -o-transform rotate(45deg)
+            transform rotate(45deg)
+            padding 0
+            color #fff
+            text-shadow none
+            opacity 1
+            -ms-filter unquote('"progidDXImageTransform.Microsoft.Alpha(Opacity=100)"')
+            filter unquote('alpha(opacity=100)')
+            margin-right -3px
+    &.mini
+        max-width 32px
+        max-height 32px !important
+        overflow hidden
+        background-color rgba(102, 102, 102, 0.80)
+        -webkit-transition max-width 0.8s
+        -moz-transition max-width 0.8s
+        transition max-width 0.8s
