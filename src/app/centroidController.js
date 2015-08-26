@@ -338,13 +338,27 @@ define([
                 pausable.resume();
             });
         },
-        onFilterQueryChanged: function (newWhere) {
+        onFilterQueryChanged: function (filters) {
             // summary:
             //      updates the def queries for all layers based on the filters
-            // newWhere: String
+            // filters: {projectAndFeatureFilter: string, nonWriProjectFilter: string}
             console.log('app.centroidController:onFilterQueryChanged', arguments);
 
-            this.filter = newWhere;
+            if (!filters) {
+                this.filter = undefined;
+                return this.showFeaturesFor();
+            }
+
+            // create private props of all filters
+            Object.keys(filters).forEach(function (key) {
+                this['_' + key] = filters[key];
+            }, this);
+
+            var cleanFilters = [this._projectAndFeatureFilter, this._nonWriProjectFilter].filter(function (item) {
+                return item;
+            });
+
+            this.filter = cleanFilters.join(' AND ');
 
             this.showFeaturesFor();
         }

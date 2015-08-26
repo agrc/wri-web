@@ -30,11 +30,35 @@ function (
             beforeEach(function () {
                 spyOn(centroidController, 'showFeaturesFor');
             });
-            it('sets filter prop', function () {
-                var newFilter = 'blah';
+            it('ignores undefined properties', function () {
+                var newFilter = {
+                    projectAndFeatureFilter: 'blah'
+                    //nonWriProjectFilter: undefined
+                };
+
                 centroidController.onFilterQueryChanged(newFilter);
 
-                expect(centroidController.filter).toEqual(newFilter);
+                expect(centroidController.filter).toEqual(newFilter.projectAndFeatureFilter);
+            });
+            it('undefined removes filter', function () {
+                var newFilter = {
+                    projectAndFeatureFilter: undefined,
+                    nonWriProjectFilter: undefined
+                };
+
+                centroidController.onFilterQueryChanged(newFilter);
+
+                expect(centroidController.filter).toEqual('');
+            });
+            it('combines filters with and', function () {
+                var newFilter = {
+                    projectAndFeatureFilter: 'blah',
+                    nonWriProjectFilter: 'yada'
+                };
+
+                centroidController.onFilterQueryChanged(newFilter);
+
+                expect(centroidController.filter).toEqual(newFilter.projectAndFeatureFilter + ' AND ' + newFilter.nonWriProjectFilter);
             });
             it('calls showFeaturesFor', function () {
                 centroidController.onFilterQueryChanged();

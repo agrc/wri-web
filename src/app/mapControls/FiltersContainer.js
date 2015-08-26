@@ -77,7 +77,9 @@ define([
                 this.own(f);
             }, this);
 
-            centroidController.filter = this.onFilterChange();
+            // startups and deps are all fouled up. Need to set on object
+            // for first pageload since topic is not caught
+            centroidController._projectAndFeatureFilter = centroidController.filter = this.onFilterChange();
 
             var mapReferenceData = new MapReferenceData({}).placeAt(this.container);
             this.own(mapReferenceData);
@@ -117,8 +119,12 @@ define([
                     wheres.push(query);
                 }
             });
+
             var where = (wheres.length) ? wheres.join(' AND ') : undefined;
-            topic.publish(config.topics.filterQueryChanged, where);
+            topic.publish(config.topics.filterQueryChanged, {
+                projectAndFeatureFilter: where
+            });
+
             return where;
         }
     });

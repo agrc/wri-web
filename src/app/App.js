@@ -70,17 +70,8 @@ define([
                 }, domConstruct.create('div', {}, document.body))
             );
 
-
             this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);
             this.childWidgets.push(this.filtersContainer);
-
-            this.setupConnections();
-        },
-        setupConnections: function () {
-            // summary:
-            //      wire events, and such
-            console.log('app.App::setupConnections', arguments);
-
         },
         startup: function () {
             // summary:

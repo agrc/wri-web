@@ -58,7 +58,9 @@ require([
                 widget.onFilterChange();
 
                 expect(config.topics.filterQueryChanged)
-                    .toHaveBeenPublishedWith('one AND two');
+                    .toHaveBeenPublishedWith({
+                            projectAndFeatureFilter: 'one AND two'
+                        });
             });
         });
     });

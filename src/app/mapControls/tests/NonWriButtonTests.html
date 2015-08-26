@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CentroidSwitchButton Tests</title>
+    <title>NonWriButton Tests</title>
 
     <!-- META TAGS -->
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../resources/App.css">
+    <link rel="stylesheet" type="text/css" href="../../../dts/dnr-style.css">
+    <link rel="stylesheet" href="../../../app/resources/App.css">
     <style type='text/css'>
         body {
             padding: 50px;
@@ -22,7 +23,7 @@
 
         require({
             baseUrl: baseUrl,
-            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle',
+            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox',
             {
                 name: 'jquery',
                 location: 'jquery/dist',
@@ -33,7 +34,7 @@
                 main: 'dist/js/bootstrap'
             }]
         }, [
-            'app/mapControls/CentroidSwitchButton',
+            'app/mapControls/NonWriButton',
 
             'dojo/domReady!'
         ], function(Module) {

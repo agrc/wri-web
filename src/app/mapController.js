@@ -5,6 +5,7 @@ define([
     'app/config',
     'app/graphicsUtils',
     'app/mapControls/CentroidSwitchButton',
+    'app/mapControls/NonWriButton',
     'app/mapControls/PrintButton',
     'app/router',
 
@@ -32,6 +33,7 @@ define([
     config,
     graphicsUtils,
     CentroidSwitchButton,
+    NonWriButton,
     PrintButton,
     router,
 
@@ -134,6 +136,7 @@ define([
 
             var centroidButton = new CentroidSwitchButton({}).placeAt(toolbarNode, 'last');
             var printButton = new PrintButton({}).placeAt(toolbarNode, 'last');
+            var nonWriButton = new NonWriButton({}).placeAt(toolbarNode, 'last');
 
             homeButton.on('home', function () {
                 router.setHash();
@@ -189,10 +192,7 @@ define([
 
             search.set('sources', sources);
 
-            this.childWidgets.push(homeButton);
-            this.childWidgets.push(printButton);
-            this.childWidgets.push(centroidButton);
-            this.childWidgets.push(search);
+            this.childWidgets = this.childWidgets.concat([homeButton, printButton, centroidButton, search, nonWriButton]);
 
             // suspend base map layers until we get the initial extent
             // trying to save requests to the server
@@ -230,6 +230,7 @@ define([
             topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
             topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
             topic.subscribe(config.topics.toggleReferenceLayerLabels, lang.hitch(this, 'toggleReferenceLayerLabels'));
+            topic.subscribe(config.topics.map.toggleWriProjects, lang.hitch(this, 'toggleProjectsFundedByWri'));
         },
         selectLayers: function (ids) {
             // summary:
@@ -660,6 +661,16 @@ define([
 
             this.baseLayers.forEach(function (l) {
                 l[action]();
+            });
+        },
+        toggleProjectsFundedByWri: function (hide) {
+            // summary:
+            //      turn on or off projects/features without uwri as a funding sources
+            // hide bool
+            console.log('app.mapController:toggleProjectsFundedByWri', arguments);
+
+            topic.publish(config.topics.filterQueryChanged, {
+                nonWriProjectFilter: hide ? 'Project_ID in (SELECT Project_ID from PROJECTCATEGORYFUNDING funding WHERE funding.CategoryFundingID=1)' : undefined
             });
         }
     };
