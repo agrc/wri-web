@@ -5,13 +5,15 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/dom-construct',
-    'dojo/topic',
-
+    'dojo/mouse',
+    'dojo/on',
     'dojo/text!app/mapControls/templates/LayerItem.html',
+    'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
+
     'bootstrap-stylus/js/button',
     'bootstrap-stylus/js/tooltip'
 ], function (
@@ -21,12 +23,14 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    declare,
-    lang,
     domClass,
     domConstruct,
+    mouse,
+    on,
+    template,
     topic,
-    template
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -63,21 +67,24 @@ define([
             console.log('app.mapControls.LayerItem::postCreate', arguments);
 
             if (this.legend) {
-                var legendContent = new Legend({
-                    mapServiceUrl: this.url,
-                    layerId: this.layerIndex,
-                    header: this.legendHeader || ''
-                });
-                legendContent.startup();
-
                 var that = this;
-                legendContent.on('loaded', function () {
-                    $(that.legendTip).tooltip({
-                        title: legendContent.domNode,
-                        html: true,
-                        placement: 'auto',
-                        delay: config.popupDelay,
-                        container: 'body'
+                on.once(this.legendTip, mouse.enter, function () {
+                    var legendContent = new Legend({
+                        mapServiceUrl: that.url,
+                        layerId: that.layerIndex,
+                        header: that.legendHeader || ''
+                    });
+                    legendContent.startup();
+
+                    legendContent.on('loaded', function () {
+                        $(that.legendTip).tooltip({
+                            title: legendContent.domNode,
+                            html: true,
+                            placement: 'auto',
+                            delay: config.popupDelay,
+                            container: 'body'
+                        });
+                        $(that.legendTip).tooltip('show');
                     });
                 });
             } else {
