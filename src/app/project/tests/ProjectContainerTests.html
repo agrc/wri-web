@@ -25,7 +25,7 @@ var widgetUnderTest;
 
 require({
     baseUrl: baseUrl,
-    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dgrid', 'dstore', 'dojox', 'xstyle', 'mustache','put-selector',
+    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dgrid', 'dstore', 'dojox', 'xstyle', 'mustache','put-selector','jsonconfig',
     {
         name: 'slider',
         location: './seiyria-bootstrap-slider',
@@ -36,10 +36,11 @@ require({
         main: 'jquery'
     }]
 }, [
+    'jquery',
     'app/project/ProjectContainer',
 
     'dojo/domReady!'
-], function (Module) {
+], function ($, Module) {
     widgetUnderTest = new Module({
     }, 'node');
 

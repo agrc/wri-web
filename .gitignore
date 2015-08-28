@@ -1,4 +1,5 @@
 *.gdb
+*.noseids
 *.odc
 *.pyc
 *.sde
@@ -8,6 +9,8 @@
 deploy
 dist/
 node_modules/
+scripts/secrets.py
+scripts/settings/__init__.py
 secrets.json
 src/agrc-jasmine-matchers/
 src/agrc/

@@ -49,6 +49,7 @@ define([
         templateString: template,
         baseClass: 'features-grid',
         widgetsInTemplate: true,
+        selectedClassName: 'selected',
 
         // Properties to be sent into constructor
 
@@ -144,6 +145,9 @@ define([
                     that.store.filter(data).forEach(function (item) {
                         that.onRowSelected(that.grid.row(item.id));
                     });
+                }),
+                topic.subscribe(config.topics.addNewFeature, function () {
+                    that.clearSelection();
                 })
             );
         },
@@ -168,10 +172,15 @@ define([
 
             topic.publish(config.topics.featureSelected, data);
 
-            var className = 'selected';
+            this.clearSelection();
+            domClass.add(row.element, this.selectedClassName);
+        },
+        clearSelection: function () {
+            // summary:
+            //      clears any selected rows in the grid
+            console.log('app.project.FeaturesGrid:clearSelection', arguments);
 
-            query('.dgrid-row.selectable', this.domNode).removeClass(className);
-            domClass.add(row.element, className);
+            query('.dgrid-row.selectable', this.domNode).removeClass(this.selectedClassName);
         }
     });
 });

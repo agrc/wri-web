@@ -13,6 +13,7 @@
             'dstore',
             'esri',
             'ijit',
+            'jsonconfig',
             'lodash',
             'put-selector',
             'xstyle',

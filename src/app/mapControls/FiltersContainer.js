@@ -50,8 +50,8 @@ define([
             this.filters = [
                 new Filter({
                     name: 'Project Status',
-                    items: config.domains.projectStatus.map(function (item) {
-                        return [item, item];
+                    items: statuses.map(function (item) {
+                        return [item[0], item[0]];
                     }),
                     fieldName: config.fieldNames.Status,
                     fieldType: Filter.TYPE_TEXT,
@@ -59,6 +59,8 @@ define([
                     defaultToSelected: statuses.filter(function (s) {
                         // cancelled and draft should be off by default
                         return s !== statuses[0] && s !== statuses[5];
+                    }).map(function (item) {
+                        return item[0];
                     })
                 }, domConstruct.create('div', null, this.container)),
                 new Filter({

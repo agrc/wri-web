@@ -113,11 +113,11 @@ require([
                 testWidget.fieldType = Filter.TYPE_NUMBER;
                 testWidget.any = false;
                 var expected = ["Project_ID IN(",
-                                "SELECT Project_ID FROM POLY WHERE FieldName IN(1,0) ",
-                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(7))"].join('');
+                                "SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ",
+                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(10))"].join('');
                 testWidget.itemClicked(1); // POLY
-                testWidget.itemClicked(0); // POLY
-                testWidget.itemClicked(7); // LINE
+                testWidget.itemClicked(2); // POLY
+                testWidget.itemClicked(10); // LINE
 
                 expect(testWidget.getQuery()).toBe(expected);
             });
@@ -125,14 +125,14 @@ require([
                 testWidget.relatedTableQuery = true;
                 testWidget.fieldType = Filter.TYPE_NUMBER;
                 testWidget.any = false;
-                var expected = ["Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN(1,0) ",
-                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(7) ",
-                                "intersect SELECT Project_ID FROM POINT WHERE FieldName IN(10,12))"].join('');
+                var expected = ["Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ",
+                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(10) ",
+                                "intersect SELECT Project_ID FROM POINT WHERE FieldName IN(6,7))"].join('');
                 testWidget.itemClicked(1); // POLY
-                testWidget.itemClicked(0); // POLY
-                testWidget.itemClicked(7); // LINE
-                testWidget.itemClicked(10); // POINT
-                testWidget.itemClicked(12); // POINT
+                testWidget.itemClicked(2); // POLY
+                testWidget.itemClicked(10); // LINE
+                testWidget.itemClicked(6); // POINT
+                testWidget.itemClicked(7); // POINT
 
                 expect(testWidget.getQuery()).toBe(expected);
             });

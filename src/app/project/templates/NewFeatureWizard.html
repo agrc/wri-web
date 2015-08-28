@@ -1,0 +1,81 @@
+<div>
+    <div class="form-group">
+        <label>Category</label>
+        <select class="form-control" data-dojo-attach-point='featureCategorySelect'
+            data-dojo-attach-event='change: onFeatureCategoryChange'>
+            <option value="">please select a category</option>
+        </select>
+    </div>
+
+    <div data-dojo-attach-point="geometryBtnsDiv" class='collapse fade form-group'>
+        <button class="btn btn-primary" disabled
+            data-dojo-attach-event='click: onDrawClick'>
+            <span class="glyphicon glyphicon-pencil"></span>
+            Draw
+        </button>
+        <button class="btn btn-primary"
+            data-dojo-attach-event='click: onUploadClick'
+            type='button'>
+            <span class="glyphicon glyphicon-cloud-upload"></span>
+            Shapefile
+        </button>
+    </div>
+
+    <div class='upload collapse fade'
+        data-dojo-attach-point='uploadDiv'>
+        <form action="post" data-dojo-attach-point="uploadForm" enctype='multipart/form-data'>
+            <div class='form-group'>
+                <label>Please upload a .zip file containing the shapefile</label>
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <span class="btn btn-primary btn-file">
+                            Browse
+                            <input type="file" name='file' id='inFile'
+                                data-dojo-attach-point='fileUploadInput'
+                                data-dojo-attach-event='change: onFileSelected'>
+                        </span>
+                    </div>
+                    <input type="text" class='form-control' data-dojo-attach-point='uploadTxtBox'>
+                </div>
+                <button class="btn btn-primary btn-block"
+                    type='button' disabled
+                    data-loading-text='Uploading...'
+                    data-dojo-attach-event='click: onUpload'
+                    data-dojo-attach-point='uploadBtn'>Upload</button>
+            </div>
+        </form>
+    </div>
+
+    <div class='collapse fade'
+        data-dojo-attach-point="featureAttributesDiv">
+        <div class="form-group hidden" data-dojo-attach-point='polyAction'>
+            <label>Action</label>
+            <select class='form-control' data-dojo-attach-point="polyActionSelect"
+                data-dojo-attach-event='change: onPolyActionSelectChange'>
+                <option value="">please select an action</option>
+            </select>
+        </div>
+        <div class="form-group hidden" data-dojo-attach-point='treatment'>
+            <label>Treatment</label>
+            <select class='form-control' data-dojo-attach-point="treatmentSelect">
+                <option value="">please select a treatment</option>
+            </select>
+        </div>
+        <div class="form-group hidden" data-dojo-attach-point='type'>
+            <label>Type</label>
+            <select class='form-control' data-dojo-attach-point="typeSelect">
+                <option value="">please select a type</option>
+            </select>
+        </div>
+        <div class="form-group hidden" data-dojo-attach-point='pointLineAction'>
+            <label>Action</label>
+            <select class="form-control" data-dojo-attach-point="pointLineActionSelect">
+                <option value="">please select an action</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" disabled>Save</button>
+        <button class="btn btn-warning" disabled>Cancel</button>
+        <button class="btn btn-success" disabled>Add Action</button>
+    </div>
+</div>

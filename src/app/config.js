@@ -72,6 +72,10 @@ define([
         //      The scale at which the base map switches to the google imagery
         switchToGoogleScale: 4000,
 
+        // centerAndZoomLevel: Number
+        //      The cache level to zoom to when zooming to a point
+        centerAndZoomLevel: 13,
+
         // defaultExtent: Extent
         //      The default extent of the map. (The state of utah)
         defaultExtent: new Extent({
@@ -96,7 +100,9 @@ define([
             esriLabels: 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
             esriTransLabels: 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer',
             googleImagery: googleImageryUrl,
-            print: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Print', type: 'GP' }) + '/Export%20Web%20Map'
+            print: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Print', type: 'GP' }) + '/Export%20Web%20Map',
+            upload: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/uploads/upload',
+            zipToGraphics: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/ZipToGraphics'
         },
 
         layerIndices: {
@@ -122,48 +128,24 @@ define([
         },
 
         featureTypesInTables: {
-            0: 'POLY',
             1: 'POLY',
-            2: 'POINT',
+            2: 'POLY',
             3: 'POLY',
-            5: 'POLY',
-            6: 'LINE',
-            7: 'LINE',
-            8: 'LINE',
+            4: 'POLY',
+            5: 'POINT',
+            6: 'POINT',
+            7: 'POINT',
+            8: 'POINT',
             9: 'POINT',
-            10: 'POINT',
-            11: 'POINT',
-            12: 'POINT'
-        },
-
-        domains: {
-            projectStatus: [
-                'Draft',
-                'Proposed',
-                'Current',
-                'Pending Completed',
-                'Completed',
-                'Cancelled'
-            ],
-            featureType: [
-                ['Terrestrial', 1],
-                ['Aquatic/Riparian', 2],
-                ['Affected Area', 3],
-                ['Easement/Aquisition', 4],
-                ['Guzzler', 5],
-                ['Trough', 6],
-                ['Water Control Structure', 7],
-                ['Other', 8],
-                ['Fish Passage Structure', 9],
-                ['Fence', 10],
-                ['Pipeline', 11],
-                ['Dam', 12],
-                ['Research', 13]
-            ]
+            10: 'LINE',
+            11: 'LINE',
+            12: 'LINE',
+            13: 'POLY'
         },
 
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
+            addNewFeature: 'wri/addNewFeature',
             featureSelected: 'wri/featureSelected',
             opacityChanged: 'wri/opacityChanged',
             filterQueryChanged: 'wri/filterQueryChanged',
@@ -185,6 +167,7 @@ define([
             },
             toggleReferenceLayer: 'wri/toggleReferenceLayer',
             toggleReferenceLayerLabels: 'wri/toggleReferenceLayerLabels',
+            startDrawingFeature: 'wri/startDrawingFeature',
             toast: 'wri/toast'
         },
 
@@ -322,5 +305,8 @@ define([
         highlightSymbol: config.symbols.selected.poly
     }];
 
+    require(['dojo/text!jsonconfig/config.json'], function (txt) {
+        config.domains = JSON.parse(txt);
+    });
     return config;
 });

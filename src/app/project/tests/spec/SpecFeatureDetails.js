@@ -49,7 +49,7 @@ require([
                 expect(widget.featureTabContents.innerHTML.length).toBeGreaterThan(5);
             });
             it('shows the feature tab', function () {
-                expect(domClass.contains(widget.featureTabContents, 'hidden')).toBe(true);
+                expect(domClass.contains(widget.featureTabContents.parentElement, 'hidden')).toBe(true);
 
                 widget.onFeatureSelected({});
 

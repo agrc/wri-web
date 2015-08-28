@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/project/NewFeatureWizard',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -19,6 +20,7 @@ define([
     'dojo/NodeList-dom'
 ], function (
     config,
+    NewFeatureWizard,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -75,7 +77,8 @@ define([
             console.log('app.project.FeatureDetails::setupConnections', arguments);
 
             this.own(
-                topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected'))
+                topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected')),
+                topic.subscribe(config.topics.addNewFeature, lang.hitch(this, 'startNewFeatureWizard'))
             );
         },
         onFeatureSelected: function (rowData) {
@@ -94,6 +97,20 @@ define([
             // show feature tab
             query('.hidden', this.domNode).removeClass('hidden');
             this.featureTabLink.click();
+        },
+        startNewFeatureWizard: function () {
+            // summary:
+            //      starts the add new feature wizard
+            console.log('app.project.FeatureDetails:startNewFeatureWizard', arguments);
+
+            domConstruct.empty(this.featureTabContents);
+
+            // show feature tab
+            query('.hidden', this.domNode).removeClass('hidden');
+            this.featureTabLink.click();
+
+            var wizard = new NewFeatureWizard({}, this.featureTabContents);
+            wizard.startup();
         }
     });
 });

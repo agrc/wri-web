@@ -44,6 +44,13 @@ define([
             setTimeout(function () {
                 topic.publish(config.topics.map.toggleAdjacent, domClass.contains(that.toggleNode, 'active'));
             }, 0);
+        },
+        onAddFeatureClick: function () {
+            // summary:
+            //      fires topics
+            console.log('app.project.ProjectDetails:onAddFeatureClick', arguments);
+
+            topic.publish(config.topics.addNewFeature);
         }
     });
 });

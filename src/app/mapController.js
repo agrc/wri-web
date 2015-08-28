@@ -231,6 +231,7 @@ define([
             topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
             topic.subscribe(config.topics.toggleReferenceLayerLabels, lang.hitch(this, 'toggleReferenceLayerLabels'));
             topic.subscribe(config.topics.map.toggleWriProjects, lang.hitch(this, 'toggleProjectsFundedByWri'));
+            topic.subscribe(config.topics.addNewFeature, lang.hitch(this, 'clearSelectedFeature'));
         },
         selectLayers: function (ids) {
             // summary:
@@ -402,13 +403,7 @@ define([
 
             var graphic = this.getGraphicById(data.featureId, data.origin);
 
-            if (this.lastSelectedGraphic) {
-                var resetSymbol = this.lastSelectedOriginalSymbol;
-                if (this.lastSelectedGraphic.symbol) {
-                    resetSymbol.color.a = this.lastSelectedGraphic.symbol.color.a;
-                }
-                this.lastSelectedGraphic.setSymbol(resetSymbol);
-            }
+            this.clearSelectedFeature();
 
             var newSelectionSymbol = config.symbols.selected[data.origin];
 
@@ -425,6 +420,19 @@ define([
 
             graphic.setSymbol(newSelectionSymbol);
             graphic.getDojoShape().moveToFront();
+        },
+        clearSelectedFeature: function () {
+            // summary:
+            //      resets the symbol of the previously selected feature
+            console.log('app.mapController:clearSelectedFeatures', arguments);
+
+            if (this.lastSelectedGraphic) {
+                var resetSymbol = this.lastSelectedOriginalSymbol;
+                if (this.lastSelectedGraphic.symbol) {
+                    resetSymbol.color.a = this.lastSelectedGraphic.symbol.color.a;
+                }
+                this.lastSelectedGraphic.setSymbol(resetSymbol);
+            }
         },
         changeOpacity: function (newValue, origin, featureId) {
             // summary:
@@ -479,18 +487,16 @@ define([
                 extent = config.defaultExtent;
 
                 this.map.setExtent(extent, false);
-
-                return extent;
-            }
-
-            if (!extent.getWidth() && !extent.getHeight()) {
+            } else if (extent.type && extent.type === 'point') {
+                // extent is actually a point geometry (see NewFeatureWizard:onGeometryDefined)
+                this.map.centerAndZoom(extent, config.centerAndZoomLevel);
+            } else if (!extent.getWidth() && !extent.getHeight()) {
                 // we are looking at the extent of a point
-                this.map.centerAndZoom(new Point(extent.xmin, extent.ymin, this.map.spatialReference), 12);
-
-                return extent;
+                this.map.centerAndZoom(new Point(extent.xmin, extent.ymin, this.map.spatialReference),
+                    config.centerAndZoomLevel);
+            } else {
+                this.map.setExtent(extent, true);
             }
-
-            this.map.setExtent(extent, true);
 
             return extent;
         },
