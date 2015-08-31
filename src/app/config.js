@@ -272,16 +272,14 @@ define([
         type: 'dynamic',
         searchFields: [flds.LABEL_FEDERAL],
         displayField: flds.LABEL_FEDERAL,
-        highlightSymbol: config.symbols.selected.poly,
-        legend: true
+        highlightSymbol: config.symbols.selected.poly
     }, {
         name: 'Sage Grouse Areas',
         reference: true,
         url: config.urls.reference,
         layerIndex: 5,
         labelsIndex: 5,
-        type: 'dynamic',
-        legend: true
+        type: 'dynamic'
     }, {
         name: 'PLSS Sections',
         reference: true,
