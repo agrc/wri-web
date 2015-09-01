@@ -1,4 +1,5 @@
 /* jshint camelcase:false */
+/* jshint maxcomplexity:false */
 var osx = 'OS X 10.10';
 var windows = 'Windows 8.1';
 var browsers = [{
@@ -18,6 +19,8 @@ var browsers = [{
 
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
+
+    var path = require('path');
     var port = grunt.option('port') || 8000;
     var jasminePort = grunt.option('jasminePort') || 8001;
 
@@ -39,7 +42,13 @@ module.exports = function (grunt) {
         'src/app/package.json',
         'src/app/config.js'
     ];
-    var secrets;
+    var secrets = {
+        ags: {
+            local: {},
+            dev: {},
+            at: {}
+        }
+    };
     var sauceConfig = {
         urls: ['http://127.0.0.1:' + jasminePort + '/_SpecRunner.html'],
         tunnelTimeout: 120,
@@ -60,19 +69,7 @@ module.exports = function (grunt) {
         sauceConfig.username = secrets.sauce_name;
         sauceConfig.key = secrets.sauce_key;
     } catch (e) {
-        // swallow for build server
-        secrets = {
-            stage: {
-                host: '',
-                username: '',
-                password: ''
-            },
-            prod: {
-                host: '',
-                username: '',
-                password: ''
-            }
-        };
+        grunt.log.ok();
     }
 
     // Project configuration.
@@ -88,6 +85,65 @@ module.exports = function (grunt) {
                         'src/app/**/*.js'
                     ]
                 }]
+            }
+        },
+        arcgis_press: {
+            options: {
+                mapServerBasePath: path.join(process.cwd(), 'maps'),
+                commonServiceProperties: {
+                    minInstancesPerNode: 1,
+                    maxInstancesPerNode: 6
+                },
+                services: {
+                   centroids: {
+                       type: 'MapServer',
+                       folder: 'WRI',
+                       serviceName: 'Projects',
+                       resource: 'wri.projects.local.mxd'
+                   },
+                   features: {
+                       serviceName: 'Features',
+                       folder: 'WRI',
+                       type: 'MapServer',
+                       resource: 'wri.features.local.mxd'
+                   },
+                   reference: {
+                       serviceName: 'Reference',
+                       folder: 'WRI',
+                       type: 'MapServer',
+                       resource: 'wri.reference.gdb.mxd'
+                   }
+               }
+            },
+            local: {
+                options: {
+                   server: {
+                       host: secrets.ags.local.host,
+                       username: secrets.ags.local.username,
+                       password: secrets.ags.local.password
+                   },
+                   commonServiceProperties: {
+                       maxInstancesPerNode: 2
+                   }
+               }
+            },
+            dev: {
+                options: {
+                   server: {
+                       host: secrets.ags.dev.host,
+                       username: secrets.ags.dev.username,
+                       password: secrets.ags.dev.password
+                   }
+               }
+            },
+            at: {
+                options: {
+                   server: {
+                       host: secrets.ags.at.host,
+                       username: secrets.ags.at.username,
+                       password: secrets.ags.at.password
+                   }
+               }
             }
         },
         bump: {
@@ -346,7 +402,20 @@ module.exports = function (grunt) {
                 options: sauceConfig
             }
         },
-        secrets: secrets,
+        shell: {
+            options: {
+                stdout: true
+            },
+            local: {
+                command: 'python maps/RepointMXD.py L'
+            },
+            dev: {
+                command: 'python maps/RepointMXD.py D'
+            },
+            at: {
+                command: 'python maps/RepointMXD.py A'
+            }
+        },
         stylus: {
             main: {
                 options: {
@@ -438,5 +507,17 @@ module.exports = function (grunt) {
         'configureProxies:built',
         'connect:built',
         'watch:built'
+    ]);
+    grunt.registerTask('press', [
+        'shell:local',
+        'arcgis_press:local'
+    ]);
+    grunt.registerTask('press-dev', [
+        'shell:dev',
+        'arcgis_press:dev'
+    ]);
+    grunt.registerTask('press-at', [
+        'shell:at',
+        'arcgis_press:at'
     ]);
 };

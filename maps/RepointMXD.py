@@ -3,14 +3,20 @@
 # catalog with the names below
 import arcpy
 import glob
+import sys
 
 
 db = r'Database Connections\\'
 local = db + 'WRI_LOCAL.sde'
 dev = db + 'WRI_DEV as wri_user.sde'
 at = db + 'WRI_AT as wri_user.sde'
+target = None
 
-target = raw_input('Local (L), Dev (D), or AT (A)? ')
+if len(sys.argv) > 1:
+    target = sys.argv[1]
+
+if not target:
+    target = raw_input('Local (L), Dev (D), or AT (A)? ')
 
 if target == 'D':
     dest = dev
