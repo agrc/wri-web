@@ -110,10 +110,22 @@ define([
                 config.urls.esriTransLabels,
                 { maxScale: config.switchToGoogleScale }
             );
-            this.baseLayers = [googleImageryLyr, esriImageryLyr, esriLabelsLyr, esriTransLabelsLyr];
-            this.map.addLayers(this.baseLayers);
 
             this.map.on('load', function () {
+                console.debug('map is loaded', that);
+                that.map.on('extent-change', function (change) {
+                    topic.publish(config.topics.map.extentChanged, change);
+                });
+                that.map.on('mouse-drag-start', function (evt) {
+                    if (evt.shiftKey) {
+                        topic.publish(config.topics.map.rubberBandZoom, true);
+                    }
+                });
+                that.map.on('mouse-drag-end', function (evt) {
+                    if (evt.shiftKey) {
+                        topic.publish(config.topics.map.rubberBandZoom, false);
+                    }
+                });
                 var btn = that.map.addButton(that.map.buttons.back, {
                     placeAt: toolbarNode
                 });
@@ -124,6 +136,9 @@ define([
                 });
                 domClass.add(btn, 'toolbar-item');
             });
+
+            this.baseLayers = [googleImageryLyr, esriImageryLyr, esriLabelsLyr, esriTransLabelsLyr];
+            this.map.addLayers(this.baseLayers);
 
             var homeButton = new HomeButton({
                 map: this.map,
@@ -199,21 +214,6 @@ define([
             this.toggleBaseLayers('suspend');
 
             this.setupConnections();
-            this.map.on('load', function () {
-                that.map.on('extent-change', function (change) {
-                    topic.publish(config.topics.map.extentChanged, change);
-                });
-                that.map.on('mouse-drag-start', function (evt) {
-                    if (evt.shiftKey) {
-                        topic.publish(config.topics.map.rubberBandZoom, true);
-                    }
-                });
-                that.map.on('mouse-drag-end', function (evt) {
-                    if (evt.shiftKey) {
-                        topic.publish(config.topics.map.rubberBandZoom, false);
-                    }
-                });
-            });
         },
         setupConnections: function () {
             // summary:
