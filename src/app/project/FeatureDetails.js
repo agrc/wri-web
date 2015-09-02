@@ -4,11 +4,11 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/query',
-    'dojo/text!app/project/templates/FeatureData.html',
+    'dojo/text!app/project/templates/FeatureDataTemplate.html',
     'dojo/text!app/project/templates/FeatureDetails.html',
+    'dojo/text!app/project/templates/ProjectDataTemplate.html',
     'dojo/topic',
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -23,11 +23,11 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    domClass,
     domConstruct,
     query,
-    featureDataTxt,
+    featureTemplate,
     template,
+    projectTemplate,
     topic,
     declare,
     lang,
@@ -40,6 +40,21 @@ define([
         templateString: template,
         baseClass: 'feature-details',
 
+        templateFunctions: {
+            hasCounty: function () {
+                return this.county && this.county.length;
+            },
+            hasLandOwnership: function () {
+                return this.landOwnership && this.landOwnership.length;
+            },
+            hasFocusArea: function () {
+                return this.focusArea && this.focusArea.length;
+            },
+            hasSageGrouse: function () {
+                return this.sageGrouse && this.sageGrouse.length;
+            }
+        },
+
         // Properties to be sent into constructor
 
         postCreate: function () {
@@ -49,9 +64,8 @@ define([
 
             this.setupConnections();
 
-            if (!this.streamMiles) {
-                domClass.add(this.streamMilesDiv, 'hidden');
-            }
+            mustache.parse(featureTemplate);
+            domConstruct.place(mustache.render(projectTemplate, this), this.projectDetailsNode);
 
             this.inherited(arguments);
         },
@@ -70,9 +84,12 @@ define([
             // rowData: Object
             console.log('app/project/FeatureDetails:onFeatureSelected', arguments);
 
+            Object.keys(this.templateFunctions).forEach(function (key) {
+                rowData[key] = this.templateFunctions[key];
+            }, this);
+
             domConstruct.empty(this.featureTabContents);
-            domConstruct.place(domConstruct.toDom(mustache.render(featureDataTxt, rowData)),
-                this.featureTabContents);
+            domConstruct.place(mustache.render(featureTemplate, rowData), this.featureTabContents);
 
             // show feature tab
             query('.hidden', this.domNode).removeClass('hidden');

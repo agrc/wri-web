@@ -42,22 +42,6 @@ require([
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
-        describe('postCreate', function () {
-            it('hides stream miles if none are passed in', function () {
-                var widget2 = new WidgetUnderTest({
-                    title: 'asdf',
-                    projectId: 1234,
-                    status: 'aasdf',
-                    description: 'asdf',
-                    acres: 123,
-                    streamMiles: null,
-                    leadAgency: 'asdf',
-                    region: 'asdf',
-                    projectManagerName: 'asdf'
-                });
-                expect(domClass.contains(widget2.streamMilesDiv, 'hidden')).toBe(true);
-            });
-        });
         describe('onFeatureSelected', function () {
             it('places template in contents', function () {
                 widget.onFeatureSelected({});

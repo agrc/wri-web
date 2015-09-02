@@ -12,19 +12,8 @@
         <div class="tab-pane hidden" id="${id}_featureTab"
             data-dojo-attach-point='featureTabContents'></div>
         <div class="tab-pane active" id="${id}_detailsTab">
-            <div class="project-information" id="${id}_projectDetails">
-                <label>Description</label>
-                <p>${description}</p>
-                <label>Lead Agency:</label> <span>${leadAgency}</span>
-                <br>
-                <label>Acres:</label> <span>{acres}</span>
-                <br>
-                <div data-dojo-attach-point="streamMilesDiv">
-                    <label>Stream Miles:</label> <span>{streamMiles}</span>
-                </div>
-                <label>Region:</label> <span>${region}</span>
-                <br>
-                <label>Project Manager:</label> <span>${projectManagerName}</span>
+            <div class="project-information" id="${id}_projectDetails"
+                data-dojo-attach-point='projectDetailsNode'>
             </div>
         </div>
     </div>
