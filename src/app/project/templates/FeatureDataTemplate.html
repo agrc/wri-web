@@ -1,0 +1,52 @@
+<p class="tight">
+    <label>Type:</label> {{type}}</p>
+{{#subType}}
+<p class="tight">
+    <label>Subtype:</label> {{subType}}</p>
+{{/subType}}
+{{#action}}
+<p class="tight">
+    <label>Action:</label> {{action}}</p>
+{{/action}}
+{{#description}}
+<p class="tight">
+    <label>Description:</label> {{description}}</p>
+{{/description}}
+{{#size}}
+<p class="tight">
+    <label>Size:</label> {{size}}</p>
+{{/size}}
+{{#hasCounty}}
+<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+    <label>County</label>
+    {{#county}}
+    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
+    {{/county}}
+</div>
+{{/hasCounty}}
+{{#hasLandOwnership}}
+<div class="pull-left well" style="width: 47%; margin:0 5px 5px 5px">
+    <label>Land Ownership</label>
+    {{#landOwnership}}
+    <div>{{name}}, {{extra}}{{#space}}: {{space}}{{/space}}</div>
+    {{/landOwnership}}
+</div>
+{{/hasLandOwnership}}
+{{#hasFocusArea}}
+<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+    <label>Focus Area</label>
+    {{#focusArea}}
+    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
+    {{/focusArea}}
+</div>
+{{/hasFocusArea}}
+{{#hasSageGrouse}}
+<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+    <label>Sage Grouse</label>
+    {{#sageGrouse}}
+    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
+    {{/sageGrouse}}
+</div>
+{{/hasSageGrouse}}
+</div>
+<div class="clearfix"></div>

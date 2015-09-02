@@ -46,7 +46,12 @@ require({
         description: 'description text',
         leadAgency: 'Lead Agency',
         region: 'Region',
-        projectManagerName: 'Project Manager'
+        projectManagerName: 'Project Manager',
+        affectedAcres: '15000 acres',
+        terrestrialAcres: '1200 acres',
+        aquaticAcres: '5000 acres',
+        easementAcres: '8000 acres',
+        streamMiles: '5 mi'
     }, 'node');
 
     widgetUnderTest.startup();
@@ -54,21 +59,89 @@ require({
     on(document.getElementById('point'), 'click', lang.hitch(widgetUnderTest,
         lang.partial(widgetUnderTest.onFeatureSelected, {
             action: null,
+            description: 'we created a point on the ground somewhere that represents something.',
             featureId: 5,
             origin: 'point',
-            size: null,
+            size: 3,
             subType: null,
-            type: 'Other'
+            type: 'Other',
+            hasCounty: function (){
+                return this.county && this.county.length;
+            },
+            hasLandOwnership: function (){
+                return this.landOwnership && this.landOwnership.length;
+            },
+            hasFocusArea: function (){
+                return this.focusArea && this.focusArea.length;
+            },
+            hasSageGrouse: function (){
+                return this.sageGrouse && this.sageGrouse.length;
+            },
+            county: [{
+                name: 'Salt Lake'
+            }, {
+                name: 'Davis'
+            }],
+            landOwnership: [{
+                name: 'BLM',
+                extra: 'Someone'
+            },{
+                name: 'BLM',
+                extra: 'Someone'
+            },{
+                name: 'BLM',
+                extra: 'Someone'
+            }],
+            focusArea: [{
+                name: 'North'
+            },{
+                name: 'South'
+            },{
+                name: 'East'
+            }],
+            sageGrouse: [{
+                name: 'Bird Region'
+            },{
+                name: 'Grassy Region'
+            },{
+                name: 'Green Region'
+            }]
         }))
     );
     on(document.getElementById('line'), 'click', lang.hitch(widgetUnderTest,
         lang.partial(widgetUnderTest.onFeatureSelected, {
-            action: null,
+            action: 'Underground pipe',
             featureId: 4,
             origin: 'line',
             size: '2124.51 ft',
-            subType: null,
-            type: 'Pipeline'
+            subType: 'Metal',
+            type: 'Pipeline',
+            hasCounty: function (){
+                return this.county && this.county.length;
+            },
+            hasLandOwnership: function (){
+                return this.landOwnership && this.landOwnership.length;
+            },
+            hasFocusArea: function (){
+                return this.focusArea && this.focusArea.length;
+            },
+            hasSageGrouse: function (){
+                return this.sageGrouse && this.sageGrouse.length;
+            },
+            county: [],
+            landOwnership: [{
+                name: 'BLM',
+                extra: 'Someone',
+                space: '125 feet'
+            },{
+                name: 'BLM',
+                extra: 'Someone',
+                space: '125 feet'
+            },{
+                name: 'BLM',
+                extra: 'Someone',
+                space: '125 feet'
+            }]
         }))
     );
     on(document.getElementById('poly'), 'click', lang.hitch(widgetUnderTest,
@@ -78,7 +151,52 @@ require({
             origin: 'poly',
             size: '163.08 mi2',
             subType: null,
-            type: 'Terrestrial'
+            type: 'Terrestrial',
+            hasCounty: function (){
+                return this.county && this.county.length;
+            },
+            hasLandOwnership: function (){
+                return this.landOwnership && this.landOwnership.length;
+            },
+            hasFocusArea: function (){
+                return this.focusArea && this.focusArea.length;
+            },
+            hasSageGrouse: function (){
+                return this.sageGrouse && this.sageGrouse.length;
+            },
+            landOwnership: [{
+                name: 'BLM',
+                extra: 'Someone',
+                space: '125 acres'
+            },{
+                name: 'BLM',
+                extra: 'Someone',
+                space: '125 acres'
+            },{
+                name: 'BLM',
+                extra: 'Someone',
+                space: '125 acres'
+            }],
+            focusArea: [{
+                name: 'North',
+                space: '50 acres'
+            },{
+                name: 'South',
+                space: '50 acres'
+            },{
+                name: 'East',
+                space: '50 acres'
+            }],
+            sageGrouse: [{
+                name: 'Bird Region',
+                space: '25 acres'
+            },{
+                name: 'Grassy Region',
+                space: '25 acres'
+            },{
+                name: 'Green Region',
+                space: '25 acres'
+            }]
         }))
     );
 

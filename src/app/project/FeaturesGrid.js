@@ -153,7 +153,20 @@ define([
             // row: dgrid row
             console.log('app/project/FeaturesGrid:onRowSelected', arguments);
 
-            topic.publish(config.topics.featureSelected, row.data);
+            var data = row.data;
+
+            var parentId = data.parent;
+            if (parentId) {
+                var parent = this.features.filter(function (child) {
+                    return child.id === parentId;
+                });
+
+                if (parent && parent.length === 1) {
+                    data.type = parent[0].type;
+                }
+            }
+
+            topic.publish(config.topics.featureSelected, data);
 
             var className = 'selected';
 
