@@ -85,11 +85,11 @@ define([
                 }
             };
 
-            var store = new (declare([Memory, DStoreTree]))({});
+            this.store = new (declare([Memory, DStoreTree]))({});
 
             this.grid = new (declare([Grid, Tree]))({
                 columns: columns,
-                collection: store.getRootCollection(),
+                collection: this.store.getRootCollection(),
                 shouldExpand: function () {
                     return true;
                 }
@@ -105,8 +105,8 @@ define([
             });
 
             // Sets up the selectable stuff above with the aspect.
-            store.setData(this.features);
-            this.grid.set('collection', store.getRootCollection());
+            this.store.setData(this.features);
+            this.grid.set('collection', this.store.getRootCollection());
             this.grid.refresh();
 
             this.setupConnections();
@@ -141,7 +141,7 @@ define([
                     }
                 }),
                 topic.subscribe(config.topics.map.featureSelected, function (data) {
-                    that.grid.collection.filter(data).forEach(function (item) {
+                    that.store.filter(data).forEach(function (item) {
                         that.onRowSelected(that.grid.row(item.id));
                     });
                 })
