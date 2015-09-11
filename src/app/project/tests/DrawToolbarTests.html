@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DrawToolbar Tests</title>
+
+    <!-- META TAGS -->
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="../../../dts/dnr-style.css">
+    <link rel="stylesheet" href="../../../app/resources/App.css">
+    <style type='text/css'>
+        body {
+            background-color: green;
+        }
+        #parent {
+            top: 50px;
+            bottom: 50px;
+            position: absolute;
+            background-color: darkGreen;
+            width: 100%;
+        }
+        #mapDiv {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- JAVASCRIPT -->
+    <script type='text/javascript' src="../../../dojo/dojo.js"></script>
+    <script type="text/javascript">
+        var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../../';
+        var widgetUnderTest;
+
+        require({
+            baseUrl: baseUrl,
+            packages: ['app', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', 'bootstrap-stylus', 'agrc', 'jsonconfig',
+            {
+                name: 'jquery',
+                location: 'jquery/dist',
+                main: 'jquery'
+            },{
+                name: 'spin',
+                location: './spinjs',
+                main: 'spin'
+            }, {
+                name: 'bootstrap',
+                location: 'bootstrap',
+                main: 'dist/js/bootstrap'
+            }]
+        }, [
+            'jquery',
+            'app/project/DrawToolbar',
+            'app/config',
+            'agrc/widgets/map/BaseMap',
+            'dojo/topic',
+            'esri/graphic',
+            'esri/geometry/geometryEngine',
+            'esri/layers/GraphicsLayer',
+
+            'dojo/domReady!'
+        ], function($, Module, config, Map, topic, Graphic, geometryEngine, GraphicsLayer) {
+            var topics = config.topics.feature;
+            map = new Map('mapDiv');
+            map.on('load', function () {
+                map.disableDoubleClickZoom();
+                gLayer = new GraphicsLayer();
+                gLayer.on('click', function (evt) {
+                    topic.publish(topics.selectedForEditing, evt.graphic);
+                });
+                map.addLayer(gLayer);
+            });
+            widgetUnderTest = new Module({
+                map: map
+            }, 'node');
+
+            widgetUnderTest.startup();
+
+            topic.publish(topics.startDrawing, 'Water Control Structure');
+            topic.subscribe(topics.drawingComplete, function (geometry) {
+                gLayer.add(new Graphic(geometry, config.symbols.selected.poly));
+            });
+            topic.subscribe(topics.cutFeatures, function (geometry) {
+                gLayer.graphics.forEach(function (g) {
+                    var newGeometries = geometryEngine.cut(g.geometry, geometry);
+                    if (newGeometries.length > 0) {
+                        var largestArea;
+                        var largestGeometry;
+                        newGeometries.forEach(function (geo) {
+                            if (!largestArea || geometryEngine.planarArea(geo, 'square-feet') > largestArea) {
+                                largestArea = geometryEngine.planarArea(geo, 'square-feet');
+                                largestGeometry = geo;
+                            }
+                        });
+                        g.setGeometry(largestGeometry);
+                    }
+                });
+            });
+        });
+</script>
+</head>
+<body>
+    <div id="parent" class='app'>
+        <div id="mapDiv"></div>
+        <div id="node"></div>
+    </div>
+</body>
+</html>

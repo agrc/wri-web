@@ -10,7 +10,9 @@ define([
     'dojo/text!app/project/templates/NewFeatureWizard.html',
     'dojo/topic',
     'dojo/_base/declare',
+    'dojo/_base/lang',
 
+    'esri/graphic',
     'esri/layers/GraphicsLayer',
     'esri/request',
     'esri/tasks/DataFile',
@@ -31,12 +33,21 @@ define([
     template,
     topic,
     declare,
+    lang,
 
+    Graphic,
     GraphicsLayer,
     esriRequest,
     DataFile,
     Geoprocessor
 ) {
+    // this needs to be here because esri/geometry/geometryEngine doesn't
+    // play nice with the dojo build system
+    var geometryEngine;
+    require(['esri/geometry/geometryEngine'], function (geoEngine) {
+        geometryEngine = geoEngine;
+    });
+
     var loadItemsIntoSelect = function (items, select) {
         // summary:
         //      add the items as options to the select
@@ -77,6 +88,12 @@ define([
         //      The layer that contains the geometry of the new feature
         graphicsLayer: null,
 
+        // originalGraphicJsons: Object[]
+        //      A cloned list of the any existing graphics at the point when the
+        //      user clicks the draw/edit button. This is used to restore them if
+        //      the user clicks the cancel button on the drawing toolbar.
+        originalGraphicJsons: null,
+
         // Properties to be sent into constructor
 
         postCreate: function () {
@@ -91,12 +108,30 @@ define([
             this.gp = new Geoprocessor(config.urls.zipToGraphics);
 
             this.graphicsLayer = new GraphicsLayer();
+            this.own(
+                this.graphicsLayer.on('click', function (evt) {
+                    topic.publish(config.topics.feature.selectedForEditing, evt.graphic);
+                }),
+                topic.subscribe(config.topics.feature.drawingComplete, lang.hitch(this, 'onGeometryDefined')),
+                topic.subscribe(config.topics.feature.cutFeatures, lang.hitch(this, 'onCutFeatures')),
+                topic.subscribe(config.topics.feature.cancelDrawing, lang.hitch(this, 'onCancelDrawing'))
+            );
             topic.publish(config.topics.layer.add, {
                 graphicsLayers: [this.graphicsLayer],
                 dynamicLayers: []
             });
 
             this.inherited(arguments);
+        },
+        onCancelDrawing: function () {
+            // summary:
+            //      restore original graphics
+            console.log('app.project.NewFeatureWizard:onCancelDrawing', arguments);
+
+            this.graphicsLayer.clear();
+            this.originalGraphicJsons.forEach(function (json) {
+                this.graphicsLayer.add(new Graphic(json));
+            }, this);
         },
         onFeatureCategoryChange: function () {
             // summary:
@@ -188,7 +223,7 @@ define([
                     featureCategory: that.featureCategorySelect.value
                 }).then(function (results) {
                     that.onFileSelected();
-                    that.onGeometryDefined(results[0].value.features[0]);
+                    that.onGeometryDefined(results[0].value.features[0].geometry, true, true);
                     results[1].value.forEach(function (message) {
                         var parts = message.split(':');
                         topic.publish(config.topics.toast, parts[1], parts[0]);
@@ -202,17 +237,29 @@ define([
             console.log('app.project.NewFeatureWizard:onDrawClick', arguments);
 
             $(this.uploadDiv).collapse('hide');
-            topic.publish(config.topics.startDrawingFeature, this.featureCategorySelect.value);
+
+            // store graphics in case we need to restore them after the cancel button is
+            // clicked on the draw toolbar
+            this.originalGraphicJsons = this.graphicsLayer.graphics.map(function (g) {
+                return g.toJson();
+            });
+
+            topic.publish(config.topics.feature.startDrawing, this.featureCategorySelect.value);
         },
-        onGeometryDefined: function (graphic) {
+        onGeometryDefined: function (geometry, zoom, clear) {
             // summary:
             //      feature has been drawn or shapefile has been uploaded
-            // graphic: Graphic
+            // geometry: Geometry
+            // zoom: Boolean (optional)
+            //      zoom to geometry
+            // clear: Boolean (optional)
+            //      clear any previous graphics
             console.log('app.project.NewFeatureWizard:onGeometryDefined', arguments);
 
             $(this.uploadDiv).collapse('hide');
             $(this.featureAttributesDiv).collapse('show');
 
+            var graphic = new Graphic(geometry);
             var symbol;
             var symbols = config.symbols.selected;
             switch (graphic.geometry.type) {
@@ -226,12 +273,16 @@ define([
                     symbol = symbols.point;
             }
             graphic.setSymbol(symbol);
-            this.graphicsLayer.clear();
+            if (clear) {
+                this.graphicsLayer.clear();
+            }
             this.graphicsLayer.add(graphic);
-            if (graphic.geometry.type !== 'point') {
-                topic.publish(config.topics.map.setExtent, graphic.geometry.getExtent());
-            } else {
-                topic.publish(config.topics.map.setExtent, graphic.geometry);
+            if (zoom) {
+                if (graphic.geometry.type !== 'point') {
+                    topic.publish(config.topics.map.setExtent, graphic.geometry.getExtent());
+                } else {
+                    topic.publish(config.topics.map.setExtent, graphic.geometry);
+                }
             }
         },
         onPolyActionSelectChange: function () {
@@ -275,6 +326,27 @@ define([
             }
 
             return preface;
+        },
+        onCutFeatures: function (cutGeometry) {
+            // summary:
+            //      cut all features in the graphics layer with the cut geometry
+            // cutGeometry: Line Geometry
+            console.log('app.project.NewFeatureWizard:onCutFeatures', arguments);
+
+            this.graphicsLayer.graphics.forEach(function (g) {
+                var newGeometries = geometryEngine.cut(g.geometry, cutGeometry);
+                if (newGeometries.length > 0) {
+                    var largestArea;
+                    var largestGeometry;
+                    newGeometries.forEach(function (geo) {
+                        if (!largestArea || geometryEngine.planarArea(geo, 'square-feet') > largestArea) {
+                            largestArea = geometryEngine.planarArea(geo, 'square-feet');
+                            largestGeometry = geo;
+                        }
+                    });
+                    g.setGeometry(largestGeometry);
+                }
+            });
         }
     });
 });

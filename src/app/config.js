@@ -145,7 +145,6 @@ define([
 
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
-            addNewFeature: 'wri/addNewFeature',
             featureSelected: 'wri/featureSelected',
             opacityChanged: 'wri/opacityChanged',
             filterQueryChanged: 'wri/filterQueryChanged',
@@ -167,7 +166,15 @@ define([
             },
             toggleReferenceLayer: 'wri/toggleReferenceLayer',
             toggleReferenceLayerLabels: 'wri/toggleReferenceLayerLabels',
-            startDrawingFeature: 'wri/startDrawingFeature',
+            feature: {
+                startNewFeatureWizard: 'wri/feature/startNewFeatureWizard',
+                startDrawing: 'wri/feature/startDrawing',
+                drawingComplete: 'wri/feature/drawingComplete',
+                cutFeatures: 'wri/feature/cutFeatures',
+                selectedForEditing: 'wri/feature/selectedForEditing',
+                drawEditComplete: 'wri/feature/drawEditComplete',
+                cancelDrawing: 'wri/features/cancelDrawing'
+            },
             toast: 'wri/toast'
         },
 

@@ -2,7 +2,7 @@
 profile = {
     resourceTags: {
         test: function (mid) {
-            return /\/Spec/.test(mid);
+            return /\/tests\//.test(mid);
         },
         copyOnly: function (filename, mid) {
             return (/^app\/resources\//.test(mid) && !/\.css$/.test(filename));

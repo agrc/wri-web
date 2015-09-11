@@ -78,7 +78,7 @@ define([
 
             this.own(
                 topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected')),
-                topic.subscribe(config.topics.addNewFeature, lang.hitch(this, 'startNewFeatureWizard'))
+                topic.subscribe(config.topics.feature.startNewFeatureWizard, lang.hitch(this, 'startNewFeatureWizard'))
             );
         },
         onFeatureSelected: function (rowData) {

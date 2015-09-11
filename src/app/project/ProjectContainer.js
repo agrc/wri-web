@@ -70,10 +70,19 @@ define([
             //      wire events, and such
             console.log('app.project.ProjectContainer::setupConnections', arguments);
 
+            var that = this;
             this.own(
                 topic.subscribe(config.topics.projectIdsChanged,
-                     lang.hitch(this, 'showDetailsForProject')),
-                on(window, 'resize', lang.hitch(this, '_resetHeight'))
+                    lang.hitch(this, 'showDetailsForProject')),
+                on(window, 'resize', lang.hitch(this, '_resetHeight')),
+                topic.subscribe(config.topics.feature.startDrawing,
+                    lang.partial(lang.hitch(this, 'toggle'), true)),
+                topic.subscribe(config.topics.feature.drawEditComplete,
+                    lang.partial(lang.hitch(this, 'toggle'), false)),
+                on(this.closeNode, 'click', function () {
+                    // this is to prevent the click event from being passed to toggle
+                    that.toggle();
+                })
             );
         },
         showDetailsForProject: function (ids) {
@@ -109,15 +118,16 @@ define([
                     domClass.add(that.domNode, 'hidden');
                 });
         },
-        hide: function () {
+        toggle: function (hide) {
             // summary:
             //      hides the container to be able to view the map
             //
+            // hide: Boolean (optional)
             console.log('app.project.ProjectContainer:hide', arguments);
 
-            domClass.toggle(this.domNode, 'mini');
-            domClass.toggle(this.closeNode, 'mini');
-            domClass.toggle(this.contentNode, 'hidden');
+            domClass.toggle(this.domNode, 'mini', hide);
+            domClass.toggle(this.closeNode, 'mini', hide);
+            domClass.toggle(this.contentNode, 'hidden', hide);
         },
         clearTimer: function () {
             // summary:

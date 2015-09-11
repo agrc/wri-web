@@ -2,6 +2,7 @@ define([
     'app/config',
     'app/mapController',
     'app/mapControls/FiltersContainer',
+    'app/project/DrawToolbar',
     'app/project/ProjectContainer',
     'app/router',
     'app/Toaster',
@@ -17,6 +18,7 @@ define([
     config,
     mapController,
     FiltersContainer,
+    DrawToolbar,
     ProjectContainer,
     router,
     Toaster,
@@ -67,7 +69,8 @@ define([
                 new FiltersContainer({}, this.filtersContainerNode),
                 new Toaster({
                     topic: config.topics.toast
-                }, domConstruct.create('div', {}, document.body))
+                }, domConstruct.create('div', {}, document.body)),
+                new DrawToolbar({map: mapController.map}, this.drawToolbarNode)
             );
 
             this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);

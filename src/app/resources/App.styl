@@ -31,6 +31,7 @@ $nav-tabs-border-color = #fff
 @require '../../bootstrap-stylus/bootstrap/input-groups';
 @require '../../bootstrap-stylus/bootstrap/progress-bars';
 @require '../../bootstrap-stylus/bootstrap/type';
+@require '../../bootstrap-stylus/bootstrap/dropdowns';
 
 @require 'vars';
 @require 'mixins';
@@ -68,13 +69,14 @@ html, body, .app
     position absolute
     bottom 0
 
-.app .map-overlay
-    position absolute
-    top 92px
-    left 20px
-    width 450px
-    z-index 1
-.app [data-dojo-attach-point=mapDiv]
+.app
+    .map-overlay
+        position absolute
+        top 92px
+        left 20px
+        width 450px
+        z-index 1
+    [data-dojo-attach-point=mapDiv]
         position absolute
         top 0
         bottom 0
@@ -106,9 +108,18 @@ html, body, .app
         .agrc .selectorMain
             top 17px
             right 10px
+    .tooltip
+        width 100px
+        position absolute
+        border 1px solid #7EABCD
+        background-color white
+        padding 5px
+        font-size 9pt
+        z-index 9999
+        opacity 1
+        border-radius 4px
 *:focus
     outline none !important
-
 .adjacent >
     &path,circle
         fill $adjacentFeatures

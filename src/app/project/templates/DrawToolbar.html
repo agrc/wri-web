@@ -1,0 +1,39 @@
+<div>
+    <h4 data-dojo-attach-point="categoryNode"></h4>
+    <div class="btn-group">
+        <button class="btn btn-default navbar-btn tool"
+            data-dojo-attach-point='selectBtn'>
+            <span class="glyphicon glyphicon-arrow-up"></span>
+            Select/Edit
+        </button>
+        <button class="btn btn-default navbar-btn tool"
+            data-dojo-attach-point='drawBtn'>
+            <span class="glyphicon glyphicon-pencil"></span>
+            Draw
+        </button>
+        <button class="btn btn-default navbar-btn tool"
+            data-dojo-attach-point='cutBtn'>
+            <span class="glyphicon glyphicon-scissors"></span>
+            Cut
+        </button>
+        <!-- <div class="btn-group">
+            <button class="btn btn-default navbar-btn dropdown-toggle"
+                data-toggle='dropdown'>
+                Snap <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#">one</a>
+                    <a href="#">two</a>
+                    <a href="#">three</a>
+                </li>
+            </ul>
+        </div> -->
+    </div>
+    <div class="btn-group pull-right">
+        <button class="btn btn-primary navbar-btn"
+            data-dojo-attach-event='click: onSaveClick'>Finish</button>
+        <button class="btn btn-warning navbar-btn"
+            data-dojo-attach-event='click: onCancelClick'>Cancel</button>
+    </div>
+</div>

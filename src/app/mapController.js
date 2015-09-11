@@ -113,6 +113,7 @@ define([
 
             this.map.on('load', function () {
                 console.debug('map is loaded', that);
+                that.map.disableDoubleClickZoom();
                 that.map.on('extent-change', function (change) {
                     topic.publish(config.topics.map.extentChanged, change);
                 });
@@ -231,7 +232,7 @@ define([
             topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
             topic.subscribe(config.topics.toggleReferenceLayerLabels, lang.hitch(this, 'toggleReferenceLayerLabels'));
             topic.subscribe(config.topics.map.toggleWriProjects, lang.hitch(this, 'toggleProjectsFundedByWri'));
-            topic.subscribe(config.topics.addNewFeature, lang.hitch(this, 'clearSelectedFeature'));
+            topic.subscribe(config.topics.feature.startNewFeatureWizard, lang.hitch(this, 'clearSelectedFeature'));
         },
         selectLayers: function (ids) {
             // summary:
