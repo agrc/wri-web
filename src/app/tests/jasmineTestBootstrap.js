@@ -9,9 +9,6 @@ require({
         location: 'stubmodule/src',
         main: 'stub-module'
     }],
-    has: {
-        'dojo-undef-api': true
-    },
     baseUrl: '/src/'
 });
 
