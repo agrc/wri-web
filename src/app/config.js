@@ -143,6 +143,15 @@ define([
             13: 'POLY'
         },
 
+        commentsFieldCategories: [
+            'Other point feature'
+        ],
+
+        retreatmentCategories: [
+            'Terrestrial Treatment Area',
+            'Aquatic/Riparian Treatment Area'
+        ],
+
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
             featureSelected: 'wri/featureSelected',

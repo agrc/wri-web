@@ -174,6 +174,14 @@ define([
                 domClass.remove(this.polyActionSelect.parentElement, 'hidden');
                 domClass.remove(this.treatmentSelect.parentElement, 'hidden');
             }
+
+            // check for comments and retreatment fields
+            if (config.commentsFieldCategories.indexOf(newValue) > -1) {
+                domClass.remove(this.comments, 'hidden');
+            }
+            if (config.retreatmentCategories.indexOf(newValue) > -1) {
+                domClass.remove(this.retreatment, 'hidden');
+            }
         },
         onUploadClick: function () {
             // summary:
@@ -297,13 +305,19 @@ define([
         },
         resetFeatureAttributes: function () {
             // summary:
-            //      clears all of the selects
+            //      clears all of the form controls
             console.log('app.project.NewFeatureWizard:resetFeatureAttributes', arguments);
 
             [this.polyActionSelect, this.treatmentSelect, this.typeSelect, this.pointLineActionSelect].forEach(function (s) {
                 clearSelect(s);
                 domClass.add(s.parentElement, 'hidden');
             });
+
+            this.commentsTxt.value = '';
+            domClass.add(this.comments, 'hidden');
+
+            domClass.add(this.retreatment, 'hidden');
+            this.retreatmentChBx.checked = false;
         },
         getServiceErrorMessage: function (er) {
             // summary:

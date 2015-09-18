@@ -89,6 +89,22 @@ require([
                 expect(domClass.contains(widget.pointLineActionSelect.parentElement, 'hidden')).toBe(false);
                 expect(domClass.contains(widget.typeSelect.parentElement, 'hidden')).toBe(true);
             });
+            it('shows the comments box on other point', function () {
+                widget.featureCategorySelect.value = config.commentsFieldCategories[0];
+                expect(domClass.contains(widget.comments, 'hidden')).toBe(true);
+
+                widget.onFeatureCategoryChange();
+
+                expect(domClass.contains(widget.comments, 'hidden')).toBe(false);
+            });
+            it('shows the retreatment box', function () {
+                widget.featureCategorySelect.value = config.retreatmentCategories[0];
+                expect(domClass.contains(widget.retreatment, 'hidden')).toBe(true);
+
+                widget.onFeatureCategoryChange();
+
+                expect(domClass.contains(widget.retreatment, 'hidden')).toBe(false);
+            });
         });
         describe('onPolyActionSelectChange', function () {
             it('populates the treatment select', function () {
