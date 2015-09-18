@@ -7,6 +7,7 @@ define([
 
     'dojo/dom-class',
     'dojo/dom-construct',
+    'dojo/query',
     'dojo/text!app/project/templates/NewFeatureWizard.html',
     'dojo/topic',
     'dojo/_base/declare',
@@ -30,6 +31,7 @@ define([
 
     domClass,
     domConstruct,
+    query,
     template,
     topic,
     declare,
@@ -114,7 +116,9 @@ define([
                 }),
                 topic.subscribe(config.topics.feature.drawingComplete, lang.hitch(this, 'onGeometryDefined')),
                 topic.subscribe(config.topics.feature.cutFeatures, lang.hitch(this, 'onCutFeatures')),
-                topic.subscribe(config.topics.feature.cancelDrawing, lang.hitch(this, 'onCancelDrawing'))
+                topic.subscribe(config.topics.feature.cancelDrawing, lang.hitch(this, 'onCancelDrawing')),
+                query('select, textarea, checkbox', this.featureAttributesDiv)
+                    .on('change', lang.hitch(this, 'validateForm'))
             );
             topic.publish(config.topics.layer.add, {
                 graphicsLayers: [this.graphicsLayer],
@@ -122,6 +126,21 @@ define([
             });
 
             this.inherited(arguments);
+        },
+        validateForm: function () {
+            // summary:
+            //      check for required fields and enables/disables save and add buttons accordingly
+            console.log('app.project.NewFeatureWizard:validateForm', arguments);
+
+            var valid = (
+                query('.form-group:not(.hidden) select, .form-group:not(.hidden) textarea', this.domNode).every(function (s) {
+                    return s.value !== '';
+                }) &&
+                this.graphicsLayer.graphics.length > 0
+            );
+
+            this.saveBtn.disabled = !valid;
+            this.addActionBtn.disabled = !valid;
         },
         onCancelDrawing: function () {
             // summary:
@@ -292,6 +311,8 @@ define([
                     topic.publish(config.topics.map.setExtent, graphic.geometry);
                 }
             }
+
+            this.validateForm();
         },
         onPolyActionSelectChange: function () {
             // summary:
@@ -318,6 +339,9 @@ define([
 
             domClass.add(this.retreatment, 'hidden');
             this.retreatmentChBx.checked = false;
+
+            this.saveBtn.disabled = true;
+            this.addActionBtn.disabled = true;
         },
         getServiceErrorMessage: function (er) {
             // summary:
@@ -361,6 +385,14 @@ define([
                     g.setGeometry(largestGeometry);
                 }
             });
+        },
+        onCancel: function () {
+            // summary:
+            //      description
+            // param or return
+            console.log('module.id:onCancel', arguments);
+
+            this.destroyRecursive(false);
         }
     });
 });

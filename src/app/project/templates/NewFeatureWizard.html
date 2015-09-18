@@ -84,8 +84,11 @@
             </label>
         </div>
 
-        <button class="btn btn-primary" disabled>Save</button>
-        <button class="btn btn-warning" disabled>Cancel</button>
-        <button class="btn btn-success" disabled>Add Action</button>
+        <button class="btn btn-primary"
+            data-dojo-attach-point='saveBtn' disabled>Save</button>
+        <button class="btn btn-warning"
+            data-dojo-attach-event='click: onCancel'>Cancel</button>
+        <button class="btn btn-success"
+            data-dojo-attach-point='addActionBtn' disabled>Add Action</button>
     </div>
 </div>
