@@ -1,10 +1,12 @@
 define([
     'app/config',
+    'app/project/Action',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
+    'dojo/aspect',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/query',
@@ -24,11 +26,13 @@ define([
     'bootstrap-stylus/js/transition'
 ], function (
     config,
+    Action,
 
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
+    aspect,
     domClass,
     domConstruct,
     query,
@@ -96,12 +100,17 @@ define([
         //      the user clicks the cancel button on the drawing toolbar.
         originalGraphicJsons: null,
 
+        // actions: Action[]
+        actions: null,
+
         // Properties to be sent into constructor
 
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             console.log('app.project.NewFeatureWizard::postCreate', arguments);
+
+            this.actions = [];
 
             loadItemsIntoSelect(config.domains.featureType.map(function (category) {
                 return category[0];
@@ -132,15 +141,23 @@ define([
             //      check for required fields and enables/disables save and add buttons accordingly
             console.log('app.project.NewFeatureWizard:validateForm', arguments);
 
+            var category = this.featureCategorySelect.value !== '';
+            var requiredActionFields = query('.form-group:not(.hidden) select, .form-group:not(.hidden) textarea',
+                                             this.featureAttributesDiv);
+            var populatedActionFields = requiredActionFields.filter(function (s) {
+                return s.value !== '';
+            });
             var valid = (
-                query('.form-group:not(.hidden) select, .form-group:not(.hidden) textarea', this.domNode).every(function (s) {
-                    return s.value !== '';
-                }) &&
+                category &&
+                populatedActionFields.length === requiredActionFields.length &&
                 this.graphicsLayer.graphics.length > 0
             );
 
-            this.saveBtn.disabled = !valid;
             this.addActionBtn.disabled = !valid;
+            this.saveBtn.disabled = !(
+                valid ||
+                (this.actions.length > 0 && category && populatedActionFields.length === 0)
+            );
         },
         onCancelDrawing: function () {
             // summary:
@@ -158,6 +175,8 @@ define([
             console.log('app.project.NewFeatureWizard:onFeatureCategoryChange', arguments);
 
             this.resetFeatureAttributes();
+            this.actions = [];
+            domConstruct.empty(this.actionsContainer);
 
             this.graphicsLayer.clear();
 
@@ -324,24 +343,36 @@ define([
             loadItemsIntoSelect(
                 config.domains.featureAttributes[this.featureCategorySelect.value][this.polyActionSelect.value], this.treatmentSelect);
         },
-        resetFeatureAttributes: function () {
+        resetFeatureAttributes: function (preserveVisibility) {
             // summary:
             //      clears all of the form controls
             console.log('app.project.NewFeatureWizard:resetFeatureAttributes', arguments);
 
+            var hide = function (node) {
+                if (!preserveVisibility) {
+                    domClass.add(node, 'hidden');
+                }
+            };
+
             [this.polyActionSelect, this.treatmentSelect, this.typeSelect, this.pointLineActionSelect].forEach(function (s) {
-                clearSelect(s);
-                domClass.add(s.parentElement, 'hidden');
+                if (!preserveVisibility) {
+                    clearSelect(s);
+                } else {
+                    s.value = '';
+                }
+                hide(s.parentElement);
             });
 
             this.commentsTxt.value = '';
-            domClass.add(this.comments, 'hidden');
+            hide(this.comments);
 
-            domClass.add(this.retreatment, 'hidden');
+            hide(this.retreatment);
             this.retreatmentChBx.checked = false;
 
             this.saveBtn.disabled = true;
             this.addActionBtn.disabled = true;
+
+            this.validateForm();
         },
         getServiceErrorMessage: function (er) {
             // summary:
@@ -393,6 +424,51 @@ define([
             console.log('module.id:onCancel', arguments);
 
             this.destroyRecursive(false);
+        },
+        onAddActionClick: function () {
+            // summary:
+            //      user has clicked the add action button
+            console.log('app.project.NewFeatureWizard:onAddActionClick', arguments);
+
+            var visible = function (node) {
+                return !domClass.contains(node, 'hidden');
+            };
+
+            var params = {};
+            if (visible(this.polyAction)) {
+                params.type = this.polyActionSelect.value;
+            } else if (visible(this.type)) {
+                params.type = this.typeSelect.value;
+            }
+            if (visible(this.treatment)) {
+                params.treatment = this.treatmentSelect.value;
+            }
+            if (visible(this.pointLineAction)) {
+                params.action = this.pointLineActionSelect.value;
+            }
+            if (visible(this.comments)) {
+                params.comments = this.commentsTxt.value;
+            }
+            if (visible(this.retreatment)) {
+                params.retreatment = this.retreatmentChBx.checked;
+            }
+
+            var action = new Action(params, domConstruct.create('div', null, this.actionsContainer));
+            this.actions.push(action);
+            var that = this;
+            var handle = aspect.before(action, 'destroyRecursive', function () {
+                that.actions.splice(that.actions.indexOf(action), 1);
+                handle.remove();
+            });
+
+            this.resetFeatureAttributes(true);
+        },
+        onSaveClick: function () {
+            // summary:
+            //      gather data and submit to api
+            console.log('app.project.NewFeatureWizard:onSaveClick', arguments);
+
+
         }
     });
 });

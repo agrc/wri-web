@@ -179,5 +179,41 @@ require([
                 expect(actual).toBe(expected);
             });
         });
+        describe('validateForm', function () {
+            it('disables save button', function () {
+                var atts = config.domains.featureAttributes;
+                atts['Test Category'] = {
+                    'Test Action': ['Test Treatment1', 'Test Treatment2']
+                };
+                domConstruct.create('option', {
+                    innerHTML: 'Test Category',
+                    value: 'Test Category'
+                }, widget.featureCategorySelect);
+                widget.featureCategorySelect.value = 'Test Category';
+                widget.onFeatureCategoryChange();
+
+                widget.graphicsLayer.graphics = [{}];
+
+                // existing stored actions
+                widget.actions = [{}];
+                widget.validateForm();
+                expect(widget.saveBtn.disabled).toBe(false);
+
+                // partially filled out action
+                domConstruct.create('option', {
+                    innerHTML: 'Test Action',
+                    value: 'Test Action'
+                }, widget.polyActionSelect);
+                widget.polyActionSelect.value = 'Test Action';
+                widget.onPolyActionSelectChange();
+                widget.validateForm();
+                expect(widget.saveBtn.disabled).toBe(true);
+
+                // existing stored actions and fully filled out action
+                widget.treatmentSelect.value = 'Test Treatment1';
+                widget.validateForm();
+                expect(widget.saveBtn.disabled).toBe(false);
+            });
+        });
     });
 });

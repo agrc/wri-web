@@ -12,7 +12,7 @@
         <button class="btn btn-primary"
             data-dojo-attach-event='click: onDrawClick'>
             <span class="glyphicon glyphicon-pencil"></span>
-            Draw/Edit
+            Draw
         </button>
         <button class="btn btn-primary"
             data-dojo-attach-event='click: onUploadClick'
@@ -49,6 +49,7 @@
 
     <div class='collapse fade'
         data-dojo-attach-point="featureAttributesDiv">
+        <div data-dojo-attach-point="actionsContainer"></div>
         <div class="form-group hidden" data-dojo-attach-point='polyAction'>
             <label>Action</label>
             <select class='form-control' data-dojo-attach-point="polyActionSelect"
@@ -85,10 +86,12 @@
         </div>
 
         <button class="btn btn-primary"
-            data-dojo-attach-point='saveBtn' disabled>Save</button>
+            data-dojo-attach-point='saveBtn'
+            data-dojo-attach-event='click: onSaveClick' disabled>Save</button>
         <button class="btn btn-warning"
             data-dojo-attach-event='click: onCancel'>Cancel</button>
         <button class="btn btn-success"
-            data-dojo-attach-point='addActionBtn' disabled>Add Action</button>
+            data-dojo-attach-point='addActionBtn'
+            data-dojo-attach-event='click: onAddActionClick' disabled>Add Additional Action</button>
     </div>
 </div>
