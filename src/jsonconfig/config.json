@@ -1,355 +1,355 @@
 {
     "projectStatus": [
         [
-            "Draft",
+            "Draft", 
             1
-        ],
+        ], 
         [
-            "Proposed",
+            "Proposed", 
             2
-        ],
+        ], 
         [
-            "Current",
+            "Current", 
             3
-        ],
+        ], 
         [
-            "Pending Completed",
+            "Pending Completed", 
             4
-        ],
+        ], 
         [
-            "Completed",
+            "Completed", 
             5
-        ],
+        ], 
         [
-            "Cancelled",
+            "Cancelled", 
             6
         ]
-    ],
+    ], 
     "featureType": [
         [
-            "Terrestrial Treatment Area",
+            "Terrestrial Treatment Area", 
             1
-        ],
+        ], 
         [
-            "Aquatic/Riparian Treatment Area",
+            "Aquatic/Riparian Treatment Area", 
             2
-        ],
+        ], 
         [
-            "Affected Area",
+            "Affected Area", 
             3
-        ],
+        ], 
         [
-            "Easement/Acquisition",
+            "Easement/Acquisition", 
             4
-        ],
+        ], 
         [
-            "Guzzler",
+            "Guzzler", 
             5
-        ],
+        ], 
         [
-            "Trough",
+            "Trough", 
             6
-        ],
+        ], 
         [
-            "Water control structure",
+            "Water control structure", 
             7
-        ],
+        ], 
         [
-            "Other point feature",
+            "Other point feature", 
             8
-        ],
+        ], 
         [
-            "Fish passage structure",
+            "Fish passage structure", 
             9
-        ],
+        ], 
         [
-            "Fence",
+            "Fence", 
             10
-        ],
+        ], 
         [
-            "Pipeline",
+            "Pipeline", 
             11
-        ],
+        ], 
         [
-            "Dam",
+            "Dam", 
             12
         ]
-    ],
+    ], 
     "pointLineActions": [
-        "Construction",
-        "Maintenance",
-        "Modification",
-        "Reconstruction",
+        "Construction", 
+        "Maintenance", 
+        "Modification", 
+        "Reconstruction", 
         "Removal"
-    ],
+    ], 
     "featureAttributes": {
         "Aquatic/Riparian Treatment Area": {
             "Stream Corridor/Channel Improvements": [
-                "Bank slope adjustment/terracing",
-                "Channel constrictor",
-                "Channel realignment",
-                "Check dam(s) (low stage)",
-                "Check dam(s) (medium stage)",
-                "Large woody debris/cover",
-                "Geotextile cover",
-                "Gravel placement",
-                "Instream random boulder placement",
-                "K-dam",
-                "Livestock crossing",
-                "Management plan",
-                "Off channel watering",
-                "Rip rap",
-                "Root wad(s)",
-                "Slope adjustment/terracing",
-                "Tree revetments",
-                "Vanes (J-hook)",
-                "Vanes (log)",
-                "Vanes (vortex rock weir/cross vane)",
-                "Water gap(s)",
-                "Wing deflector(s)",
-                "Instream flow enhancement",
-                "Beaver dam analog",
-                "Create backwater (oxbow-like) area",
-                "Excavation",
+                "Bank slope adjustment/terracing", 
+                "Channel constrictor", 
+                "Channel realignment", 
+                "Check dam(s) (low stage)", 
+                "Check dam(s) (medium stage)", 
+                "Large woody debris/cover", 
+                "Geotextile cover", 
+                "Gravel placement", 
+                "Instream random boulder placement", 
+                "K-dam", 
+                "Livestock crossing", 
+                "Management plan", 
+                "Off channel watering", 
+                "Rip rap", 
+                "Root wad(s)", 
+                "Slope adjustment/terracing", 
+                "Tree revetments", 
+                "Vanes (J-hook)", 
+                "Vanes (log)", 
+                "Vanes (vortex rock weir/cross vane)", 
+                "Water gap(s)", 
+                "Wing deflector(s)", 
+                "Instream flow enhancement", 
+                "Beaver dam analog", 
+                "Create backwater (oxbow-like) area", 
+                "Excavation", 
                 "Repair/maintenance of previous work"
-            ],
+            ], 
             "Grazing management/changes": [
                 "Grazing management/Changes"
-            ],
+            ], 
             "Prescribed fire": [
-                "Prescribed fire",
+                "Prescribed fire", 
                 "Pile burn"
-            ],
+            ], 
             "Vegetation Improvements": [
-                "Biological control",
-                "Drawdown",
-                "Hydroseeding",
-                "Pole planting/cuttings",
-                "Reduction of shallow water area(s)",
-                "Seedlings",
-                "Sod mats",
-                "Water stinger",
-                "Mechanical removal",
-                "Grapple/Opposable thumb",
-                "Seeding",
+                "Biological control", 
+                "Drawdown", 
+                "Hydroseeding", 
+                "Pole planting/cuttings", 
+                "Reduction of shallow water area(s)", 
+                "Seedlings", 
+                "Sod mats", 
+                "Water stinger", 
+                "Mechanical removal", 
+                "Grapple/Opposable thumb", 
+                "Seeding", 
                 "Manual removal / hand crew"
-            ],
+            ], 
             "Lake/Wetland/Pond Improvements": [
-                "Aeration",
-                "Crest height modification",
-                "Debris removal",
-                "Dredging",
-                "Embankment repair",
-                "Enlarging",
-                "Habitat structure(s) (floating)",
-                "Habitat structure(s) (submerged)",
-                "Manual removal",
-                "Modify shoreline complexity",
-                "Off/side channel habitat",
-                "Open springhead(s)",
-                "Outlet/spillway modification or repair",
-                "Screening",
-                "Slope modification",
-                "Pond Cleaning",
-                "Pond Construction",
+                "Aeration", 
+                "Crest height modification", 
+                "Debris removal", 
+                "Dredging", 
+                "Embankment repair", 
+                "Enlarging", 
+                "Habitat structure(s) (floating)", 
+                "Habitat structure(s) (submerged)", 
+                "Manual removal", 
+                "Modify shoreline complexity", 
+                "Off/side channel habitat", 
+                "Open springhead(s)", 
+                "Outlet/spillway modification or repair", 
+                "Screening", 
+                "Slope modification", 
+                "Pond Cleaning", 
+                "Pond Construction", 
                 "Excavation"
-            ],
+            ], 
             "Herbicide application": [
-                "Aerial (fixed-wing)",
-                "Aerial (helicopter)",
-                "Ground",
+                "Aerial (fixed-wing)", 
+                "Aerial (helicopter)", 
+                "Ground", 
                 "Spot treatment"
-            ],
+            ], 
             "Piscicide Application": [
-                "Antimycin",
+                "Antimycin", 
                 "Rotenone"
             ]
-        },
+        }, 
         "Affected Area": {
             "Easement/Acquisition": [
-                "Conservation easement",
+                "Conservation easement", 
                 "Fee title land acquisition"
             ]
-        },
+        }, 
         "Terrestrial Treatment Area": {
             "Prescribed fire": [
-                "Prescribed fire",
+                "Prescribed fire", 
                 "Pile burn"
-            ],
+            ], 
             "Aerator": [
-                "Double drum (1-way)",
-                "Double drum (2-way)",
-                "Single drum (1-way)",
+                "Double drum (1-way)", 
+                "Double drum (2-way)", 
+                "Single drum (1-way)", 
                 "Single drum (2-way)"
-            ],
+            ], 
             "Planting/Transplanting": [
-                "Bareroot stock",
-                "Container stock",
-                "Bitterbrush planter",
+                "Bareroot stock", 
+                "Container stock", 
+                "Bitterbrush planter", 
                 "Other"
-            ],
+            ], 
             "Seeding (primary)": [
-                "Broadcast (aerial-fixed wing)",
-                "Broadcast (aerial-helicopter)",
-                "Drill (rangeland)",
-                "Drill (truax)",
-                "Ground (mechanical application)",
+                "Broadcast (aerial-fixed wing)", 
+                "Broadcast (aerial-helicopter)", 
+                "Drill (rangeland)", 
+                "Drill (truax)", 
+                "Ground (mechanical application)", 
                 "Hand seeding"
-            ],
+            ], 
             "Excavating/Extraction": [
-                "Grapple/Opposable thumb",
-                "Pond Cleaning",
+                "Grapple/Opposable thumb", 
+                "Pond Cleaning", 
                 "Other"
-            ],
+            ], 
             "Road/Parking Area Improvements": [
                 "Road/Parking area improvements"
-            ],
+            ], 
             "Greenstripping": [
                 "Greenstripping"
-            ],
+            ], 
             "Spring Development": [
                 "Spring development"
-            ],
+            ], 
             "Seeding (secondary/shrub)": [
-                "Broadcast (aerial-fixed wing)",
-                "Broadcast (aerial-helicopter)",
-                "Drill (rangeland)",
-                "Drill (truax)",
-                "Ground (mechanical application)",
+                "Broadcast (aerial-fixed wing)", 
+                "Broadcast (aerial-helicopter)", 
+                "Drill (rangeland)", 
+                "Drill (truax)", 
+                "Ground (mechanical application)", 
                 "Hand seeding"
-            ],
+            ], 
             "Roller chopper": [
-                "1-way",
+                "1-way", 
                 "2-way"
-            ],
+            ], 
             "Chain harrow": [
-                "<= 15 ft. (1-way)",
-                "<= 15 ft. (2-way)",
-                "> 15 ft. (1-way)",
+                "<= 15 ft. (1-way)", 
+                "<= 15 ft. (2-way)", 
+                "> 15 ft. (1-way)", 
                 "> 15 ft. (2-way)"
-            ],
+            ], 
             "Forestry practices": [
-                "Clearcutting",
-                "Coppice cutting",
-                "Group selection cuts",
-                "Ripping",
-                "Thinning (commercial)",
-                "Thinning (non-commercial)",
+                "Clearcutting", 
+                "Coppice cutting", 
+                "Group selection cuts", 
+                "Ripping", 
+                "Thinning (commercial)", 
+                "Thinning (non-commercial)", 
                 "Girdling"
-            ],
+            ], 
             "Interseeding": [
                 "Interseeding"
-            ],
+            ], 
             "Anchor chain": [
-                "Ely (1-way)",
-                "Ely (2-way)",
-                "Smooth (1-way)",
+                "Ely (1-way)", 
+                "Ely (2-way)", 
+                "Smooth (1-way)", 
                 "Smooth (2-way)"
-            ],
+            ], 
             "Vegetation removal / hand crew": [
-                "Lop (no scatter)",
-                "Lop and chip",
-                "Lop and scatter",
-                "Lop-pile-burn",
+                "Lop (no scatter)", 
+                "Lop and chip", 
+                "Lop and scatter", 
+                "Lop-pile-burn", 
                 "Cut Stump"
-            ],
+            ], 
             "Herbicide application": [
-                "Aerial (fixed-wing)",
-                "Aerial (helicopter)",
-                "Ground",
+                "Aerial (fixed-wing)", 
+                "Aerial (helicopter)", 
+                "Ground", 
                 "Spot treatment"
-            ],
+            ], 
             "Harrow": [
-                "<= 15 ft. (1-way)",
-                "<= 15 ft. (2-way)",
-                "> 15 ft. (1-way)",
+                "<= 15 ft. (1-way)", 
+                "<= 15 ft. (2-way)", 
+                "> 15 ft. (1-way)", 
                 "> 15 ft. (2-way)"
-            ],
+            ], 
             "Roller Packer": [
-                "Post-seeding",
+                "Post-seeding", 
                 "Other"
-            ],
+            ], 
             "Cable": [
-                "1-way",
+                "1-way", 
                 "2-way"
-            ],
+            ], 
             "Grazing management/changes": [
                 "Grazing management/Changes"
-            ],
+            ], 
             "Land imprinter": [
                 "Land imprinter"
-            ],
+            ], 
             "Bulldozing": [
-                "Tree push",
-                "Pond Cleaning",
+                "Tree push", 
+                "Pond Cleaning", 
                 "Other"
-            ],
+            ], 
             "Mowing": [
-                "Brush hog",
+                "Brush hog", 
                 "Other"
-            ],
+            ], 
             "Biological control (of vegetation)": [
-                "Goats",
+                "Goats", 
                 "Insects"
-            ],
+            ], 
             "Disc": [
-                "Off-set (1-way)",
-                "Off-set (2-way)",
-                "Plow (1-way)",
+                "Off-set (1-way)", 
+                "Off-set (2-way)", 
+                "Plow (1-way)", 
                 "Plow (2-way)"
-            ],
+            ], 
             "Road decommissioning": [
                 "Road decomissioning"
-            ],
+            ], 
             "Bullhog": [
-                "Full size",
+                "Full size", 
                 "Skid steer"
-            ],
+            ], 
             "Skid-steer mounted tree cutter": [
-                "Hydraulic brush saw",
+                "Hydraulic brush saw", 
                 "Hydraulic shears"
             ]
-        },
+        }, 
         "Fence": [
-            "Aerator",
-            "Anchor chain",
-            "Biological control (of vegetation)",
-            "Bulldozing",
-            "Bullhog",
-            "Cable",
+            "Aerator", 
+            "Anchor chain", 
+            "Biological control (of vegetation)", 
+            "Bulldozing", 
+            "Bullhog", 
+            "Cable", 
             "Chain harrow"
-        ],
+        ], 
         "Dam": [
-            "Easement/Acquisition",
-            "Excavating/Extraction",
-            "Forestry practices",
+            "Easement/Acquisition", 
+            "Excavating/Extraction", 
+            "Forestry practices", 
             "Grazing management/changes"
-        ],
+        ], 
         "Guzzler": [
-            "Greenstripping",
-            "Harrow",
-            "Herbicide application",
+            "Greenstripping", 
+            "Harrow", 
+            "Herbicide application", 
             "Interseeding"
-        ],
+        ], 
         "Easement/Acquisition": {
             "Easement/Acquisition": [
-                "Conservation easement",
+                "Conservation easement", 
                 "Fee title land acquisition"
             ]
-        },
-        "Other point feature": [],
-        "Trough": [],
+        }, 
+        "Other point feature": [], 
+        "Trough": [], 
         "Pipeline": [
-            "Construction",
+            "Construction", 
             "Disc"
-        ],
-        "Water control structure": [],
+        ], 
+        "Water control structure": [], 
         "Fish passage structure": [
-            "Lake/Wetland/Pond Improvements",
-            "Land imprinter",
-            "Maintenance",
-            "Modification",
-            "Mowing",
+            "Lake/Wetland/Pond Improvements", 
+            "Land imprinter", 
+            "Maintenance", 
+            "Modification", 
+            "Mowing", 
             "Piscicide Application"
         ]
     }
