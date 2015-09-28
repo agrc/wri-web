@@ -44,6 +44,9 @@ define([
         templateString: template,
         baseClass: 'feature-details',
 
+        // newFeatureWizard: NewFeatureWizard
+        newFeatureWizard: null,
+
         templateFunctions: {
             hasCounty: function () {
                 return this.county && this.county.length;
@@ -111,16 +114,19 @@ define([
             domClass.remove(this.newFeatureTabContainer, 'hidden');
             this.newFeatureTabLink.click();
 
-            var wizard = new NewFeatureWizard({},
-                domConstruct.create('div', null, this.newFeatureTabContents));
-            wizard.startup();
+            if (!this.newFeatureWizard) {
+                var wizard = new NewFeatureWizard({},
+                    domConstruct.create('div', null, this.newFeatureTabContents));
+                wizard.startup();
 
-            var that = this;
-            wizard.on('hide', function () {
-                domClass.add(that.newFeatureTab, 'hidden');
-                domClass.add(that.newFeatureTabContainer, 'hidden');
-                that.detailsTabLink.click();
-            });
+                var that = this;
+                wizard.on('hide', function () {
+                    domClass.add(that.newFeatureTab, 'hidden');
+                    domClass.add(that.newFeatureTabContainer, 'hidden');
+                    that.detailsTabLink.click();
+                });
+                this.newFeatureWizard = wizard;
+            }
         }
     });
 });

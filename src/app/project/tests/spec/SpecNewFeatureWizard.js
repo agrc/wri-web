@@ -1,10 +1,14 @@
 require([
+    'agrc-jasmine-matchers/topics',
+
     'app/config',
     'app/project/NewFeatureWizard',
 
     'dojo/dom-class',
     'dojo/dom-construct'
 ], function (
+    topics,
+
     config,
     WidgetUnderTest,
 
@@ -213,6 +217,44 @@ require([
                 widget.treatmentSelect.value = 'Test Treatment1';
                 widget.validateForm();
                 expect(widget.saveBtn.disabled).toBe(false);
+            });
+        });
+        describe('onAddActionClick', function () {
+            it('prevents duplicate actions', function () {
+                topics.listen(config.topics.toast);
+
+                // add first action
+                var atts = config.domains.featureAttributes;
+                atts['Test Category'] = {
+                    'Test Action': ['Test Treatment1', 'Test Treatment2']
+                };
+                domConstruct.create('option', {
+                    innerHTML: 'Test Category',
+                    value: 'Test Category'
+                }, widget.featureCategorySelect);
+                widget.featureCategorySelect.value = 'Test Category';
+                widget.onFeatureCategoryChange();
+                widget.graphicsLayer.graphics = [{}];
+                domConstruct.create('option', {
+                    innerHTML: 'Test Action',
+                    value: 'Test Action'
+                }, widget.polyActionSelect);
+                widget.polyActionSelect.value = 'Test Action';
+                widget.onPolyActionSelectChange();
+                widget.treatmentSelect.value = 'Test Treatment1';
+
+                widget.onAddActionClick();
+
+                expect(widget.actions.length).toBe(1);
+
+                // restore controls to the same values
+                widget.polyActionSelect.value = 'Test Action';
+                widget.onPolyActionSelectChange();
+                widget.treatmentSelect.value = 'Test Treatment1';
+
+                widget.onAddActionClick();
+
+                expect(config.topics.toast).toHaveBeenPublishedWith(widget.duplicateActionMsg, 'warning');
             });
         });
     });

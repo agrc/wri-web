@@ -103,6 +103,10 @@ define([
         // actions: Action[]
         actions: null,
 
+        // duplicateActionMsg: String
+        //      sent to toaster
+        duplicateActionMsg: 'Can\'t add duplicate actions!',
+
         // Properties to be sent into constructor
 
         postCreate: function () {
@@ -456,15 +460,32 @@ define([
                 params.retreatment = this.retreatmentChBx.checked;
             }
 
-            var action = new Action(params, domConstruct.create('div', null, this.actionsContainer));
-            this.actions.push(action);
-            var that = this;
-            var handle = aspect.before(action, 'destroyRecursive', function () {
-                that.actions.splice(that.actions.indexOf(action), 1);
-                handle.remove();
+            var existing = this.actions.some(function (a) {
+                var match;
+                for (var p in params) {
+                    if (params.hasOwnProperty(p)) {
+                        match = params[p] === a[p];
+                        if (!match) {
+                            return false;
+                        }
+                    }
+                }
+                return match;
             });
 
-            this.resetFeatureAttributes(true);
+            if (!existing) {
+                var action = new Action(params, domConstruct.create('div', null, this.actionsContainer));
+                this.actions.push(action);
+                var that = this;
+                var handle = aspect.before(action, 'destroyRecursive', function () {
+                    that.actions.splice(that.actions.indexOf(action), 1);
+                    handle.remove();
+                });
+
+                this.resetFeatureAttributes(true);
+            } else {
+                topic.publish(config.topics.toast, this.duplicateActionMsg, 'warning');
+            }
         },
         onSaveClick: function () {
             // summary:
