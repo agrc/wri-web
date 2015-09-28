@@ -419,11 +419,14 @@ define([
         },
         onCancel: function () {
             // summary:
-            //      description
-            // param or return
-            console.log('module.id:onCancel', arguments);
+            //      destroy this widget and all associated data
+            console.log('app.project.NewFeatureWizard:onCancel', arguments);
 
-            this.destroyRecursive(false);
+            this.graphicsLayer.clear();
+
+            this.emit("hide");
+
+            this.destroyRecursive();
         },
         onAddActionClick: function () {
             // summary:

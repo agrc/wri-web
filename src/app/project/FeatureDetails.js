@@ -5,6 +5,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
+    'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/query',
     'dojo/text!app/project/templates/FeatureDataTemplate.html',
@@ -25,6 +26,7 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
+    domClass,
     domConstruct,
     query,
     featureTemplate,
@@ -95,7 +97,8 @@ define([
             domConstruct.place(mustache.render(featureTemplate, rowData), this.featureTabContents);
 
             // show feature tab
-            query('.hidden', this.domNode).removeClass('hidden');
+            domClass.remove(this.featureTab, 'hidden');
+            domClass.remove(this.featureTabContainer, 'hidden');
             this.featureTabLink.click();
         },
         startNewFeatureWizard: function () {
@@ -103,14 +106,21 @@ define([
             //      starts the add new feature wizard
             console.log('app.project.FeatureDetails:startNewFeatureWizard', arguments);
 
-            domConstruct.empty(this.featureTabContents);
+            // show new feature tab
+            domClass.remove(this.newFeatureTab, 'hidden');
+            domClass.remove(this.newFeatureTabContainer, 'hidden');
+            this.newFeatureTabLink.click();
 
-            // show feature tab
-            query('.hidden', this.domNode).removeClass('hidden');
-            this.featureTabLink.click();
-
-            var wizard = new NewFeatureWizard({}, this.featureTabContents);
+            var wizard = new NewFeatureWizard({},
+                domConstruct.create('div', null, this.newFeatureTabContents));
             wizard.startup();
+
+            var that = this;
+            wizard.on('hide', function () {
+                domClass.add(that.newFeatureTab, 'hidden');
+                domClass.add(that.newFeatureTabContainer, 'hidden');
+                that.detailsTabLink.click();
+            });
         }
     });
 });

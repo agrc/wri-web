@@ -1,15 +1,27 @@
 <div>
     <ul class="nav nav-tabs" role="tablist">
-        <li class="hidden" role='presentation'>
+        <li class="hidden" role='presentation'
+            data-dojo-attach-point='newFeatureTab'>
+            <a href="#${id}_newFeatureTab" data-toggle='tab'
+                data-dojo-attach-point='newFeatureTabLink'>Add Feature</a>
+        </li>
+        <li class="hidden" role='presentation'
+            data-dojo-attach-point='featureTab'>
             <a href="#${id}_featureTab" data-toggle='tab'
                 data-dojo-attach-point='featureTabLink'>Feature</a>
         </li>
         <li class='active'>
-            <a href="#${id}_detailsTab" data-toggle='tab'>Details</a>
+            <a href="#${id}_detailsTab" data-toggle='tab'
+                data-dojo-attach-point='detailsTabLink'>Details</a>
         </li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane hidden" id="${id}_featureTab">
+        <div class="tab-pane hidden" id="${id}_newFeatureTab"
+            data-dojo-attach-point='newFeatureTabContainer'>
+            <div data-dojo-attach-point='newFeatureTabContents'></div>
+        </div>
+        <div class="tab-pane hidden" id="${id}_featureTab"
+            data-dojo-attach-point='featureTabContainer'>
             <div data-dojo-attach-point='featureTabContents'></div>
         </div>
         <div class="tab-pane active" id="${id}_detailsTab">
