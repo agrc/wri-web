@@ -81,6 +81,16 @@ function (
 
                 expect(lastGraphic.setSymbol.calls.mostRecent().args[0].color.a).toBe(opacity);
             });
+            it('only calls moveToFront if shape is onscreen', function (done) {
+                g.getDojoShape = function () {
+                    return;
+                };
+
+                expect(function () {
+                    mapController.selectFeature(data);
+                    done();
+                }).not.toThrow();
+            });
         });
         describe('toggleReferenceLayer', function () {
             beforeEach(function () {

@@ -419,7 +419,10 @@ define([
             this.lastSelectedGraphic = graphic;
 
             graphic.setSymbol(newSelectionSymbol);
-            graphic.getDojoShape().moveToFront();
+            var shape = graphic.getDojoShape();
+            if (shape) {
+                shape.moveToFront();
+            }
         },
         clearSelectedFeature: function () {
             // summary:
