@@ -148,7 +148,11 @@ define([
             var categoryNum = config.domains.featureType.filter(function (t) {
                 return t[0] === this.categoryNode.innerHTML;
             }, this)[0][1];
-            this.drawToolbar.activate(geometryTypes[config.featureTypesInTables[categoryNum]]);
+            var geoType = geometryTypes[config.featureTypesInTables[categoryNum]];
+            this.drawToolbar.activate(geoType);
+
+            // cut is not applicable to points
+            this.cutBtn.disabled = geoType === Draw.POINT;
         },
         startCutting: function () {
             // summary:

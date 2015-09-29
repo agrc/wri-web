@@ -55,10 +55,16 @@ require([
                 stubmodule('app/project/DrawToolbar', {
                     'app/config': {
                         featureTypesInTables: {
-                            99: 'POLY'
+                            99: 'POLY',
+                            98: 'POINT',
+                            97: 'LINE'
                         },
                         domains: {
-                            featureType: [[testType, 99]]
+                            featureType: [
+                                [testType, 99],
+                                ['type2', 98],
+                                ['type3', 97]
+                            ]
                         },
                         topics: config.topics
                     }
@@ -78,6 +84,23 @@ require([
                 widget2.onStartDrawingFeature(testType);
 
                 expect(widget2.drawToolbar.activate).toHaveBeenCalledWith(Draw.POLYGON);
+
+                destroy(widget2);
+            });
+            it('disables the cut tool for point geometry type', function () {
+                widget2.show();
+
+                expect(widget2.cutBtn.disabled).toBe(false);
+
+                widget2.onStartDrawingFeature('type2');
+
+                expect(widget2.cutBtn.disabled).toBe(true);
+
+                widget2.onStartDrawingFeature(testType);
+
+                expect(widget2.cutBtn.disabled).toBe(false);
+
+                destroy(widget2);
             });
         });
     });
