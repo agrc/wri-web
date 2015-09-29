@@ -177,7 +177,7 @@ define([
                 var values;
                 if (this.fieldType === c.TYPE_TEXT) {
                     values = this.selectedValues.map(function (v) {
-                        return "'" + v + "'";
+                        return '\'' + v + '\'';
                     });
                 } else {
                     values = this.selectedValues;

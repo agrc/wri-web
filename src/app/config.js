@@ -190,8 +190,8 @@ define([
         symbols: {
             selected: {
                 point: new SimpleMarkerSymbol({
-                    type: "esriSMS",
-                    style: "esriSMSCircle",
+                    type: 'esriSMS',
+                    style: 'esriSMSCircle',
                     color: selectionColor,
                     size: 10,
                     angle: 0,
@@ -203,18 +203,18 @@ define([
                     }
                 }),
                 line: new SimpleLineSymbol({
-                    type: "esriSLS",
-                    style: "esriSLSSolid",
+                    type: 'esriSLS',
+                    style: 'esriSLSSolid',
                     color: selectionColor,
                     width: 4
                 }),
                 poly: new SimpleFillSymbol({
-                    type: "esriSFS",
-                    style: "esriSFSSolid",
+                    type: 'esriSFS',
+                    style: 'esriSFSSolid',
                     color: selectionColor,
                     outline: {
-                        type: "esriSLS",
-                        style: "esriSLSSolid",
+                        type: 'esriSLS',
+                        style: 'esriSLSSolid',
                         color: [110, 110, 110, 255],
                         width: 0.5
                     }

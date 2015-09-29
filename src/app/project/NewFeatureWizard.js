@@ -428,7 +428,7 @@ define([
 
             this.graphicsLayer.clear();
 
-            this.emit("hide");
+            this.emit('hide');
 
             this.destroyRecursive();
         },

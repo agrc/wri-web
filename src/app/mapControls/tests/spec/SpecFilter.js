@@ -83,26 +83,26 @@ require([
                 testWidget.itemClicked('1');
                 testWidget.itemClicked('2');
 
-                expect(testWidget.getQuery()).toBe("FieldName IN('1','2')");
+                expect(testWidget.getQuery()).toBe('FieldName IN(\'1\',\'2\')');
 
                 testWidget.fieldType = Filter.TYPE_NUMBER;
 
-                expect(testWidget.getQuery()).toBe("FieldName IN(1,2)");
+                expect(testWidget.getQuery()).toBe('FieldName IN(1,2)');
             });
             it('handles "all" queries', function () {
                 testWidget.any = false;
                 testWidget.itemClicked('1');
                 testWidget.itemClicked('2');
-                var expected = "FieldName='1' AND FieldName='2'";
+                var expected = 'FieldName=\'1\' AND FieldName=\'2\'';
 
                 expect(testWidget.getQuery()).toBe(expected);
             });
             it('related table any query', function () {
                 testWidget.relatedTableQuery = true;
                 testWidget.any = true;
-                var expected = ["(Project_ID IN(SELECT Project_ID FROM POINT WHERE FieldName IN('1','2')) OR ",
-                                "Project_ID IN(SELECT Project_ID FROM LINE WHERE FieldName IN('1','2')) OR ",
-                                "Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN('1','2')))"].join('');
+                var expected = ['(Project_ID IN(SELECT Project_ID FROM POINT WHERE FieldName IN(\'1\',\'2\')) OR ',
+                                'Project_ID IN(SELECT Project_ID FROM LINE WHERE FieldName IN(\'1\',\'2\')) OR ',
+                                'Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN(\'1\',\'2\')))'].join('');
                 testWidget.itemClicked('1');
                 testWidget.itemClicked('2');
 
@@ -112,9 +112,9 @@ require([
                 testWidget.relatedTableQuery = true;
                 testWidget.fieldType = Filter.TYPE_NUMBER;
                 testWidget.any = false;
-                var expected = ["Project_ID IN(",
-                                "SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ",
-                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(10))"].join('');
+                var expected = ['Project_ID IN(',
+                                'SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ',
+                                'intersect SELECT Project_ID FROM LINE WHERE FieldName IN(10))'].join('');
                 testWidget.itemClicked(1); // POLY
                 testWidget.itemClicked(2); // POLY
                 testWidget.itemClicked(10); // LINE
@@ -125,9 +125,9 @@ require([
                 testWidget.relatedTableQuery = true;
                 testWidget.fieldType = Filter.TYPE_NUMBER;
                 testWidget.any = false;
-                var expected = ["Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ",
-                                "intersect SELECT Project_ID FROM LINE WHERE FieldName IN(10) ",
-                                "intersect SELECT Project_ID FROM POINT WHERE FieldName IN(6,7))"].join('');
+                var expected = ['Project_ID IN(SELECT Project_ID FROM POLY WHERE FieldName IN(1,2) ',
+                                'intersect SELECT Project_ID FROM LINE WHERE FieldName IN(10) ',
+                                'intersect SELECT Project_ID FROM POINT WHERE FieldName IN(6,7))'].join('');
                 testWidget.itemClicked(1); // POLY
                 testWidget.itemClicked(2); // POLY
                 testWidget.itemClicked(10); // LINE
