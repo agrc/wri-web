@@ -111,16 +111,19 @@ require([
             });
         });
         describe('onPolyActionSelectChange', function () {
-            it('populates the treatment select', function () {
+            beforeEach(function () {
                 var atts = config.domains.featureAttributes;
                 atts['Test Category'] = {
                     'Test Action': ['Test Treatment1', 'Test Treatment2']
                 };
+                atts['Test Category'][config.herbicideActionName] = ['test1', 'test2'];
                 domConstruct.create('option', {
                     innerHTML: 'Test Category',
                     value: 'Test Category'
                 }, widget.featureCategorySelect);
                 widget.featureCategorySelect.value = 'Test Category';
+            });
+            it('populates the treatment select', function () {
                 domConstruct.create('option', {
                     innerHTML: 'Test Action',
                     value: 'Test Action'
@@ -130,6 +133,27 @@ require([
                 widget.onPolyActionSelectChange();
 
                 expect(widget.treatmentSelect.children.length).toBe(3);
+            });
+            it('shows/hides the herbicide select', function () {
+                domConstruct.create('option', {
+                    innerHTML: config.herbicideActionName,
+                    value: config.herbicideActionName
+                }, widget.polyActionSelect);
+                widget.polyActionSelect.value = config.herbicideActionName;
+
+                widget.onPolyActionSelectChange();
+
+                expect(domClass.contains(widget.herbicide, 'hidden')).toBe(false);
+
+                domConstruct.create('option', {
+                    innerHTML: 'Test Action',
+                    value: 'Test Action'
+                }, widget.polyActionSelect);
+                widget.polyActionSelect.value = 'Test Action';
+
+                widget.onPolyActionSelectChange();
+
+                expect(domClass.contains(widget.herbicide, 'hidden')).toBe(true);
             });
         });
         describe('resetFeatureAttributes', function () {

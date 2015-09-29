@@ -23,6 +23,11 @@ def get_data(table, fields):
     return [list(row) for row in cursor.fetchall()]
 
 
+def get_list(table, field):
+    cursor.execute('SELECT {} FROM {}'.format(field, table))
+    return [row[0] for row in cursor.fetchall()]
+
+
 def make_lu(table, key, value):
     cursor.execute('SELECT {},{} FROM {}'.format(key, value, table))
     obj = {}
@@ -37,7 +42,8 @@ treatments_lu = make_lu('LU_TREATMENTTYPE', 'TreatmentTypeID', 'TreatmentTypeDes
 obj = {
     'projectStatus': get_data('LU_STATUS', ['StatusDescription', 'StatusID']),
     'featureType': get_data('LU_FEATURETYPE', ['FeatureTypeDescription', 'FeatureTypeID']),
-    'featureAttributes': {}
+    'featureAttributes': {},
+    'herbicides': get_list('LU_HERBICIDE', 'HerbicideDescription')
 }
 
 # add actions and treatments to polygon features

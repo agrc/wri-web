@@ -138,6 +138,8 @@ define([
                 dynamicLayers: []
             });
 
+            loadItemsIntoSelect(config.domains.herbicides, this.herbicideSelect);
+
             this.inherited(arguments);
         },
         validateForm: function () {
@@ -346,6 +348,9 @@ define([
             clearSelect(this.treatmentSelect);
             loadItemsIntoSelect(
                 config.domains.featureAttributes[this.featureCategorySelect.value][this.polyActionSelect.value], this.treatmentSelect);
+
+            var showHerb = this.polyActionSelect.value.toUpperCase() === config.herbicideActionName;
+            domClass.toggle(this.herbicide, 'hidden', !showHerb);
         },
         resetFeatureAttributes: function (preserveVisibility) {
             // summary:
@@ -358,7 +363,11 @@ define([
                 }
             };
 
-            [this.polyActionSelect, this.treatmentSelect, this.typeSelect, this.pointLineActionSelect].forEach(function (s) {
+            [
+                this.polyActionSelect,
+                this.treatmentSelect,
+                this.typeSelect,
+                this.pointLineActionSelect].forEach(function (s) {
                 if (!preserveVisibility) {
                     clearSelect(s);
                 } else {
@@ -366,6 +375,10 @@ define([
                 }
                 hide(s.parentElement);
             });
+
+            this.herbicideSelect.value = '';
+            // always hide herbicide
+            domClass.add(this.herbicide, 'hidden');
 
             this.commentsTxt.value = '';
             hide(this.comments);
@@ -456,25 +469,27 @@ define([
             if (visible(this.pointLineAction)) {
                 params.action = this.pointLineActionSelect.value;
             }
+            if (visible(this.herbicide)) {
+                params.herbicide = this.herbicideSelect.value;
+            }
             if (visible(this.comments)) {
                 params.comments = this.commentsTxt.value;
             }
 
             var existing = this.actions.some(function (a) {
                 var match;
-                for (var p in params) {
-                    if (params.hasOwnProperty(p)) {
-                        match = params[p] === a[p];
-                        if (!match) {
-                            return false;
-                        }
+                Object.keys(params).forEach(function (p) {
+                    match = params[p] === a[p];
+                    if (!match) {
+                        return false;
                     }
-                }
+                });
                 return match;
             });
 
             if (!existing) {
                 var action = new Action(params, domConstruct.create('div', null, this.actionsContainer));
+                this.own(action);
                 this.actions.push(action);
                 var that = this;
                 var handle = aspect.before(action, 'destroyRecursive', function () {

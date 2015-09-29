@@ -76,6 +76,10 @@ define([
         //      The cache level to zoom to when zooming to a point
         centerAndZoomLevel: 13,
 
+        // herbicideAction: String
+        //      the name of the herbicide action
+        herbicideActionName: 'HERBICIDE APPLICATION',
+
         // defaultExtent: Extent
         //      The default extent of the map. (The state of utah)
         defaultExtent: new Extent({

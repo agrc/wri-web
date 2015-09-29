@@ -30,6 +30,9 @@ define([
         // action: String
         action: null,
 
+        // herbicide: String
+        herbicide: null,
+
         // comments: String (optional)
         comments: null,
 
@@ -39,7 +42,7 @@ define([
             console.log('app.project.Action::postCreate', arguments);
 
             // show only controls for which there was data passed
-            ['type', 'treatment', 'action', 'comments'].forEach(function (v) {
+            ['type', 'treatment', 'action', 'comments', 'herbicide'].forEach(function (v) {
                 if (this[v] !== null) {
                     domClass.remove(this[v + 'Li'], 'hidden');
                 }
