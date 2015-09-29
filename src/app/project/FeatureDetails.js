@@ -7,7 +7,6 @@ define([
 
     'dojo/dom-class',
     'dojo/dom-construct',
-    'dojo/query',
     'dojo/text!app/project/templates/FeatureDataTemplate.html',
     'dojo/text!app/project/templates/FeatureDetails.html',
     'dojo/text!app/project/templates/ProjectDataTemplate.html',
@@ -28,7 +27,6 @@ define([
 
     domClass,
     domConstruct,
-    query,
     featureTemplate,
     template,
     projectTemplate,
