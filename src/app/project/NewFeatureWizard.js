@@ -370,8 +370,11 @@ define([
             this.commentsTxt.value = '';
             hide(this.comments);
 
-            hide(this.retreatment);
-            this.retreatmentChBx.checked = false;
+            // don't reset retreatment if adding an additional action
+            if (!preserveVisibility) {
+                hide(this.retreatment);
+                this.retreatmentChBx.checked = false;
+            }
 
             this.saveBtn.disabled = true;
             this.addActionBtn.disabled = true;
@@ -455,9 +458,6 @@ define([
             }
             if (visible(this.comments)) {
                 params.comments = this.commentsTxt.value;
-            }
-            if (visible(this.retreatment)) {
-                params.retreatment = this.retreatmentChBx.checked;
             }
 
             var existing = this.actions.some(function (a) {

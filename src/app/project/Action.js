@@ -27,10 +27,6 @@ define([
         // treatment: String
         treatment: null,
 
-        // retreatment: String (true | false) (optional)
-        //      string value of the checked state of the checkbox
-        retreatment: null,
-
         // action: String
         action: null,
 
@@ -43,7 +39,7 @@ define([
             console.log('app.project.Action::postCreate', arguments);
 
             // show only controls for which there was data passed
-            ['type', 'treatment', 'retreatment', 'action', 'comments'].forEach(function (v) {
+            ['type', 'treatment', 'action', 'comments'].forEach(function (v) {
                 if (this[v] !== null) {
                     domClass.remove(this[v + 'Li'], 'hidden');
                 }
