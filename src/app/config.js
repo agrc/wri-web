@@ -1,6 +1,7 @@
 /* jshint maxlen:false */
 define([
     'dojo/has',
+    'dojo/request',
     'dojo/_base/lang',
 
     'esri/config',
@@ -12,6 +13,7 @@ define([
     'dojo/domReady!'
 ], function (
     has,
+    request,
     lang,
 
     esriConfig,
@@ -325,8 +327,14 @@ define([
         highlightSymbol: config.symbols.selected.poly
     }];
 
-    require(['dojo/text!jsonconfig/config.json'], function (txt) {
-        config.domains = JSON.parse(txt);
+    request(require.baseUrl + 'jsonconfig/config.json', {
+        handleAs: 'json',
+        sync: true
+    }).then(function (response) {
+        config.domains = response;
+    }, function () {
+        throw 'Error getting config.json!';
     });
+
     return config;
 });
