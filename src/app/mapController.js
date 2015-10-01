@@ -75,10 +75,6 @@ define([
         // showReferenceLayerLabels: Boolean
         showReferenceLayerLabels: true,
 
-        // baseMapLayers: Layer[]
-        //      The list of layers that make up the base map
-        baseMapLayers: null,
-
         initMap: function (mapDiv, toolbarNode) {
             // summary:
             //      Sets up the map and layers
