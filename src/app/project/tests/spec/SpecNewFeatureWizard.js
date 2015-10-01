@@ -102,12 +102,20 @@ require([
                 expect(domClass.contains(widget.comments, 'hidden')).toBe(false);
             });
             it('shows the retreatment box', function () {
-                widget.featureCategorySelect.value = config.retreatmentCategories[0];
+                widget.featureCategorySelect.value = config.terrestrialAquaticCategories[0];
                 expect(domClass.contains(widget.retreatment, 'hidden')).toBe(true);
 
                 widget.onFeatureCategoryChange();
 
                 expect(domClass.contains(widget.retreatment, 'hidden')).toBe(false);
+            });
+            it('only shows the add additional action button for terrestrial and acquatic', function () {
+                expect(domClass.contains(widget.addActionBtn, 'hidden')).toBe(false);
+
+                widget.featureCategorySelect.value = config.commentsFieldCategories[0];
+                widget.onFeatureCategoryChange();
+
+                expect(domClass.contains(widget.addActionBtn, 'hidden')).toBe(true);
             });
         });
         describe('onPolyActionSelectChange', function () {

@@ -223,9 +223,13 @@ define([
             if (config.commentsFieldCategories.indexOf(newValue) > -1) {
                 domClass.remove(this.comments, 'hidden');
             }
-            if (config.retreatmentCategories.indexOf(newValue) > -1) {
+            var isTerrAquatic = config.terrestrialAquaticCategories.indexOf(newValue) > -1;
+            if (isTerrAquatic) {
                 domClass.remove(this.retreatment, 'hidden');
             }
+
+            // show/hide the add additional action button
+            domClass.toggle(this.addActionBtn, 'hidden', !isTerrAquatic);
         },
         onUploadClick: function () {
             // summary:

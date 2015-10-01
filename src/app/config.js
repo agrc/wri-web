@@ -153,7 +153,7 @@ define([
             'Other point feature'
         ],
 
-        retreatmentCategories: [
+        terrestrialAquaticCategories: [
             'Terrestrial Treatment Area',
             'Aquatic/Riparian Treatment Area'
         ],
