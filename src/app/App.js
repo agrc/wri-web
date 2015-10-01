@@ -66,7 +66,6 @@ define([
 
             this.childWidgets.push(
                 new ProjectContainer({}, this.projectContainerNode),
-                new FiltersContainer({}, this.filtersContainerNode),
                 new Toaster({
                     topic: config.topics.toast
                 }, domConstruct.create('div', {}, document.body)),
