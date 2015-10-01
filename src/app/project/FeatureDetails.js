@@ -112,7 +112,7 @@ define([
             domClass.remove(this.newFeatureTabContainer, 'hidden');
             this.newFeatureTabLink.click();
 
-            if (!this.newFeatureWizard) {
+            if (!this.newFeatureWizard || this.newFeatureWizard._destroyed) {
                 var wizard = new NewFeatureWizard({},
                     domConstruct.create('div', null, this.newFeatureTabContents));
                 wizard.startup();
