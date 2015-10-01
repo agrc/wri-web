@@ -62,7 +62,7 @@ define([
 
         // scaleTrigger: Number
         //      the basemap level to toggle centroids
-        scaleTrigger: 8,
+        scaleTrigger: 13,
 
         // popupDelay: Number
         //      The delay (in milliseconds) that popups delay before showing
@@ -74,7 +74,7 @@ define([
 
         // centerAndZoomLevel: Number
         //      The cache level to zoom to when zooming to a point
-        centerAndZoomLevel: 13,
+        centerAndZoomLevel: 18,
 
         // herbicideAction: String
         //      the name of the herbicide action
