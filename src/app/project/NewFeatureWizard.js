@@ -1,6 +1,7 @@
 define([
     'app/config',
     'app/project/Action',
+    'app/Wkt',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -27,6 +28,7 @@ define([
 ], function (
     config,
     Action,
+    Wkt,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -511,7 +513,22 @@ define([
             //      gather data and submit to api
             console.log('app.project.NewFeatureWizard:onSaveClick', arguments);
 
+            var geometries = this.graphicsLayer.graphics.map(function (graphic) {
+                // this makes Terraformer ignore it's unit standardization
+                graphic.geometry.spatialReference = null;
+                return graphic.geometry;
+            });
 
+            if (!geometries || geometries.length < 1) {
+                topic.publish(config.topics.toast, { message: 'No geometries found.', type: 'warning'});
+
+                return;
+            }
+
+            var esriGeometry = geometryEngine.union(geometries);
+            var convert = new Wkt();
+            console.debug(convert.toWkt(esriGeometry));
+            console.debug(this.getActionsData());
         },
         getActionsData: function () {
             // summary:

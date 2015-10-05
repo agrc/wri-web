@@ -46,8 +46,7 @@
     "requireSpaceBeforeBinaryOperators": true,
     "requireSpaceAfterBinaryOperators": true,
     "disallowKeywords": [
-        "with",
-        "continue"
+        "with"
     ],
     "validateIndentation": 4,
     "disallowMixedSpacesAndTabs": true,

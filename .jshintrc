@@ -20,7 +20,7 @@
     "forin": true,
     "freeze": true,
     "latedef": true,
-    "maxcomplexity": 10,
+    "maxcomplexity": 15,
     "maxerr": 250,
     "noarg": true,
     "nonbsp": true,
