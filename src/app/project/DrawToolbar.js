@@ -65,7 +65,8 @@ define([
             this.own(
                 topic.subscribe(config.topics.feature.startDrawing, lang.hitch(this, 'onStartDrawingFeature')),
                 query('.tool', this.domNode).on('click', lang.hitch(this, 'onToolClick')),
-                topic.subscribe(config.topics.feature.selectedForEditing, lang.hitch(this, 'onSelectedForEditing'))
+                topic.subscribe(config.topics.feature.selectedForEditing, lang.hitch(this, 'onSelectedForEditing')),
+                topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'onCancelClick'))
             );
 
             this.inherited(arguments);
