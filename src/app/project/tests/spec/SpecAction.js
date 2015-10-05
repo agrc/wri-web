@@ -30,5 +30,24 @@ require([
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
+        describe('toObject', function () {
+            it('returns the valid properties', function () {
+                var obj = {
+                    type: 'blah',
+                    comments: 'hello'
+                };
+                var widget2 = new WidgetUnderTest(obj, domConstruct.create('div', null, document.body));
+                expect(widget2.toObject()).toEqual(obj);
+                destroy(widget2);
+
+                obj = {
+                    type: 'blah',
+                    action: 'hello action'
+                };
+                widget2 = new WidgetUnderTest(obj, domConstruct.create('div', null, document.body));
+                expect(widget2.toObject()).toEqual(obj);
+                destroy(widget2);
+            });
+        });
     });
 });

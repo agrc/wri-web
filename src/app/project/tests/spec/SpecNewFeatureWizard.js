@@ -2,6 +2,7 @@ require([
     'agrc-jasmine-matchers/topics',
 
     'app/config',
+    'app/project/Action',
     'app/project/NewFeatureWizard',
 
     'dojo/dom-class',
@@ -10,6 +11,7 @@ require([
     topics,
 
     config,
+    Action,
     WidgetUnderTest,
 
     domClass,
@@ -287,6 +289,112 @@ require([
                 widget.onAddActionClick();
 
                 expect(config.topics.toast).toHaveBeenPublishedWith(widget.duplicateActionMsg, 'warning');
+            });
+        });
+        describe('getActionsData', function () {
+            it('combines multiple treatments for the same action', function () {
+                widget.actions = [{
+                    type: 'Terr',
+                    treatment: 'T1'
+                }, {
+                    type: 'Terr',
+                    treatment: 'T2'
+                }, {
+                    type: 'Something else',
+                    treatment: 'T3'
+                }];
+
+                var results = widget.getActionsData();
+
+                expect(results).toEqual([{
+                    type: 'Terr',
+                    treatments: [{
+                        treatment: 'T1'
+                    }, {
+                        treatment: 'T2'
+                    }]
+                }, {
+                    type: 'Something else',
+                    treatments: [{treatment: 'T3'}]
+                }]);
+            });
+            it('combines herbicides for the same treatment', function () {
+                widget.actions = [{
+                    type: 'Terr',
+                    treatment: 'T1'
+                }, {
+                    type: 'Terr',
+                    treatment: 'T2',
+                    herbicide: 'herbi1'
+                }, {
+                    type: 'Terr',
+                    treatment: 'T2',
+                    herbicide: 'herbi2'
+                }, {
+                    type: 'Terr2',
+                    treatment: 'T2',
+                    herbicide: 'herbi2'
+                }, {
+                    type: 'Something else',
+                    treatment: 'T3',
+                    herbicide: 'herbi3'
+                }];
+
+                var results = widget.getActionsData();
+
+                expect(results).toEqual([{
+                    type: 'Terr',
+                    treatments: [{
+                        treatment: 'T1'
+                    }, {
+                        treatment: 'T2',
+                        herbicides: ['herbi1', 'herbi2']
+                    }]
+                }, {
+                    type: 'Terr2',
+                    treatments: [{
+                        treatment: 'T2',
+                        herbicides: ['herbi2']
+                    }]
+                }, {
+                    type: 'Something else',
+                    treatments: [{
+                        treatment: 'T3',
+                        herbicides: ['herbi3']
+                    }]
+                }]);
+            });
+            it('copying action and description properties', function () {
+                var inputs = [{
+                    action: 'hello',
+                    comments: 'blah'
+                }, {
+                    type: 'Something else',
+                    treatment: 'T3',
+                    herbicide: 'herbi3'
+                }, {
+                    type: 'type2',
+                    action: 'hello2'
+                }];
+                inputs.forEach(function (i) {
+                    widget.actions.push(new Action(i));
+                });
+
+                var results = widget.getActionsData();
+
+                expect(results).toEqual([{
+                    action: 'hello',
+                    comments: 'blah'
+                }, {
+                    type: 'type2',
+                    action: 'hello2'
+                }, {
+                    type: 'Something else',
+                    treatments: [{
+                        treatment: 'T3',
+                        herbicides: ['herbi3']
+                    }]
+                }]);
             });
         });
     });

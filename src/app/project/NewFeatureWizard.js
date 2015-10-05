@@ -512,6 +512,61 @@ define([
             console.log('app.project.NewFeatureWizard:onSaveClick', arguments);
 
 
+        },
+        getActionsData: function () {
+            // summary:
+            //      format action data for submission to api
+            console.log('app.project.NewFeatureWizard:getActionsData', arguments);
+
+            // use object to allow for easier checking for existing items
+            var nestedActions = {};
+
+            // don't need to worry about duplicates for non-nested actions
+            var nonNestedActions = [];
+
+            this.actions.forEach(function (a) {
+                if (a.type && a.treatment) {
+                    // nested action
+                    if (!nestedActions[a.type]) {
+                        nestedActions[a.type] = {
+                            treatments: {}
+                        };
+                    }
+                    var action = nestedActions[a.type];
+
+                    if (a.treatment) {
+                        if (!action.treatments[a.treatment]) {
+                            action.treatments[a.treatment] = [a.herbicide];
+                        } else {
+                            action.treatments[a.treatment].push(a.herbicide);
+                        }
+                    }
+                } else {
+                    // non-nested action
+                    nonNestedActions.push(a.toObject());
+                }
+            });
+
+            // convert to a single array of actions
+            return nonNestedActions.concat(Object.keys(nestedActions).map(function (type) {
+                return {
+                    type: type,
+                    treatments: Object.keys(nestedActions[type].treatments).map(function (treatmentName) {
+                        var treatment = {
+                            treatment: treatmentName
+                        };
+                        var herbicides = nestedActions[type].treatments[treatmentName].filter(function (y) {
+                            // only return defined herbicide values
+                            return y;
+                        });
+                        if (herbicides.length > 0) {
+                            treatment.herbicides = herbicides;
+                        }
+
+                        return treatment;
+                    })
+                };
+            }));
         }
     });
 });

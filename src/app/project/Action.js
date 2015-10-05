@@ -13,6 +13,8 @@ define([
     template,
     declare
 ) {
+    var props = ['type', 'treatment', 'action', 'comments', 'herbicide'];
+
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
         //      Container for holding action data
@@ -42,7 +44,7 @@ define([
             console.log('app.project.Action::postCreate', arguments);
 
             // show only controls for which there was data passed
-            ['type', 'treatment', 'action', 'comments', 'herbicide'].forEach(function (v) {
+            props.forEach(function (v) {
                 if (this[v] !== null) {
                     domClass.remove(this[v + 'Li'], 'hidden');
                 }
@@ -56,6 +58,20 @@ define([
             console.log('app.project.Action:onClose', arguments);
 
             this.destroyRecursive(false);
+        },
+        toObject: function () {
+            // summary:
+            //      convert the properties of this widget to an object
+            console.log('app.project.Action:toObject', arguments);
+
+            var obj = {};
+            props.forEach(function (p) {
+                if (this[p]) {
+                    obj[p] = this[p];
+                }
+            }, this);
+
+            return obj;
         }
     });
 });
