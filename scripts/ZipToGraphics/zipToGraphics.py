@@ -27,8 +27,7 @@ categories = {
     'Fish passage structure': ['Point', 'Multipoint'],
     'Fence': ['Polyline'],
     'Pipeline': ['Polyline'],
-    'Dam': ['Polyline'],
-    'Research': ['Polygon']
+    'Dam': ['Polyline']
 }
 
 def main(zfilepath, category):
