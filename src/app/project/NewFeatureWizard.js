@@ -166,6 +166,8 @@ define([
                 valid ||
                 (this.actions.length > 0 && category && populatedActionFields.length === 0)
             );
+
+            return valid;
         },
         onCancelDrawing: function () {
             // summary:
@@ -534,6 +536,10 @@ define([
             // summary:
             //      format action data for submission to api
             console.log('app.project.NewFeatureWizard:getActionsData', arguments);
+
+            if (this.validateForm()) {
+                this.onAddActionClick();
+            }
 
             // use object to allow for easier checking for existing items
             var nestedActions = {};
