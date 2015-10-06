@@ -62,11 +62,17 @@ define([
 
             $(this.domNode).collapse({toggle: false});
 
+            var that = this;
             this.own(
                 topic.subscribe(config.topics.feature.startDrawing, lang.hitch(this, 'onStartDrawingFeature')),
                 query('.tool', this.domNode).on('click', lang.hitch(this, 'onToolClick')),
                 topic.subscribe(config.topics.feature.selectedForEditing, lang.hitch(this, 'onSelectedForEditing')),
-                topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'onCancelClick'))
+                topic.subscribe(config.topics.projectIdsChanged, function () {
+                    // only fire cancel if drawing toolbar is active
+                    if (domClass.contains(that.domNode, 'in')) {
+                        that.onCancelClick();
+                    }
+                })
             );
 
             this.inherited(arguments);
