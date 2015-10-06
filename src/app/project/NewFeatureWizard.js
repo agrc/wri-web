@@ -527,8 +527,30 @@ define([
 
             var esriGeometry = geometryEngine.union(geometries);
             var convert = new Wkt();
-            console.debug(convert.toWkt(esriGeometry));
-            console.debug(this.getActionsData());
+            var postData = lang.mixin(this.getUserData(),
+            {
+                category: this.featureCategorySelect.value,
+                retreatment: this.retreatmentChBx.checked,
+                geometry: convert.toWkt(esriGeometry),
+                actions: JSON.stringify(this.getActionsData())
+            });
+
+            console.debug(postData);
+        },
+        getUserData: function () {
+            // summary:
+            //      gets the user data from the form
+            // {key: token:}
+            console.log('app.project.NewFeatureWizard:getUserData', arguments);
+
+            var form = document.getElementById('user-data');
+            var key = 'key' in form ? form.key.value : null;
+            var token = 'token' in form ? form.token.value : null;
+
+            return {
+                key: key,
+                token: token
+            };
         },
         getActionsData: function () {
             // summary:
