@@ -2,6 +2,7 @@ define([
     'app/config',
     'app/project/Action',
     'app/project/userCredentials',
+    'app/router',
     'app/Wkt',
 
     'dijit/_TemplatedMixin',
@@ -12,6 +13,7 @@ define([
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/query',
+    'dojo/request/xhr',
     'dojo/text!app/project/templates/NewFeatureWizard.html',
     'dojo/topic',
     'dojo/_base/declare',
@@ -30,6 +32,7 @@ define([
     config,
     Action,
     userCredentials,
+    router,
     Wkt,
 
     _TemplatedMixin,
@@ -40,6 +43,7 @@ define([
     domClass,
     domConstruct,
     query,
+    xhr,
     template,
     topic,
     declare,
@@ -463,28 +467,7 @@ define([
             //      user has clicked the add action button
             console.log('app.project.NewFeatureWizard:onAddActionClick', arguments);
 
-            var visible = function (node) {
-                return !domClass.contains(node, 'hidden');
-            };
-
-            var params = {};
-            if (visible(this.polyAction)) {
-                params.type = this.polyActionSelect.value;
-            } else if (visible(this.type)) {
-                params.type = this.typeSelect.value;
-            }
-            if (visible(this.treatment)) {
-                params.treatment = this.treatmentSelect.value;
-            }
-            if (visible(this.pointLineAction)) {
-                params.action = this.pointLineActionSelect.value;
-            }
-            if (visible(this.herbicide)) {
-                params.herbicide = this.herbicideSelect.value;
-            }
-            if (visible(this.comments)) {
-                params.comments = this.commentsTxt.value;
-            }
+            var params = this.getActionParams();
 
             var existing = this.actions.some(function (a) {
                 var match;
@@ -512,14 +495,44 @@ define([
                 topic.publish(config.topics.toast, this.duplicateActionMsg, 'warning');
             }
         },
+        getActionParams: function () {
+            // summary:
+            //      get the params for a new Action from the visible form controls
+            // param or return
+            console.log('app.project.NewFeatureWizard:getActionParams', arguments);
+
+            var visible = function (node) {
+                return !domClass.contains(node, 'hidden');
+            };
+
+            var params = {};
+
+            if (visible(this.polyAction)) {
+                params.type = this.polyActionSelect.value;
+            } else if (visible(this.type)) {
+                params.type = this.typeSelect.value;
+            }
+            if (visible(this.treatment)) {
+                params.treatment = this.treatmentSelect.value;
+            }
+            if (visible(this.pointLineAction)) {
+                params.action = this.pointLineActionSelect.value;
+            }
+            if (visible(this.herbicide)) {
+                params.herbicide = this.herbicideSelect.value;
+            }
+            if (visible(this.comments)) {
+                params.comments = this.commentsTxt.value;
+            }
+
+            return params;
+        },
         onSaveClick: function () {
             // summary:
             //      gather data and submit to api
             console.log('app.project.NewFeatureWizard:onSaveClick', arguments);
 
             var geometries = this.graphicsLayer.graphics.map(function (graphic) {
-                // this makes Terraformer ignore it's unit standardization
-                graphic.geometry.spatialReference = null;
                 return graphic.geometry;
             });
 
@@ -539,16 +552,44 @@ define([
                 actions: JSON.stringify(this.getActionsData())
             });
 
-            console.debug(postData);
+            var onError = function (msg) {
+                topic.publish(config.topics.toast, {
+                    message: msg || 'Error submitting feature to the server!',
+                    type: 'danger'
+                });
+            };
+
+            var projectId = router.getProjectId();
+            xhr.post(config.urls.api + '/project/' + projectId + '/feature/create', {
+                handleAs: 'json',
+                headers: { 'Accept': 'application/json' },
+                data: postData
+            }).then(function (response) {
+                if (response.status === 200) {
+                    topic.publish(config.topics.toast, {
+                        message: response.message || 'Feature added successfully!',
+                        type: 'success'
+                    });
+                    topic.publish(config.topics.projectIdsChanged, [projectId]);
+                } else {
+                    onError(response.message);
+                }
+            }, function (error) {
+                onError(error.response.data);
+            }).always(lang.partial(topic.publish, config.topics.hideProjectLoader));
+
+            topic.publish(config.topics.showProjectLoader);
         },
         getActionsData: function () {
             // summary:
             //      format action data for submission to api
             console.log('app.project.NewFeatureWizard:getActionsData', arguments);
 
+            var tempAction;
             if (this.validateForm()) {
-                this.onAddActionClick();
+                tempAction = new Action(this.getActionParams());
             }
+            var actions = (tempAction) ? this.actions.concat([tempAction]) : this.actions;
 
             // use object to allow for easier checking for existing items
             var nestedActions = {};
@@ -556,7 +597,7 @@ define([
             // don't need to worry about duplicates for non-nested actions
             var nonNestedActions = [];
 
-            this.actions.forEach(function (a) {
+            actions.forEach(function (a) {
                 if (a.type && a.treatment) {
                     // nested action
                     if (!nestedActions[a.type]) {

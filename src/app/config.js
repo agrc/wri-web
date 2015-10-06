@@ -190,7 +190,9 @@ define([
                 drawEditComplete: 'wri/feature/drawEditComplete',
                 cancelDrawing: 'wri/features/cancelDrawing'
             },
-            toast: 'wri/toast'
+            toast: 'wri/toast',
+            showProjectLoader: 'wri/showProjectLoader',
+            hideProjectLoader: 'wri/hideProjectLoader'
         },
 
         symbols: {

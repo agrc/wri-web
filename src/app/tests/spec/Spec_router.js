@@ -109,5 +109,21 @@ require([
                 })).toEqual('Project_ID NOT IN(1,2)');
             });
         });
+        describe('getProjectId', function () {
+            it('returns the current project id', function () {
+                router.projectIds = [2];
+
+                expect(router.getProjectId()).toBe(2);
+            });
+            it('throws an error if there are multiple or no ids', function () {
+                router.projectIds = [1, 2];
+
+                expect(router.getProjectId.bind(router)).toThrow();
+
+                router.projectIds = [];
+
+                expect(router.getProjectId.bind(router)).toThrow();
+            });
+        });
     });
 });

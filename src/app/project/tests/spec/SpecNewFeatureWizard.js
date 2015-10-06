@@ -5,8 +5,14 @@ require([
     'app/project/Action',
     'app/project/NewFeatureWizard',
 
+    'dojo/Deferred',
     'dojo/dom-class',
-    'dojo/dom-construct'
+    'dojo/dom-construct',
+    'dojo/text!app/tests/data/esri_geometries.json',
+
+    'esri/geometry/Point',
+
+    'stubmodule'
 ], function (
     topics,
 
@@ -14,8 +20,14 @@ require([
     Action,
     WidgetUnderTest,
 
+    Deferred,
     domClass,
-    domConstruct
+    domConstruct,
+    esriGeometries,
+
+    Point,
+
+    stubModule
 ) {
     describe('app/project/NewFeatureWizard', function () {
         var widget;
@@ -430,6 +442,42 @@ require([
                         treatment: 'Test Treatment1'
                     }]
                 }]);
+            });
+        });
+        describe('onSaveClick', function () {
+            it('sends the correct data to the api', function (done) {
+                var def = new Deferred();
+                var xhrSpy = jasmine.createSpy('xhr').and.returnValue(def.promise);
+                stubModule('app/project/NewFeatureWizard', {
+                    'app/router': {
+                        getProjectId: function () {
+                            return 999;
+                        }
+                    },
+                    'app/project/userCredentials': {
+                        getUserData: function () {
+                            return {};
+                        }
+                    },
+                    'dojo/request/xhr': {
+                        post: xhrSpy
+                    }
+                }).then(function (StubbedModule) {
+                    var testWidget2 = new StubbedModule({}, domConstruct.create('div', {}, document.body));
+                    testWidget2.graphicsLayer.graphics = [{
+                        geometry: new Point(JSON.parse(esriGeometries).esri.point)
+                    }];
+                    var actionData = 'blah';
+                    spyOn(testWidget2, 'getActionsData').and.returnValue(actionData);
+
+                    testWidget2.onSaveClick();
+
+                    var args = xhrSpy.calls.mostRecent().args;
+                    expect(args[0]).toMatch(/999/);
+
+                    destroy(testWidget2);
+                    done();
+                });
             });
         });
     });

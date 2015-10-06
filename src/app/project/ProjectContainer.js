@@ -84,7 +84,11 @@ define([
                 on(this.closeNode, 'click', function () {
                     // this is to prevent the click event from being passed to toggle
                     that.toggle();
-                })
+                }),
+                topic.subscribe(config.topics.showProjectLoader,
+                    lang.hitch(this, '_showLoader')),
+                topic.subscribe(config.topics.hideProjectLoader,
+                    lang.hitch(this, '_hideLoader'))
             );
         },
         showDetailsForProject: function (ids) {
@@ -146,16 +150,9 @@ define([
             // id
             console.log('app.project.ProjectContainer::_queryForProjectDetails', arguments);
 
+            this._showLoader();
+
             var that = this;
-            this.displayTimer = window.setTimeout(function () {
-                domClass.remove(that.loadingNode, 'hidden');
-                domClass.remove(that.domNode, 'hidden');
-            }, 500);
-
-            domClass.add(this.errorNode, 'hidden');
-            domClass.add(this.contentNode, 'hidden');
-            domClass.add(this.closeNode, 'hidden');
-
             return xhr.get(config.urls.api + '/project/' + id, {
                 handleAs: 'json',
                 headers: { 'Accept': 'application/json' },
@@ -171,6 +168,33 @@ define([
                 });
             });
         },
+        _showLoader: function () {
+            // summary:
+            //      hides all content and shows the loader bar
+            console.log('app.project.ProjectContainer:_showLoader', arguments);
+
+            var that = this;
+            this.displayTimer = window.setTimeout(function () {
+                domClass.remove(that.loadingNode, 'hidden');
+                domClass.remove(that.domNode, 'hidden');
+            }, 500);
+
+            domClass.add(this.errorNode, 'hidden');
+            domClass.add(this.contentNode, 'hidden');
+            domClass.add(this.closeNode, 'hidden');
+        },
+        _hideLoader: function () {
+            // summary:
+            //      shows the content and hides the loader
+            console.log('app.project.ProjectContainer:_hideLoader', arguments);
+
+            this.clearTimer();
+
+            domClass.add(this.loadingNode, 'hidden');
+            domClass.remove(this.closeNode, 'hidden');
+            domClass.remove(this.domNode, 'hidden');
+            domClass.remove(this.contentNode, 'hidden');
+        },
         _updateDetails: function (response) {
             // summary:
             //      refreshes the widget data for a new project
@@ -178,15 +202,13 @@ define([
             console.log('app.project.ProjectContainer::_updateDetails', arguments);
 
             domClass.toggle(this.errorNode, 'hidden', response.project);
-            domClass.add(this.loadingNode, 'hidden');
-            domClass.remove(this.closeNode, 'hidden');
-            domClass.remove(this.domNode, 'hidden');
-
             if (!response.project) {
                 this.errorNode.innerHTML = 'We could not find a project with the id: ' + this.currentProject + '.';
 
                 return;
             }
+
+            this._hideLoader();
 
             response.project.allowEdits = response.allowEdits;
             this.projectDetails = new ProjectDetails(response.project).placeAt(this.detailsNode);
@@ -194,8 +216,6 @@ define([
             this.featuresGrid = new FeaturesGrid({
                 features: response.features
             }).placeAt(this.featureGridNode);
-
-            domClass.remove(this.contentNode, 'hidden');
 
             this.featureDetails.startup();
             this.projectDetails.startup();

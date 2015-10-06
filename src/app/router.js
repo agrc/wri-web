@@ -120,6 +120,19 @@ define([
             }
 
             return dojoString.substitute(template, [config.fieldNames.Project_ID, id_nums]);
+        },
+        getProjectId: function () {
+            // summary:
+            //      returns the single project id
+            console.log('app/router:getProjectId', arguments);
+
+            if (this.projectIds.length === 1) {
+                return this.projectIds[0];
+            } else if (this.projectIds.length > 1) {
+                throw 'multiple project ids!';
+            } else {
+                throw 'no project ids!';
+            }
         }
     };
 });
