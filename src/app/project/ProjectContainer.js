@@ -164,6 +164,11 @@ define([
                 that.clearTimer();
 
                 return response;
+            }, function () {
+                topic.publish(config.topics.toast, {
+                    message: 'Error with project api',
+                    type: 'danger'
+                });
             });
         },
         _updateDetails: function (response) {
