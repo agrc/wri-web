@@ -396,6 +396,41 @@ require([
                     }]
                 }]);
             });
+            it('gets action from visible controls if applicable', function () {
+                var atts = config.domains.featureAttributes;
+                atts['Test Category'] = {
+                    'Test Action': ['Test Treatment1', 'Test Treatment2']
+                };
+                domConstruct.create('option', {
+                    innerHTML: 'Test Category',
+                    value: 'Test Category'
+                }, widget.featureCategorySelect);
+                widget.featureCategorySelect.value = 'Test Category';
+                widget.onFeatureCategoryChange();
+                widget.graphicsLayer.graphics = [{}];
+                domConstruct.create('option', {
+                    innerHTML: 'Test Action',
+                    value: 'Test Action'
+                }, widget.polyActionSelect);
+                widget.polyActionSelect.value = 'Test Action';
+                widget.onPolyActionSelectChange();
+                widget.treatmentSelect.value = 'Test Treatment1';
+                widget.actions = [{
+                    type: 'Test Action',
+                    treatment: 'T1'
+                }];
+
+                var results = widget.getActionsData();
+
+                expect(results).toEqual([{
+                    type: 'Test Action',
+                    treatments: [{
+                        treatment: 'T1'
+                    }, {
+                        treatment: 'Test Treatment1'
+                    }]
+                }]);
+            });
         });
         describe('getUserData', function () {
             var form;
