@@ -180,6 +180,7 @@ define([
                 return;
             }
 
+            response.project.allowEdits = response.allowEdits;
             this.projectDetails = new ProjectDetails(response.project).placeAt(this.detailsNode);
             this.featureDetails = new FeatureDetails(response.project).placeAt(this.featureDetailsNode);
             this.featuresGrid = new FeaturesGrid({

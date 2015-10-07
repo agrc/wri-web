@@ -4,10 +4,13 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/declare',
     'dojo/dom-class',
+    'dojo/dom-construct',
+    'dojo/on',
     'dojo/text!app/project/templates/ProjectDetails.html',
     'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
     'bootstrap-stylus/js/button'
 ], function (
@@ -16,10 +19,13 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    declare,
     domClass,
+    domConstruct,
+    on,
     template,
-    topic
+    topic,
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -34,6 +40,22 @@ define([
             console.log('app.project.ProjectDetails:constructor', arguments);
 
             this.statusClass = params.status.replace(' ', '');
+        },
+        postCreate: function () {
+            // summary:
+            //      description
+            // param or return
+            console.log('app.project.ProjectDetails:postCreate', arguments);
+
+            if (this.allowEdits) {
+                var btn = domConstruct.create('button', {
+                    role: 'button',
+                    'class': 'btn btn-primary',
+                    innerHTML: 'Add Feature'
+                }, this.toggleNode.parentNode, 'first');
+
+                this.own(on(btn, 'click', lang.hitch(this, 'onAddFeatureClick')));
+            }
         },
         toggleAdjacent: function () {
             // summary:
