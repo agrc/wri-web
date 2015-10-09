@@ -4,6 +4,7 @@ define([
     'app/project/FeatureDetails',
     'app/project/FeaturesGrid',
     'app/project/ProjectDetails',
+    'app/project/userCredentials',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -23,6 +24,7 @@ define([
     FeatureDetails,
     FeaturesGrid,
     ProjectDetails,
+    userCredentials,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -156,7 +158,8 @@ define([
 
             return xhr.get(config.urls.api + '/project/' + id, {
                 handleAs: 'json',
-                headers: { 'Accept': 'application/json' }
+                headers: { 'Accept': 'application/json' },
+                query: userCredentials.getUserData()
             }).then(function (response) {
                 that.clearTimer();
 

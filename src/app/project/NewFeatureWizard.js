@@ -1,6 +1,7 @@
 define([
     'app/config',
     'app/project/Action',
+    'app/project/userCredentials',
     'app/Wkt',
 
     'dijit/_TemplatedMixin',
@@ -28,6 +29,7 @@ define([
 ], function (
     config,
     Action,
+    userCredentials,
     Wkt,
 
     _TemplatedMixin,
@@ -529,7 +531,7 @@ define([
 
             var esriGeometry = geometryEngine.union(geometries);
             var convert = new Wkt();
-            var postData = lang.mixin(this.getUserData(),
+            var postData = lang.mixin(userCredentials.getUserData(),
             {
                 category: this.featureCategorySelect.value,
                 retreatment: this.retreatmentChBx.checked,
@@ -538,21 +540,6 @@ define([
             });
 
             console.debug(postData);
-        },
-        getUserData: function () {
-            // summary:
-            //      gets the user data from the form
-            // {key: token:}
-            console.log('app.project.NewFeatureWizard:getUserData', arguments);
-
-            var form = document.getElementById('user-data');
-            var key = 'key' in form ? form.key.value : null;
-            var token = 'token' in form ? form.token.value : null;
-
-            return {
-                key: key,
-                token: token
-            };
         },
         getActionsData: function () {
             // summary:
