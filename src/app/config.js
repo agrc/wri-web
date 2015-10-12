@@ -60,7 +60,7 @@ define([
 
         // version.: String
         //      The version number.
-        version: '0.6.3',
+        version: '0.6.4',
 
         // scaleTrigger: Number
         //      the basemap level to toggle centroids
