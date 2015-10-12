@@ -49,6 +49,10 @@ define([
         //      The timer that delays the display of the progress bar
         displayTimer: null,
 
+        // projectDetailsRequest: Promise
+        //      The promise returns by the xhr request
+        projectDetailsRequest: null,
+
 
         // Properties to be sent into constructor
 
@@ -152,8 +156,13 @@ define([
 
             this._showLoader();
 
+            // cancel any in flight requests
+            if (this.projectDetailsRequest && !this.projectDetailsRequest.isFulfilled()) {
+                this.projectDetailsRequest.cancel();
+            }
+
             var that = this;
-            return xhr.get(config.urls.api + '/project/' + id, {
+            this.projectDetailsRequest = xhr.get(config.urls.api + '/project/' + id, {
                 handleAs: 'json',
                 headers: { 'Accept': 'application/json' },
                 query: userCredentials.getUserData()
@@ -167,6 +176,7 @@ define([
                     type: 'danger'
                 });
             });
+            return this.projectDetailsRequest;
         },
         _showLoader: function () {
             // summary:
