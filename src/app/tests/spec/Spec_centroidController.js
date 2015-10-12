@@ -67,10 +67,12 @@ function (
             });
         });
         describe('_showPopupFor', function () {
-            it('strips space from Pending Completed class name', function () {
+            var setContentSpy;
+            beforeEach(function () {
                 centroidController.startup();
-                var setContentSpy = spyOn(centroidController.dialog, 'setContent');
-
+                setContentSpy = spyOn(centroidController.dialog, 'setContent');
+            });
+            it('strips space from Pending Completed class name', function () {
                 // for projects
                 centroidController._showPopupFor(true, true, {
                     target: domConstruct.create('div'),
@@ -94,6 +96,20 @@ function (
                 });
 
                 expect(setContentSpy.calls.mostRecent().args[0]).toContain('PendingCompleted');
+            });
+            it('doesn\'t do anything if the user is drawing', function () {
+                centroidController.isDrawing = true;
+
+                centroidController._showPopupFor(true, false, {
+                    target: domConstruct.create('div'),
+                    graphic: {
+                        attributes: {
+                            StatusDescription: 'Pending Completed'
+                        }
+                    }
+                });
+
+                expect(setContentSpy).not.toHaveBeenCalled();
             });
         });
     });
