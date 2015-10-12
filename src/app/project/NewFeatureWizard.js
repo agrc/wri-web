@@ -193,6 +193,7 @@ define([
             //      shows or hides the drawing buttons
             console.log('app.project.NewFeatureWizard:onFeatureCategoryChange', arguments);
 
+            $(this.featureAttributesDiv).collapse('hide');
             this.resetFeatureAttributes();
             this.actions = [];
             domConstruct.empty(this.actionsContainer);
