@@ -150,7 +150,8 @@ define([
         },
 
         commentsFieldCategories: [
-            'Other point feature'
+            'Other point feature',
+            'Water control structure'
         ],
 
         terrestrialAquaticCategories: [
