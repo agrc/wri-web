@@ -338,6 +338,12 @@ define([
         legend: true,
         layerIndex: 0
     }, {
+        name: 'NHD Streams',
+        reference: true,
+        url: config.urls.reference,
+        layerIndex: 15,
+        type: 'dynamic'
+    }, {
         name: 'WRI Projects',
         search: true,
         url: config.urls.centroidService,
