@@ -65,6 +65,7 @@ define([
     var loadItemsIntoSelect = function (items, select) {
         // summary:
         //      add the items as options to the select
+        //      toggle the visibility of the select
         // items: String[]
         // select: Select Dom Node
 
@@ -74,6 +75,7 @@ define([
                 value: item
             }, select);
         });
+        domClass.toggle(select.parentElement, 'hidden', (!items || items.length === 0));
     };
     var clearSelect = function (select) {
         // summary:
@@ -85,6 +87,7 @@ define([
                 domConstruct.destroy(c);
             }
         });
+        domClass.add(select.parentElement, 'hidden');
     };
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -208,12 +211,7 @@ define([
             if (Array.isArray(items)) {
                 // line or point feature types
                 loadItemsIntoSelect(config.domains.pointLineActions, this.pointLineActionSelect);
-                if (items.length > 0) {
-                    loadItemsIntoSelect(items, this.typeSelect);
-                    domClass.remove(this.typeSelect.parentElement, 'hidden');
-                } else {
-                    domClass.add(this.typeSelect.parentElement, 'hidden');
-                }
+                loadItemsIntoSelect(items, this.typeSelect);
 
                 domClass.remove(this.pointLineActionSelect.parentElement, 'hidden');
             } else {
@@ -225,8 +223,6 @@ define([
                     }
                 }
                 loadItemsIntoSelect(actions, this.polyActionSelect);
-                domClass.remove(this.polyActionSelect.parentElement, 'hidden');
-                domClass.remove(this.treatmentSelect.parentElement, 'hidden');
             }
 
             // check for comments and retreatment fields

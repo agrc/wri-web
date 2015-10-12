@@ -82,7 +82,6 @@ require([
 
                 expect(widget.polyActionSelect.children.length).toBe(3);
                 expect(domClass.contains(widget.polyActionSelect.parentElement, 'hidden')).toBe(false);
-                expect(domClass.contains(widget.treatmentSelect.parentElement, 'hidden')).toBe(false);
             });
             it('points/lines - populates the sub-type & action', function () {
                 atts[testType] = [
@@ -130,6 +129,20 @@ require([
                 widget.onFeatureCategoryChange();
 
                 expect(domClass.contains(widget.addActionBtn, 'hidden')).toBe(true);
+            });
+            it('hides action and type if there are no available values', function () {
+                atts[testType] = undefined;
+                domClass.remove(widget.pointLineActionSelect.parentElement, 'hidden');
+                domClass.remove(widget.treatmentSelect.parentElement, 'hidden');
+                domClass.remove(widget.herbicideSelect.parentElement, 'hidden');
+                domClass.remove(widget.typeSelect.parentElement, 'hidden');
+
+                widget.onFeatureCategoryChange();
+
+                expect(domClass.contains(widget.pointLineActionSelect.parentElement, 'hidden')).toBe(true);
+                expect(domClass.contains(widget.treatmentSelect.parentElement, 'hidden')).toBe(true);
+                expect(domClass.contains(widget.herbicideSelect.parentElement, 'hidden')).toBe(true);
+                expect(domClass.contains(widget.typeSelect.parentElement, 'hidden')).toBe(true);
             });
         });
         describe('onPolyActionSelectChange', function () {

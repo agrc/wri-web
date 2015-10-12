@@ -165,7 +165,7 @@
                 "Rotenone"
             ]
         },
-        "Affected Area": {
+        "Easement/Acquisition": {
             "Easement/Acquisition": [
                 "Conservation easement",
                 "Fee title land acquisition"
@@ -331,18 +331,12 @@
             "Herbicide application",
             "Interseeding"
         ],
-        "Easement/Acquisition": {
-            "Easement/Acquisition": [
-                "Conservation easement",
-                "Fee title land acquisition"
-            ]
-        },
-        "Other point feature": [],
-        "Trough": [],
         "Pipeline": [
             "Construction",
             "Disc"
         ],
+        "Other point feature": [],
+        "Trough": [],
         "Water control structure": [],
         "Fish passage structure": [
             "Lake/Wetland/Pond Improvements",
