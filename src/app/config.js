@@ -51,6 +51,8 @@ define([
         googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
+    esriConfig.defaults.io.corsEnabledServers.push('maps.dnr.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('dwrapps.utah.gov');
     var selectionColor = [255, 220, 0];
 
     var config = {
@@ -100,7 +102,7 @@ define([
             reference: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Reference', type: 'Map' }),
             api: gisServerBaseUrl + apiEndpoint + '/api',
             plss: plssUrl,
-            fireThreatIndex: 'https://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireThreatIndex/MapServer',
+            fireRiskIndex: 'http://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireRiskIndex/MapServer',
             rangeTrendApp: 'https://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}',
             esriImagery: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
             esriLabels: 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
@@ -317,9 +319,9 @@ define([
         url: config.urls.reference + '/8',
         type: 'range'
     }, {
-        name: 'Fire Threat Index',
+        name: 'Fire Risk Index',
         reference: true,
-        url: config.urls.fireThreatIndex,
+        url: config.urls.fireRiskIndex,
         type: 'cached',
         legend: true,
         layerIndex: 0
