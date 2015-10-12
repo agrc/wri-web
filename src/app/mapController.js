@@ -75,6 +75,11 @@ define([
         // showReferenceLayerLabels: Boolean
         showReferenceLayerLabels: true,
 
+        // isDrawing: Boolean
+        //      Is the drawing toolbar currently open
+        //      Used to disabled feature selection
+        isDrawing: false,
+
         initMap: function (mapDiv, toolbarNode) {
             // summary:
             //      Sets up the map and layers
@@ -217,18 +222,27 @@ define([
             //      wire events, and such
             console.log('app/mapController::setupConnections', arguments);
 
-            topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'selectLayers'));
+            var that = this;
+            topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
+            topic.subscribe(config.topics.feature.drawEditComplete, function () {
+                domClass.remove(that.map.root, 'drawing');
+                that.isDrawing = false;
+            });
+            topic.subscribe(config.topics.feature.startDrawing, function () {
+                domClass.add(that.map.root, 'drawing');
+                that.isDrawing = true;
+            });
+            topic.subscribe(config.topics.feature.startNewFeatureWizard, lang.hitch(this, 'clearSelectedFeature'));
             topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'selectFeature'));
-            topic.subscribe(config.topics.opacityChanged, lang.hitch(this, 'changeOpacity'));
             topic.subscribe(config.topics.layer.add, lang.hitch(this, 'addLayers'));
             topic.subscribe(config.topics.map.setExtent, lang.hitch(this, 'setExtent'));
-            topic.subscribe(config.topics.map.toggleAdjacent, lang.hitch(this, 'toggleAdjacent'));
             topic.subscribe(config.topics.map.setMap, lang.hitch(this, '_setMap'));
-            topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
+            topic.subscribe(config.topics.map.toggleAdjacent, lang.hitch(this, 'toggleAdjacent'));
+            topic.subscribe(config.topics.map.toggleWriProjects, lang.hitch(this, 'toggleProjectsFundedByWri'));
+            topic.subscribe(config.topics.opacityChanged, lang.hitch(this, 'changeOpacity'));
+            topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'selectLayers'));
             topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
             topic.subscribe(config.topics.toggleReferenceLayerLabels, lang.hitch(this, 'toggleReferenceLayerLabels'));
-            topic.subscribe(config.topics.map.toggleWriProjects, lang.hitch(this, 'toggleProjectsFundedByWri'));
-            topic.subscribe(config.topics.feature.startNewFeatureWizard, lang.hitch(this, 'clearSelectedFeature'));
         },
         selectLayers: function (ids) {
             // summary:
@@ -347,13 +361,16 @@ define([
                 });
 
                 var deferred = new Deferred();
+                var that = this;
 
                 layer.on('load', deferred.resolve);
                 layer.on('click', function (evt) {
-                    topic.publish(config.topics.map.featureSelected, {
-                        featureId: evt.graphic.attributes[config.fieldNames.FeatureID],
-                        origin: typesLookup[i]
-                    });
+                    if (!that.isDrawing) {
+                        topic.publish(config.topics.map.featureSelected, {
+                            featureId: evt.graphic.attributes[config.fieldNames.FeatureID],
+                            origin: typesLookup[i]
+                        });
+                    }
                 });
 
                 deferreds.push(deferred);
