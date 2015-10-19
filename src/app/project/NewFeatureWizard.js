@@ -62,12 +62,13 @@ define([
         geometryEngine = geoEngine;
     });
 
-    var loadItemsIntoSelect = function (items, select) {
+    var loadItemsIntoSelect = function (items, select, preventShow) {
         // summary:
         //      add the items as options to the select
         //      toggle the visibility of the select
         // items: String[]
         // select: Select Dom Node
+        // preventShow: Boolean
 
         items.forEach(function (item) {
             domConstruct.create('option', {
@@ -75,7 +76,9 @@ define([
                 value: item
             }, select);
         });
-        domClass.toggle(select.parentElement, 'hidden', (!items || items.length === 0));
+        if (!preventShow) {
+            domClass.toggle(select.parentElement, 'hidden', (!items || items.length === 0));
+        }
     };
     var clearSelect = function (select) {
         // summary:
@@ -149,7 +152,7 @@ define([
                 dynamicLayers: []
             });
 
-            loadItemsIntoSelect(config.domains.herbicides, this.herbicideSelect);
+            loadItemsIntoSelect(config.domains.herbicides, this.herbicideSelect, true);
 
             this.inherited(arguments);
         },
@@ -522,7 +525,7 @@ define([
                 params.comments = this.commentsTxt.value;
             }
 
-            return params;
+            return (Object.keys(params).length > 0) ? params : null;
         },
         onSaveClick: function () {
             // summary:
@@ -584,7 +587,10 @@ define([
 
             var tempAction;
             if (this.validateForm()) {
-                tempAction = new Action(this.getActionParams());
+                var params = this.getActionParams();
+                if (params) {
+                    tempAction = new Action(params);
+                }
             }
             var actions = (tempAction) ? this.actions.concat([tempAction]) : this.actions;
 
@@ -618,7 +624,7 @@ define([
             });
 
             // convert to a single array of actions
-            return nonNestedActions.concat(Object.keys(nestedActions).map(function (type) {
+            var result = nonNestedActions.concat(Object.keys(nestedActions).map(function (type) {
                 return {
                     type: type,
                     treatments: Object.keys(nestedActions[type].treatments).map(function (treatmentName) {
@@ -637,6 +643,8 @@ define([
                     })
                 };
             }));
+
+            return (result.length > 0) ? result : null;
         }
     });
 });

@@ -8,6 +8,7 @@ require([
     'dojo/Deferred',
     'dojo/dom-class',
     'dojo/dom-construct',
+    'dojo/query',
     'dojo/text!app/tests/data/esri_geometries.json',
 
     'esri/geometry/Point',
@@ -23,6 +24,7 @@ require([
     Deferred,
     domClass,
     domConstruct,
+    query,
     esriGeometries,
 
     Point,
@@ -455,6 +457,18 @@ require([
                         treatment: 'Test Treatment1'
                     }]
                 }]);
+            });
+            it('doesn\t return empty action objects', function () {
+                spyOn(widget, 'validateForm').and.returnValue(true);
+
+                expect(widget.getActionsData()).toEqual(null);
+            });
+        });
+        describe('getActionParams', function () {
+            it('returns null if no controls are visible', function () {
+                query('[data-dojo-attach-point="actionsContainer"] .form-group',
+                    widget.domNode).addClass('hidden');
+                expect(widget.getActionParams()).toBeNull();
             });
         });
         describe('onSaveClick', function () {
