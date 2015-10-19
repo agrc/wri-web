@@ -321,48 +321,48 @@ require([
         describe('getActionsData', function () {
             it('combines multiple treatments for the same action', function () {
                 widget.actions = [{
-                    type: 'Terr',
+                    action: 'Cable',
                     treatment: 'T1'
                 }, {
-                    type: 'Terr',
+                    action: 'Cable',
                     treatment: 'T2'
                 }, {
-                    type: 'Something else',
+                    action: 'Something else',
                     treatment: 'T3'
                 }];
 
                 var results = widget.getActionsData();
 
                 expect(results).toEqual([{
-                    type: 'Terr',
+                    action: 'Cable',
                     treatments: [{
                         treatment: 'T1'
                     }, {
                         treatment: 'T2'
                     }]
                 }, {
-                    type: 'Something else',
+                    action: 'Something else',
                     treatments: [{treatment: 'T3'}]
                 }]);
             });
             it('combines herbicides for the same treatment', function () {
                 widget.actions = [{
-                    type: 'Terr',
+                    action: 'Cable',
                     treatment: 'T1'
                 }, {
-                    type: 'Terr',
+                    action: 'Cable',
                     treatment: 'T2',
                     herbicide: 'herbi1'
                 }, {
-                    type: 'Terr',
+                    action: 'Cable',
                     treatment: 'T2',
                     herbicide: 'herbi2'
                 }, {
-                    type: 'Terr2',
+                    action: 'Cable2',
                     treatment: 'T2',
                     herbicide: 'herbi2'
                 }, {
-                    type: 'Something else',
+                    action: 'Something else',
                     treatment: 'T3',
                     herbicide: 'herbi3'
                 }];
@@ -370,7 +370,7 @@ require([
                 var results = widget.getActionsData();
 
                 expect(results).toEqual([{
-                    type: 'Terr',
+                    action: 'Cable',
                     treatments: [{
                         treatment: 'T1'
                     }, {
@@ -378,13 +378,13 @@ require([
                         herbicides: ['herbi1', 'herbi2']
                     }]
                 }, {
-                    type: 'Terr2',
+                    action: 'Cable2',
                     treatments: [{
                         treatment: 'T2',
                         herbicides: ['herbi2']
                     }]
                 }, {
-                    type: 'Something else',
+                    action: 'Something else',
                     treatments: [{
                         treatment: 'T3',
                         herbicides: ['herbi3']
@@ -396,7 +396,7 @@ require([
                     action: 'hello',
                     comments: 'blah'
                 }, {
-                    type: 'Something else',
+                    action: 'Something else',
                     treatment: 'T3',
                     herbicide: 'herbi3'
                 }, {
@@ -416,7 +416,7 @@ require([
                     type: 'type2',
                     action: 'hello2'
                 }, {
-                    type: 'Something else',
+                    action: 'Something else',
                     treatments: [{
                         treatment: 'T3',
                         herbicides: ['herbi3']
@@ -443,14 +443,14 @@ require([
                 widget.onPolyActionSelectChange();
                 widget.treatmentSelect.value = 'Test Treatment1';
                 widget.actions = [{
-                    type: 'Test Action',
+                    action: 'Test Action',
                     treatment: 'T1'
                 }];
 
                 var results = widget.getActionsData();
 
                 expect(results).toEqual([{
-                    type: 'Test Action',
+                    action: 'Test Action',
                     treatments: [{
                         treatment: 'T1'
                     }, {
@@ -465,10 +465,101 @@ require([
             });
         });
         describe('getActionParams', function () {
+            var setUp = function (data) {
+                data.forEach(function (d) {
+                    var select = d[0];
+                    var value = d[1];
+                    domConstruct.create('option', {
+                        innerHTML: value,
+                        value: value
+                    }, select);
+                    select.value = value;
+                    domClass.remove(select.parentElement, 'hidden');
+                });
+            };
             it('returns null if no controls are visible', function () {
                 query('[data-dojo-attach-point="actionsContainer"] .form-group',
                     widget.domNode).addClass('hidden');
                 expect(widget.getActionParams()).toBeNull();
+            });
+            describe('maps the correct control values to the correct properties', function () {
+                it('poly with action, treatment & herbicide', function () {
+                    var action = 'actionman';
+                    var treatment = 'treatment1';
+                    var herbicide = 'herbie';
+                    setUp([
+                        [widget.polyActionSelect, action],
+                        [widget.treatmentSelect, treatment],
+                        [widget.herbicideSelect, herbicide]
+                    ]);
+
+                    expect(widget.getActionParams()).toEqual({
+                        action: action,
+                        treatment: treatment,
+                        herbicide: herbicide
+                    });
+                });
+                it('poly with action & treatment', function () {
+                    var action = 'actionman';
+                    var treatment = 'treatment1';
+                    setUp([
+                        [widget.polyActionSelect, action],
+                        [widget.treatmentSelect, treatment]
+                    ]);
+
+                    expect(widget.getActionParams()).toEqual({
+                        action: action,
+                        treatment: treatment
+                    });
+                });
+                it('poly with single action', function () {
+                    var action = 'actionman';
+                    setUp([
+                        [widget.polyActionSelect, action]
+                    ]);
+
+                    expect(widget.getActionParams()).toEqual({
+                        action: action
+                    });
+                });
+                it('point/line with action & type', function () {
+                    var action = 'actionman';
+                    var type = 'typer';
+                    setUp([
+                        [widget.pointLineActionSelect, action],
+                        [widget.typeSelect, type]
+                    ]);
+
+                    expect(widget.getActionParams()).toEqual({
+                        action: action,
+                        type: type
+                    });
+                });
+                it('point/line with single action', function () {
+                    var action = 'actionman';
+                    setUp([
+                        [widget.pointLineActionSelect, action]
+                    ]);
+
+                    expect(widget.getActionParams()).toEqual({
+                        action: action
+                    });
+                });
+                it('point/line with action & comments', function () {
+                    var action = 'actionman';
+                    var comments = 'hello comments';
+                    setUp([
+                        [widget.pointLineActionSelect, action]
+                    ]);
+                    domClass.remove(widget.comments, 'hidden');
+                    widget.commentsTxt.value = comments;
+
+                    expect(widget.getActionParams()).toEqual({
+                        action: action,
+                        comments: comments
+                    });
+                });
+
             });
         });
         describe('onSaveClick', function () {

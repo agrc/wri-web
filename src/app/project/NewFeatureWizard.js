@@ -508,8 +508,9 @@ define([
             var params = {};
 
             if (visible(this.polyAction)) {
-                params.type = this.polyActionSelect.value;
-            } else if (visible(this.type)) {
+                params.action = this.polyActionSelect.value;
+            }
+            if (visible(this.type)) {
                 params.type = this.typeSelect.value;
             }
             if (visible(this.treatment)) {
@@ -601,14 +602,14 @@ define([
             var nonNestedActions = [];
 
             actions.forEach(function (a) {
-                if (a.type && a.treatment) {
+                if (a.action && a.treatment) {
                     // nested action
-                    if (!nestedActions[a.type]) {
-                        nestedActions[a.type] = {
+                    if (!nestedActions[a.action]) {
+                        nestedActions[a.action] = {
                             treatments: {}
                         };
                     }
-                    var action = nestedActions[a.type];
+                    var action = nestedActions[a.action];
 
                     if (a.treatment) {
                         if (!action.treatments[a.treatment]) {
@@ -624,14 +625,14 @@ define([
             });
 
             // convert to a single array of actions
-            var result = nonNestedActions.concat(Object.keys(nestedActions).map(function (type) {
+            var result = nonNestedActions.concat(Object.keys(nestedActions).map(function (action) {
                 return {
-                    type: type,
-                    treatments: Object.keys(nestedActions[type].treatments).map(function (treatmentName) {
+                    action: action,
+                    treatments: Object.keys(nestedActions[action].treatments).map(function (treatmentName) {
                         var treatment = {
                             treatment: treatmentName
                         };
-                        var herbicides = nestedActions[type].treatments[treatmentName].filter(function (y) {
+                        var herbicides = nestedActions[action].treatments[treatmentName].filter(function (y) {
                             // only return defined herbicide values
                             return y;
                         });
