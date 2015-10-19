@@ -564,16 +564,17 @@ define([
             xhr.post(config.urls.api + '/project/' + projectId + '/feature/create', {
                 handleAs: 'json',
                 headers: { 'Accept': 'application/json' },
-                data: postData
-            }).then(function (response) {
+                data: postData,
+                failOk: true
+            }).response.then(function (response) {
                 if (response.status === 200) {
                     topic.publish(config.topics.toast, {
-                        message: response.message || 'Feature added successfully!',
+                        message: response.data || 'Feature added successfully!',
                         type: 'success'
                     });
                     topic.publish(config.topics.projectIdsChanged, [projectId]);
                 } else {
-                    onError(response.message);
+                    onError(response);
                 }
             }, function (error) {
                 onError(error.response.data);
