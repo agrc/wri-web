@@ -565,7 +565,9 @@ require([
         describe('onSaveClick', function () {
             it('sends the correct data to the api', function (done) {
                 var def = new Deferred();
-                var xhrSpy = jasmine.createSpy('xhr').and.returnValue(def.promise);
+                var xhrSpy = jasmine.createSpy('xhr').and.returnValue({
+                    response: def.promise
+                });
                 stubModule('app/project/NewFeatureWizard', {
                     'app/router': {
                         getProjectId: function () {
