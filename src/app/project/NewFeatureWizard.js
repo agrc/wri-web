@@ -523,7 +523,7 @@ define([
                 params.herbicide = this.herbicideSelect.value;
             }
             if (visible(this.comments)) {
-                params.comments = this.commentsTxt.value;
+                params.description = this.commentsTxt.value;
             }
 
             return (Object.keys(params).length > 0) ? params : null;

@@ -34,7 +34,7 @@ require([
             it('returns the valid properties', function () {
                 var obj = {
                     type: 'blah',
-                    comments: 'hello'
+                    description: 'hello'
                 };
                 var widget2 = new WidgetUnderTest(obj, domConstruct.create('div', null, document.body));
                 expect(widget2.toObject()).toEqual(obj);

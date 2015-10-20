@@ -13,7 +13,7 @@ define([
     template,
     declare
 ) {
-    var props = ['type', 'treatment', 'action', 'comments', 'herbicide'];
+    var props = ['type', 'treatment', 'action', 'description', 'herbicide'];
 
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -35,8 +35,8 @@ define([
         // herbicide: String
         herbicide: null,
 
-        // comments: String (optional)
-        comments: null,
+        // description: String (optional)
+        description: null,
 
         postCreate: function () {
             // summary:

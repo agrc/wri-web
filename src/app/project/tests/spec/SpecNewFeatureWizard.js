@@ -394,7 +394,7 @@ require([
             it('copying action and description properties', function () {
                 var inputs = [{
                     action: 'hello',
-                    comments: 'blah'
+                    description: 'blah'
                 }, {
                     action: 'Something else',
                     treatment: 'T3',
@@ -411,7 +411,7 @@ require([
 
                 expect(results).toEqual([{
                     action: 'hello',
-                    comments: 'blah'
+                    description: 'blah'
                 }, {
                     type: 'type2',
                     action: 'hello2'
@@ -556,7 +556,7 @@ require([
 
                     expect(widget.getActionParams()).toEqual({
                         action: action,
-                        comments: comments
+                        description: comments
                     });
                 });
 
