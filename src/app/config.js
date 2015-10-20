@@ -189,7 +189,8 @@ define([
                 cutFeatures: 'wri/feature/cutFeatures',
                 selectedForEditing: 'wri/feature/selectedForEditing',
                 drawEditComplete: 'wri/feature/drawEditComplete',
-                cancelDrawing: 'wri/features/cancelDrawing'
+                cancelDrawing: 'wri/feature/cancelDrawing',
+                removeEditingGraphic: 'wri/feature/removeEditingGraphic'
             },
             toast: 'wri/toast',
             showProjectLoader: 'wri/showProjectLoader',

@@ -6,6 +6,7 @@ require([
 
     'dojo/dom-class',
     'dojo/dom-construct',
+    'dojo/keys',
     'dojo/_base/lang',
 
     'esri/map',
@@ -20,6 +21,7 @@ require([
 
     domClass,
     domConstruct,
+    keys,
     lang,
 
     Map,
@@ -139,6 +141,35 @@ require([
                 widget.onDrawComplete({geometry: geometry});
 
                 expect(config.topics.feature.drawingComplete).toHaveBeenPublished();
+            });
+        });
+        describe('onKeyUp', function () {
+            it('fires the event only if there is a selected graphic and DELETE was pressed', function () {
+                var deactivateSpy = jasmine.createSpy('deactivate');
+                widget.editToolbar = {
+                    deactivate: deactivateSpy,
+                    getCurrentState: function () {
+                        return {tool: 0};
+                    }
+                };
+
+                widget.onKeyUp({
+                    keyCode: 1
+                });
+                expect(deactivateSpy).not.toHaveBeenCalled();
+
+                widget.onKeyUp({
+                    keyCode: keys.DELETE
+                });
+                expect(deactivateSpy).not.toHaveBeenCalled();
+
+                widget.editToolbar.getCurrentState = function () {
+                    return {tool: 1};
+                };
+                widget.onKeyUp({
+                    keyCode: keys.DELETE
+                });
+                expect(deactivateSpy).toHaveBeenCalled();
             });
         });
     });

@@ -137,6 +137,7 @@ define([
             this.gp = new Geoprocessor(config.urls.zipToGraphics);
 
             this.graphicsLayer = new GraphicsLayer();
+            var that = this;
             this.own(
                 this.graphicsLayer.on('click', function (evt) {
                     topic.publish(config.topics.feature.selectedForEditing, evt.graphic);
@@ -145,7 +146,10 @@ define([
                 topic.subscribe(config.topics.feature.cutFeatures, lang.hitch(this, 'onCutFeatures')),
                 topic.subscribe(config.topics.feature.cancelDrawing, lang.hitch(this, 'onCancelDrawing')),
                 query('select, textarea, checkbox', this.featureAttributesDiv)
-                    .on('change', lang.hitch(this, 'validateForm'))
+                    .on('change', lang.hitch(this, 'validateForm')),
+                topic.subscribe(config.topics.feature.removeEditingGraphic, function (graphic) {
+                    that.graphicsLayer.remove(graphic);
+                })
             );
             topic.publish(config.topics.layer.add, {
                 graphicsLayers: [this.graphicsLayer],

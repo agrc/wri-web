@@ -6,6 +6,8 @@ define([
     'dijit/_WidgetsInTemplateMixin',
 
     'dojo/dom-class',
+    'dojo/keys',
+    'dojo/on',
     'dojo/query',
     'dojo/text!app/project/templates/DrawToolbar.html',
     'dojo/topic',
@@ -27,6 +29,8 @@ define([
     _WidgetsInTemplateMixin,
 
     domClass,
+    keys,
+    on,
     query,
     template,
     topic,
@@ -72,10 +76,25 @@ define([
                     if (domClass.contains(that.domNode, 'in')) {
                         that.onCancelClick();
                     }
-                })
+                }),
+                on(document, 'keyup', lang.hitch(this, 'onKeyUp'))
             );
 
             this.inherited(arguments);
+        },
+        onKeyUp: function (evt) {
+            // summary:
+            //      deletes the selected feature, if any if the delete key was pressed
+            // evt: Event Object
+            console.log('app.project.DrawToolbar:onKeyUp', arguments);
+
+            if (evt.keyCode === keys.DELETE) {
+                var currentState = this.editToolbar.getCurrentState();
+                if (currentState.tool !== 0) {
+                    this.editToolbar.deactivate();
+                    topic.publish(config.topics.feature.removeEditingGraphic, currentState.graphic);
+                }
+            }
         },
         show: function () {
             // summary:
