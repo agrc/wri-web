@@ -191,11 +191,15 @@ define([
         onDrawComplete: function (evt) {
             // summary:
             //      the user has double-clicked to finish the drawing
+            //      add a new geometry or cut existing ones depending on which button is active
             // evt: Object ({geographicGeometry: Geometry, geometry: Geometry})
             console.log('app.project.DrawToolbar:onDrawComplete', arguments);
 
+            var geo = evt.geometry;
             if (domClass.contains(this.drawBtn, 'active')) {
-                topic.publish(config.topics.feature.drawingComplete, evt.geometry);
+                if (geo.type !== 'polygon' || geo.rings[0].length > 3) {
+                    topic.publish(config.topics.feature.drawingComplete, evt.geometry);
+                }
             } else {
                 topic.publish(config.topics.feature.cutFeatures, evt.geometry);
             }

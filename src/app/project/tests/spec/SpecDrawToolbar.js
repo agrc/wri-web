@@ -1,7 +1,10 @@
 require([
+    'agrc-jasmine-matchers/topics',
+
     'app/config',
     'app/project/DrawToolbar',
 
+    'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/_base/lang',
 
@@ -10,9 +13,12 @@ require([
 
     'stubmodule'
 ], function (
+    topics,
+
     config,
     WidgetUnderTest,
 
+    domClass,
     domConstruct,
     lang,
 
@@ -101,6 +107,38 @@ require([
                 expect(widget2.cutBtn.disabled).toBe(false);
 
                 destroy(widget2);
+            });
+        });
+        describe('onDrawComplete', function () {
+            it('requires polygons to have at least three unique points', function () {
+                var geometry = {
+                    type: 'polygon',
+                    rings: [[
+                        [-12396133.91773127, 4976196.977454647],
+                        [-12396377.560758937, 4975905.561284303],
+                        [-12396133.91773127, 4976196.977454647]
+                    ]]
+                };
+                topics.listen(config.topics.feature.drawingComplete);
+                domClass.add(widget.drawBtn, 'active');
+
+                widget.onDrawComplete({geometry: geometry});
+
+                expect(config.topics.feature.drawingComplete).not.toHaveBeenPublished();
+
+                geometry = {
+                    type: 'polygon',
+                    rings: [[
+                        [-12396133.91773127, 4976196.977454647],
+                        [-12396377.560758937, 4975905.561284303],
+                        [-22396377.560758937, 3975905.561284303],
+                        [-12396133.91773127, 4976196.977454647]
+                    ]]
+                };
+
+                widget.onDrawComplete({geometry: geometry});
+
+                expect(config.topics.feature.drawingComplete).toHaveBeenPublished();
             });
         });
     });
