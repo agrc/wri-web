@@ -14,9 +14,9 @@
             background-color: green;
         }
         #parent {
-            top: 50px;
+            top: 100px;
             bottom: 50px;
-            position: absolute;
+            /*position: absolute;*/
             background-color: darkGreen;
             width: 100%;
         }
@@ -76,7 +76,7 @@
 
             widgetUnderTest.startup();
 
-            topic.publish(topics.startDrawing, 'Water Control Structure');
+            topic.publish(topics.startDrawing, 'Affected Area');
             topic.subscribe(topics.drawingComplete, function (geometry) {
                 gLayer.add(new Graphic(geometry, config.symbols.selected.poly));
             });
@@ -99,7 +99,7 @@
         });
 </script>
 </head>
-<body>
+<body class='tundra'>
     <div id="parent" class='app'>
         <div id="mapDiv"></div>
         <div id="node"></div>
