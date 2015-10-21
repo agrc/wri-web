@@ -9,4 +9,6 @@ Service name: `WRI/Toolbox`
 
 Synchronous
 
+Allow Uploads
+
 Message Level should be at least `Error`.
