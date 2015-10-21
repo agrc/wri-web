@@ -1,13 +1,19 @@
 require([
     'app/project/FeatureDetails',
 
+    'dojo/Deferred',
     'dojo/dom-class',
-    'dojo/dom-construct'
+    'dojo/dom-construct',
+
+    'stubmodule'
 ], function (
     WidgetUnderTest,
 
+    Deferred,
     domClass,
-    domConstruct
+    domConstruct,
+
+    stubModule
 ) {
     describe('app/project/FeatureDetails', function () {
         var widget;
@@ -43,24 +49,111 @@ require([
             });
         });
         describe('onFeatureSelected', function () {
-            it('places template in contents', function () {
-                widget.onFeatureSelected({});
-
-                expect(widget.featureTabContents.innerHTML.length).toBeGreaterThan(5);
+            beforeEach(function () {
+                if (widget) {
+                    destroy(widget);
+                }
             });
-            it('shows the feature tab', function () {
-                expect(domClass.contains(widget.featureTabContents.parentElement, 'hidden')).toBe(true);
 
-                widget.onFeatureSelected({});
+            it('places template in contents', function (done) {
+                stubModule('app/project/FeatureDetails', {
+                    'dojo/request/xhr': {
+                        get: jasmine.createSpy('xhr').and.returnValue({
+                            response: new Deferred().promise
+                        })
+                    },
+                    'app/router': {
+                        getProjectId: function () {
+                            return 999;
+                        }
+                    }
+                }).then(function (StubbedModule) {
+                    widget = new StubbedModule({
+                        title: 'Title',
+                        projectId: 1234,
+                        status: 'Completed',
+                        description: 'asdf',
+                        acres: 123,
+                        streamMiles: 34,
+                        leadAgency: 'asdf',
+                        region: 'asdf',
+                        projectManagerName: 'Scott Davis'
+                    }, domConstruct.create('div', null, document.body));
+                    widget.startup();
 
-                expect(domClass.contains(widget.featureTabContents, 'hidden')).toBe(false);
+                    widget.onFeatureSelected({});
+
+                    expect(widget.featureTabContents.innerHTML.length).toBeGreaterThan(5);
+                    done();
+                });
             });
-            it('clears out any previous data', function () {
-                widget.featureTabContents.innerHTML = 'test';
+            it('shows the feature tab', function (done) {
+                stubModule('app/project/FeatureDetails', {
+                    'dojo/request/xhr': {
+                        get: jasmine.createSpy('xhr').and.returnValue({
+                            response: new Deferred().promise
+                        })
+                    },
+                    'app/router': {
+                        getProjectId: function () {
+                            return 999;
+                        }
+                    }
+                }).then(function (StubbedModule) {
+                    widget = new StubbedModule({
+                        title: 'Title',
+                        projectId: 1234,
+                        status: 'Completed',
+                        description: 'asdf',
+                        acres: 123,
+                        streamMiles: 34,
+                        leadAgency: 'asdf',
+                        region: 'asdf',
+                        projectManagerName: 'Scott Davis'
+                    }, domConstruct.create('div', null, document.body));
+                    widget.startup();
 
-                widget.onFeatureSelected({});
+                    expect(domClass.contains(widget.featureTabContents.parentElement, 'hidden')).toBe(true);
 
-                expect(widget.featureTabContents.innerHTML).not.toContain('test');
+                    widget.onFeatureSelected({});
+
+                    expect(domClass.contains(widget.featureTabContents, 'hidden')).toBe(false);
+                    done();
+                });
+            });
+            it('clears out any previous data', function (done) {
+                stubModule('app/project/FeatureDetails', {
+                    'dojo/request/xhr': {
+                        get: jasmine.createSpy('xhr').and.returnValue({
+                            response: new Deferred().promise
+                        })
+                    },
+                    'app/router': {
+                        getProjectId: function () {
+                            return 999;
+                        }
+                    }
+                }).then(function (StubbedModule) {
+                    widget = new StubbedModule({
+                        title: 'Title',
+                        projectId: 1234,
+                        status: 'Completed',
+                        description: 'asdf',
+                        acres: 123,
+                        streamMiles: 34,
+                        leadAgency: 'asdf',
+                        region: 'asdf',
+                        projectManagerName: 'Scott Davis'
+                    }, domConstruct.create('div', null, document.body));
+                    widget.startup();
+
+                    widget.featureTabContents.innerHTML = 'test';
+
+                    widget.onFeatureSelected({});
+
+                    expect(widget.featureTabContents.innerHTML).not.toContain('test');
+                    done();
+                });
             });
         });
     });

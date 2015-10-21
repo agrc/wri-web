@@ -1,13 +1,13 @@
 <p class="tight">
-    <label>Type:</label> {{type}}</p>
-{{#subType}}
-<p class="tight">
-    <label>Subtype:</label> {{subType}}</p>
-{{/subType}}
+    <label>Category:</label> {{type}}</p>
 {{#action}}
 <p class="tight">
     <label>Action:</label> {{action}}</p>
 {{/action}}
+{{#subType}}
+<p class="tight">
+    <label>Treatment:</label> {{subType}}</p>
+{{/subType}}
 {{#description}}
 <p class="tight">
     <label>Description:</label> {{description}}</p>
@@ -48,5 +48,13 @@
     {{/sageGrouse}}
 </div>
 {{/hasSageGrouse}}
+{{#hasNhd}}
+<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+    <label>Stream Miles</label>
+    {{#nhd}}
+    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
+    {{/nhd}}
+</div>
+{{/hasNhd}}
 </div>
 <div class="clearfix"></div>
