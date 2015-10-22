@@ -70,7 +70,7 @@ define([
         // select: Select Dom Node
         // preventShow: Boolean
 
-        items.forEach(function (item) {
+        items.sort().forEach(function (item) {
             domConstruct.create('option', {
                 innerHTML: item,
                 value: item
