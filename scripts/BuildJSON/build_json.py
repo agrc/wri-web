@@ -39,6 +39,7 @@ def make_lu(table, key, value):
 
 actions_lu = make_lu('LU_ACTION', 'ActionID', 'ActionDescription')
 treatments_lu = make_lu('LU_TREATMENTTYPE', 'TreatmentTypeID', 'TreatmentTypeDescription')
+subtypes_lu = make_lu('LU_FEATURESUBTYPE', 'FeatureSubTypeID', 'FeatureSubTypeDescription')
 obj = {
     'projectStatus': get_data('LU_STATUS', ['StatusDescription', 'StatusID']),
     'featureType': get_data('LU_FEATURETYPE', ['FeatureTypeDescription', 'FeatureTypeID']),
@@ -90,7 +91,7 @@ for row in cursor.fetchall():
         SELECT FeatureSubTypeID FROM FEATURETYPE_FEATURESUBTYPE
         WHERE FeatureTypeID = {}
         """.format(code))
-    obj['featureAttributes'][desc] = [actions_lu[row[0]] for row in cursor.fetchall()]
+    obj['featureAttributes'][desc] = [subtypes_lu[row[0]] for row in cursor.fetchall()]
 
 f = open(json_file, 'w')
 print >> f, json.dumps(obj, indent=4)
