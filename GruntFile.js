@@ -407,13 +407,22 @@ module.exports = function (grunt) {
             options: {
                 stdout: true
             },
-            local: {
+            configLocal: {
+                command: 'python scripts/BuildJSON/build_json.py L'
+            },
+            configDev: {
+                command: 'python scripts/BuildJSON/build_json.py D'
+            },
+            configAt: {
+                command: 'python scripts/BuildJSON/build_json.py A'
+            },
+            mapLocal: {
                 command: 'python maps/RepointMXD.py L'
             },
-            dev: {
+            mapDev: {
                 command: 'python maps/RepointMXD.py D'
             },
-            at: {
+            mapAt: {
                 command: 'python maps/RepointMXD.py A'
             }
         },
@@ -475,6 +484,7 @@ module.exports = function (grunt) {
         'if-missing:esri_slurp:dev',
         'newer:imagemin:main',
         'stylus',
+        'shell:configAt',
         'dojo:prod',
         'copy:main',
         'processhtml:main'
@@ -484,6 +494,7 @@ module.exports = function (grunt) {
         'if-missing:esri_slurp:dev',
         'newer:imagemin:main',
         'stylus',
+        'shell:configDev',
         'dojo:stage',
         'copy:main',
         'processhtml:main'
@@ -511,14 +522,14 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('press', [
         'shell:local',
-        'arcgis_press:local'
+        'arcgis_press:mapLocal'
     ]);
     grunt.registerTask('press-dev', [
         'shell:dev',
-        'arcgis_press:dev'
+        'arcgis_press:mapDev'
     ]);
     grunt.registerTask('press-at', [
         'shell:at',
-        'arcgis_press:at'
+        'arcgis_press:mapAt'
     ]);
 };

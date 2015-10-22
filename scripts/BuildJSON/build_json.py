@@ -7,14 +7,32 @@ build_json
 builds a .json file used to configure the app
 '''
 
-from os.path import join
-from settings import *
-import pyodbc
+from os.path import join, dirname
 import json
+import pyodbc
+import secrets
+import sys
 
 
-json_file = join(JSONDIR, 'config.json')
-connection = pyodbc.connect(CONNECTION_STRING)
+target = None
+
+if len(sys.argv) > 1:
+    target = sys.argv[1]
+
+if not target:
+    target = raw_input('Local (L), Dev (D), or AT (A)? ')
+
+if target == 'D':
+    connection_string = secrets.DEV_CONNECTION_STRING
+elif target == 'A':
+    connection_string = secrets.AT_CONNECTION_STRING
+else:
+    connection_string = secrets.LOCAL_CONNECTION_STRING
+
+print('updating config.js with data from {}'.format(connection_string))
+
+json_file = join(dirname(__file__), secrets.JSONDIR, 'config.json')
+connection = pyodbc.connect(connection_string)
 cursor = connection.cursor()
 
 
@@ -93,6 +111,5 @@ for row in cursor.fetchall():
         """.format(code))
     obj['featureAttributes'][desc] = [subtypes_lu[row[0]] for row in cursor.fetchall()]
 
-f = open(json_file, 'w')
-print >> f, json.dumps(obj, indent=4)
-f.close()
+with open(json_file, 'w') as f:
+    f.write(json.dumps(obj, indent=4))
