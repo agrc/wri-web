@@ -17,44 +17,54 @@
     <label>Size:</label> {{size}}</p>
 {{/size}}
 {{#hasCounty}}
-<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+<p class="tight">
     <label>County</label>
-    {{#county}}
-    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
-    {{/county}}
-</div>
+    <ul class="tight">
+        {{#county}}
+        <li>{{name}}{{#space}}: {{space}}{{/space}}</li>
+        {{/county}}
+    </ul>
+</p>
 {{/hasCounty}}
 {{#hasLandOwnership}}
-<div class="pull-left well" style="width: 47%; margin:0 5px 5px 5px">
+<p class="tight">
     <label>Land Ownership</label>
-    {{#landOwnership}}
-    <div>{{name}}, {{extra}}{{#space}}: {{space}}{{/space}}</div>
-    {{/landOwnership}}
-</div>
+    <ul class="tight">
+        {{#landOwnership}}
+        <li>{{name}}, {{extra}}{{#space}}: {{space}}{{/space}}</li>
+        {{/landOwnership}}
+    </ul>
+</p>
 {{/hasLandOwnership}}
 {{#hasFocusArea}}
-<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+<p class="tight">
     <label>Focus Area</label>
-    {{#focusArea}}
-    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
-    {{/focusArea}}
-</div>
+    <ul class="tight">
+        {{#focusArea}}
+        <li>{{name}}{{#space}}: {{space}}{{/space}}</li>
+        {{/focusArea}}
+    </ul>
+</p>
 {{/hasFocusArea}}
 {{#hasSageGrouse}}
-<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+<p class="tight">
     <label>Sage Grouse</label>
-    {{#sageGrouse}}
-    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
-    {{/sageGrouse}}
-</div>
+    <ul class="tight">
+        {{#sageGrouse}}
+        <li>{{name}}{{#space}}: {{space}}{{/space}}</li>
+        {{/sageGrouse}}
+    </ul>
+</p>
 {{/hasSageGrouse}}
 {{#hasNhd}}
-<div class="pull-left well" style="width: 47%;margin:0 5px 5px 5px">
+<p class="tight">
     <label>Stream Miles</label>
-    {{#nhd}}
-    <div>{{name}}{{#space}}: {{space}}{{/space}}</div>
-    {{/nhd}}
-</div>
+    <ul class="tight">
+        {{#nhd}}
+        <li>{{name}}{{#space}}: {{space}}{{/space}}</li>
+        {{/nhd}}
+    </ul>
+</p>
 {{/hasNhd}}
 </div>
 <div class="clearfix"></div>

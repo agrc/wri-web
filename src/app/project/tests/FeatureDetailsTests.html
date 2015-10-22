@@ -17,6 +17,14 @@
     </style>
 
     <!-- JAVASCRIPT -->
+    <script>
+    dojoConfig = {
+        has: {
+            'dojo-undef-api': true
+        }
+    }
+    </script>
+
     <script type='text/javascript' src="../../../dojo/dojo.js"></script>
     <script type="text/javascript">
 var baseUrl = window.location.pathname.replace(/\/[^\/]+$/, '') + '/' + '../../../';
@@ -24,7 +32,11 @@ var widgetUnderTest;
 
 require({
     baseUrl: baseUrl,
-    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', 'mustache',
+    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', 'mustache', 'lodash', {
+        name: 'stubmodule',
+        location: './stubmodule',
+        main: 'src/stub-module'
+    },
     {
         name: 'jquery',
         location: 'jquery/dist',
@@ -40,165 +52,152 @@ require({
 
     'dojo/_base/lang',
     'dojo/on',
+    'dojo/Deferred',
+
+    'dojo/dom-construct',
+
+    'stubmodule',
+
     'dojo/domReady!'
-], function ($, Module, lang, on) {
-    widgetUnderTest = new Module({
-        description: 'description text',
-        leadAgency: 'Lead Agency',
-        region: 'Region',
-        projectManagerName: 'Project Manager',
-        affectedAcres: '15000 acres',
-        terrestrialAcres: '1200 acres',
-        aquaticAcres: '5000 acres',
-        easementAcres: '8000 acres',
-        streamMiles: '5 mi'
-    }, 'node');
+], function ($, Module, lang, on, Deferred, domConstruct, stubModule) {
+    stubModule('app/project/FeatureDetails', {
+        'app/router': {
+            getProjectId: function () {
+                return 1;
+            }
+        },
+        'dojo/request/xhr': {
+            get: function () {
+                return {
+                    response: new Deferred().promise
+                }
+            }
+        }
+    }).then(function (StubbedModule) {
+        widgetUnderTest = new StubbedModule({
+            description: 'description text',
+            leadAgency: 'Lead Agency',
+            region: 'Region',
+            projectManagerName: 'Project Manager',
+            affectedAcres: '15000 acres',
+            terrestrialAcres: '1200 acres',
+            aquaticAcres: '5000 acres',
+            easementAcres: '8000 acres',
+            streamMiles: '5 mi'
+        }, domConstruct.create('div', null, document.body));
 
-    widgetUnderTest.startup();
+        widgetUnderTest.startup();
 
-    on(document.getElementById('point'), 'click', lang.hitch(widgetUnderTest,
-        lang.partial(widgetUnderTest.onFeatureSelected, {
-            action: null,
-            description: 'we created a point on the ground somewhere that represents something.',
-            featureId: 5,
-            origin: 'point',
-            size: 3,
-            subType: null,
-            type: 'Other',
-            hasCounty: function (){
-                return this.county && this.county.length;
-            },
-            hasLandOwnership: function (){
-                return this.landOwnership && this.landOwnership.length;
-            },
-            hasFocusArea: function (){
-                return this.focusArea && this.focusArea.length;
-            },
-            hasSageGrouse: function (){
-                return this.sageGrouse && this.sageGrouse.length;
-            },
-            county: [{
-                name: 'Salt Lake'
-            }, {
-                name: 'Davis'
-            }],
-            landOwnership: [{
-                name: 'BLM',
-                extra: 'Someone'
-            },{
-                name: 'BLM',
-                extra: 'Someone'
-            },{
-                name: 'BLM',
-                extra: 'Someone'
-            }],
-            focusArea: [{
-                name: 'North'
-            },{
-                name: 'South'
-            },{
-                name: 'East'
-            }],
-            sageGrouse: [{
-                name: 'Bird Region'
-            },{
-                name: 'Grassy Region'
-            },{
-                name: 'Green Region'
-            }]
-        }))
-    );
-    on(document.getElementById('line'), 'click', lang.hitch(widgetUnderTest,
-        lang.partial(widgetUnderTest.onFeatureSelected, {
-            action: 'Underground pipe',
-            featureId: 4,
-            origin: 'line',
-            size: '2124.51 ft',
-            subType: 'Metal',
-            type: 'Pipeline',
-            hasCounty: function (){
-                return this.county && this.county.length;
-            },
-            hasLandOwnership: function (){
-                return this.landOwnership && this.landOwnership.length;
-            },
-            hasFocusArea: function (){
-                return this.focusArea && this.focusArea.length;
-            },
-            hasSageGrouse: function (){
-                return this.sageGrouse && this.sageGrouse.length;
-            },
-            county: [],
-            landOwnership: [{
-                name: 'BLM',
-                extra: 'Someone',
-                space: '125 feet'
-            },{
-                name: 'BLM',
-                extra: 'Someone',
-                space: '125 feet'
-            },{
-                name: 'BLM',
-                extra: 'Someone',
-                space: '125 feet'
-            }]
-        }))
-    );
-    on(document.getElementById('poly'), 'click', lang.hitch(widgetUnderTest,
-        lang.partial(widgetUnderTest.onFeatureSelected, {
-            action: null,
-            featureId: 1351,
-            origin: 'poly',
-            size: '163.08 mi2',
-            subType: null,
-            type: 'Terrestrial',
-            hasCounty: function (){
-                return this.county && this.county.length;
-            },
-            hasLandOwnership: function (){
-                return this.landOwnership && this.landOwnership.length;
-            },
-            hasFocusArea: function (){
-                return this.focusArea && this.focusArea.length;
-            },
-            hasSageGrouse: function (){
-                return this.sageGrouse && this.sageGrouse.length;
-            },
-            landOwnership: [{
-                name: 'BLM',
-                extra: 'Someone',
-                space: '125 acres'
-            },{
-                name: 'BLM',
-                extra: 'Someone',
-                space: '125 acres'
-            },{
-                name: 'BLM',
-                extra: 'Someone',
-                space: '125 acres'
-            }],
-            focusArea: [{
-                name: 'North',
-                space: '50 acres'
-            },{
-                name: 'South',
-                space: '50 acres'
-            },{
-                name: 'East',
-                space: '50 acres'
-            }],
-            sageGrouse: [{
-                name: 'Bird Region',
-                space: '25 acres'
-            },{
-                name: 'Grassy Region',
-                space: '25 acres'
-            },{
-                name: 'Green Region',
-                space: '25 acres'
-            }]
-        }))
-    );
+        on(document.getElementById('point'), 'click', lang.hitch(widgetUnderTest,
+            lang.partial(widgetUnderTest.onFeatureSelected, {
+                action: null,
+                description: 'we created a point on the ground somewhere that represents something.',
+                featureId: 5,
+                origin: 'point',
+                size: 3,
+                subType: null,
+                type: 'Other',
+                county: [{
+                    name: 'Salt Lake'
+                }, {
+                    name: 'Davis'
+                }],
+                landOwnership: [{
+                    name: 'BLM',
+                    extra: 'Someone'
+                },{
+                    name: 'BLM',
+                    extra: 'Someone'
+                },{
+                    name: 'BLM',
+                    extra: 'Someone'
+                }],
+                focusArea: [{
+                    name: 'North'
+                },{
+                    name: 'South'
+                },{
+                    name: 'East'
+                }],
+                sageGrouse: [{
+                    name: 'Bird Region'
+                },{
+                    name: 'Grassy Region'
+                },{
+                    name: 'Green Region'
+                }]
+            }))
+        );
+        on(document.getElementById('line'), 'click', lang.hitch(widgetUnderTest,
+            lang.partial(widgetUnderTest.onFeatureSelected, {
+                action: 'Underground pipe',
+                featureId: 4,
+                origin: 'line',
+                size: '2124.51 ft',
+                subType: 'Metal',
+                type: 'Pipeline',
+                county: [],
+                landOwnership: [{
+                    name: 'BLM',
+                    extra: 'Someone',
+                    space: '125 feet'
+                },{
+                    name: 'BLM',
+                    extra: 'Someone',
+                    space: '125 feet'
+                },{
+                    name: 'BLM',
+                    extra: 'Someone',
+                    space: '125 feet'
+                }]
+            }))
+        );
+        on(document.getElementById('poly'), 'click', lang.hitch(widgetUnderTest,
+            lang.partial(widgetUnderTest.onFeatureSelected, {
+                action: null,
+                featureId: 1351,
+                origin: 'poly',
+                size: '163.08 mi2',
+                subType: null,
+                type: 'Terrestrial',
+                landOwnership: [{
+                    name: 'BLM',
+                    extra: 'Someone',
+                    space: '125 acres'
+                },{
+                    name: 'BLM',
+                    extra: 'Someone',
+                    space: '125 acres'
+                },{
+                    name: 'BLM',
+                    extra: 'Someone',
+                    space: '125 acres'
+                }],
+                focusArea: [{
+                    name: 'North',
+                    space: '50 acres'
+                },{
+                    name: 'South',
+                    space: '50 acres'
+                },{
+                    name: 'East',
+                    space: '50 acres'
+                }],
+                sageGrouse: [{
+                    name: 'Bird Region',
+                    space: '25 acres'
+                },{
+                    name: 'Grassy Region',
+                    space: '25 acres'
+                },{
+                    name: 'Green Region',
+                    space: '25 acres'
+                }]
+            }))
+        );
+    });
+
+
 
     document.getElementById('point').click();
 });
