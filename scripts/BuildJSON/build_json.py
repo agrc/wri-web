@@ -35,7 +35,7 @@ elif target == 'A':
 else:
     connection_string = secrets.LOCAL_CONNECTION_STRING
 
-print('updating config.js with data from {}'.format(connection_string))
+print('updating config.json with data from {}'.format(connection_string))
 
 json_file = join(dirname(__file__), secrets.JSONDIR, 'config.json')
 connection = pyodbc.connect(connection_string)
