@@ -22,6 +22,15 @@
         </div>
         <div class="tab-pane hidden" id="${id}_featureTab"
             data-dojo-attach-point='featureTabContainer'>
+            <p data-dojo-attach-point='modBtns' class='hidden'>
+                <!-- <button role="button" class="btn btn-primary"
+                    data-dojo-attach-point='modifyFeatureBtn'
+                    data-dojo-attac-event='click: onModifyFeatureClick'>Modify Feature</button> -->
+                <button role="button" class="btn btn-danger"
+                    data-dojo-attach-point='deleteFeatureBtn'
+                    data-dojo-attach-event='click: onDeleteFeatureClick'>Delete Feature</button>
+            </p>
+
             <div data-dojo-attach-point='featureTabContents'></div>
         </div>
         <div class="tab-pane active" id="${id}_detailsTab">

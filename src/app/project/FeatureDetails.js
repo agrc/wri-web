@@ -49,6 +49,13 @@ define([
         // newFeatureWizard: NewFeatureWizard
         newFeatureWizard: null,
 
+
+        // passed into the constructor
+
+        // allowEdits: Boolean
+        //      the user has edit rights to this project
+        allowEdits: null,
+
         templateFunctions: {
             hasCounty: function () {
                 return this.county && this.county.length;
@@ -67,8 +74,6 @@ define([
             }
         },
 
-        // Properties to be sent into constructor
-
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -78,6 +83,10 @@ define([
 
             mustache.parse(featureTemplate);
             domConstruct.place(mustache.render(projectTemplate, this), this.projectDetailsNode);
+
+            if (this.allowEdits) {
+                domClass.remove(this.modBtns, 'hidden');
+            }
 
             this.inherited(arguments);
         },
@@ -146,6 +155,13 @@ define([
                 });
                 this.newFeatureWizard = wizard;
             }
+        },
+        onDeleteFeatureClick: function () {
+            // summary:
+            //      user has clicked the delete feature button
+            console.log('app.project.FeatureDetails:onDeleteFeatureClick', arguments);
+
+            // TODO make request to delete service.
         }
     });
 });

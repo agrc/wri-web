@@ -33,6 +33,13 @@ define([
         templateString: template,
         baseClass: 'project-details',
 
+
+        // passed into the constructor
+
+        // allowEdits: Boolean
+        //      the user has edit rights to this project
+        allowEdits: null,
+
         constructor: function (params) {
             // summary:
             //      overrides same function in _WidgetBase
