@@ -164,10 +164,7 @@ define([
             var that = this;
             this.projectDetailsRequest = xhr.get(config.urls.api + '/project/' + id, {
                 handleAs: 'json',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': null
-                },
+                headers: config.defaultXhrHeaders,
                 query: userCredentials.getUserData()
             }).then(function (response) {
                 that.clearTimer();

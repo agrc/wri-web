@@ -567,7 +567,7 @@ define([
             var projectId = router.getProjectId();
             xhr.post(config.urls.api + '/project/' + projectId + '/feature/create', {
                 handleAs: 'json',
-                headers: { 'Accept': 'application/json' },
+                headers: config.defaultXhrHeaders,
                 data: postData,
                 failOk: true
             }).response.then(function (response) {

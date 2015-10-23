@@ -121,7 +121,7 @@ define([
             var projectId = router.getProjectId();
             xhr.get(config.urls.api + '/project/' + projectId + '/feature/' + rowData.featureId, {
                 handleAs: 'json',
-                headers: { 'Accept': 'application/json' },
+                headers: config.defaultXhrHeaders,
                 query: { 'featureCategory': rowData.type }
             }).response.then(lang.hitch(this, function (response) {
                 if (response.status !== 200) {

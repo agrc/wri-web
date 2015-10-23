@@ -111,6 +111,11 @@ define([
             zipToGraphics: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/ZipToGraphics'
         },
 
+        defaultXhrHeaders: {
+            'Accept': 'application/json',
+            'X-Requested-With': null
+        },
+
         layerIndices: {
             point: 0,
             line: 1,
