@@ -215,13 +215,16 @@ define([
             console.log('app.project.ProjectContainer::_updateDetails', arguments);
 
             domClass.toggle(this.errorNode, 'hidden', response.project);
+
+            this._hideLoader();
+
             if (!response.project) {
-                this.errorNode.innerHTML = 'We could not find a project with the id: ' + this.currentProject + '.';
+                domClass.add(this.contentNode, 'hidden');
+                domClass.add(this.closeNode, 'hidden');
+                this.errorTxt.innerHTML = 'We could not find a project with the id of "' + this.currentProject + '".';
 
                 return;
             }
-
-            this._hideLoader();
 
             response.project.allowEdits = response.allowEdits;
             this.projectDetails = new ProjectDetails(response.project).placeAt(this.detailsNode);
