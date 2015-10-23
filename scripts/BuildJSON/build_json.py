@@ -7,6 +7,12 @@ build_json
 builds a .json file used to configure the app
 '''
 
+import os
+#: don't run on travis
+if os.environ.get('CI'):
+    exit()
+
+
 from os.path import join, dirname
 import json
 import pyodbc
