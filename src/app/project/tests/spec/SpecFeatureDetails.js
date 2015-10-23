@@ -22,19 +22,35 @@ require([
             widget = null;
         };
 
-        beforeEach(function () {
-            widget = new WidgetUnderTest({
-                title: 'Title',
-                projectId: 1234,
-                status: 'Completed',
-                description: 'asdf',
-                acres: 123,
-                streamMiles: 34,
-                leadAgency: 'asdf',
-                region: 'asdf',
-                projectManagerName: 'Scott Davis'
-            }, domConstruct.create('div', null, document.body));
-            widget.startup();
+        var def;
+        var StubbedModule;
+        beforeEach(function (done) {
+            def = new Deferred();
+            stubModule('app/project/FeatureDetails', {
+                'dojo/request/xhr': jasmine.createSpy('xhr').and.returnValue({
+                    response: def.promise
+                }),
+                'app/router': {
+                    getProjectId: function () {
+                        return 999;
+                    }
+                }
+            }).then(function (Module) {
+                StubbedModule = Module;
+                widget = new StubbedModule({
+                    title: 'Title',
+                    projectId: 1234,
+                    status: 'Completed',
+                    description: 'asdf',
+                    acres: 123,
+                    streamMiles: 34,
+                    leadAgency: 'asdf',
+                    region: 'asdf',
+                    projectManagerName: 'Scott Davis'
+                }, domConstruct.create('div', null, document.body));
+                widget.startup();
+                done();
+            });
         });
 
         afterEach(function () {
@@ -45,51 +61,13 @@ require([
 
         describe('Sanity', function () {
             it('should create a FeatureDetails', function () {
-                expect(widget).toEqual(jasmine.any(WidgetUnderTest));
+                expect(widget).toEqual(jasmine.any(StubbedModule));
             });
         });
         describe('onFeatureSelected', function () {
-            beforeEach(function (done) {
-                stubModule('app/project/FeatureDetails', {
-                    'dojo/request/xhr': {
-                        get: jasmine.createSpy('xhr').and.returnValue({
-                            response: new Deferred().promise
-                        })
-                    },
-                    'app/router': {
-                        getProjectId: function () {
-                            return 999;
-                        }
-                    }
-                }).then(function (StubbedModule) {
-                    if (widget) {
-                        destroy(widget);
-                    }
-
-                    widget = new StubbedModule({
-                        title: 'Title',
-                        projectId: 1234,
-                        status: 'Completed',
-                        description: 'asdf',
-                        acres: 123,
-                        streamMiles: 34,
-                        leadAgency: 'asdf',
-                        region: 'asdf',
-                        projectManagerName: 'Scott Davis'
-                    }, domConstruct.create('div', null, document.body));
-                    widget.startup();
-                    done();
-                });
-            });
-
-            afterEach(function () {
-                if (widget) {
-                    destroy(widget);
-                }
-            });
-
             it('places template in contents', function () {
                 widget.onFeatureSelected({});
+                def.resolve();
 
                 expect(widget.featureTabContents.innerHTML.length).toBeGreaterThan(5);
             });
@@ -97,6 +75,7 @@ require([
                 expect(domClass.contains(widget.featureTabContents.parentElement, 'hidden')).toBe(true);
 
                 widget.onFeatureSelected({});
+                def.resolve();
 
                 expect(domClass.contains(widget.featureTabContents, 'hidden')).toBe(false);
             });
@@ -104,6 +83,7 @@ require([
                 widget.featureTabContents.innerHTML = 'test';
 
                 widget.onFeatureSelected({});
+                def.resolve();
 
                 expect(widget.featureTabContents.innerHTML).not.toContain('test');
             });

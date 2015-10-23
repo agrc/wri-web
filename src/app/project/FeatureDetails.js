@@ -40,6 +40,13 @@ define([
 
     mustache
 ) {
+    var onError = function (defaultMsg, msg) {
+        topic.publish(config.topics.toast, {
+            message: msg || defaultMsg,
+            type: 'danger'
+        });
+    };
+
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
         //      Contains feature details and editing tools.
@@ -49,12 +56,13 @@ define([
         // newFeatureWizard: NewFeatureWizard
         newFeatureWizard: null,
 
+        // currentRowData: Number
+        //      the row data of the currently selected feature
+        currentRowData: null,
 
-        // passed into the constructor
-
-        // allowEdits: Boolean
-        //      the user has edit rights to this project
-        allowEdits: null,
+        // projectId: Number
+        //      the id of the project that is currently open
+        projectId: null,
 
         templateFunctions: {
             hasCounty: function () {
@@ -74,6 +82,13 @@ define([
             }
         },
 
+
+        // Properties to be sent into constructor
+
+        // allowEdits: Boolean
+        //      the user has edit rights to this project
+        allowEdits: null,
+
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -87,6 +102,8 @@ define([
             if (this.allowEdits) {
                 domClass.remove(this.modBtns, 'hidden');
             }
+
+            this.projectId = router.getProjectId();
 
             this.inherited(arguments);
         },
@@ -106,31 +123,42 @@ define([
             // rowData: Object
             console.log('app/project/FeatureDetails:onFeatureSelected', arguments);
 
+            var onErrorWithDefault = lang.partial(onError, 'Error selecting feature!');
+
             Object.keys(this.templateFunctions).forEach(function (key) {
                 rowData[key] = this.templateFunctions[key];
             }, this);
-
-            domConstruct.empty(this.featureTabContents);
-            domConstruct.place(mustache.render(featureTemplate, rowData), this.featureTabContents);
 
             // show feature tab
             domClass.remove(this.featureTab, 'hidden');
             domClass.remove(this.featureTabContainer, 'hidden');
             this.featureTabLink.click();
 
-            var projectId = router.getProjectId();
-            xhr.get(config.urls.api + '/project/' + projectId + '/feature/' + rowData.featureId, {
-                handleAs: 'json',
-                headers: config.defaultXhrHeaders,
-                query: { 'featureCategory': rowData.type }
-            }).response.then(lang.hitch(this, function (response) {
+            this.currentRowData = rowData;
+
+            // prevent flicker of window by putting this on a timer
+            var timer = window.setTimeout(function () {
+                domConstruct.empty(that.featureTabContents);
+            }, 500);
+            var responseData;
+            var that = this;
+            this.makeRequest('GET').then(function (response) {
                 if (response.status !== 200) {
+                    onErrorWithDefault(response);
                     return;
                 }
 
-                domConstruct.empty(this.featureTabContents);
-                domConstruct.place(mustache.render(featureTemplate, lang.mixin(rowData, response.data)), this.featureTabContents);
-            }));
+                responseData = response.data;
+            }, function (error) {
+                onErrorWithDefault(error.response.data);
+            }).always(function () {
+                window.clearTimeout(timer);
+                domConstruct.empty(that.featureTabContents);
+                domConstruct.place(
+                    mustache.render(featureTemplate, lang.mixin(rowData, responseData)),
+                    that.featureTabContents
+                );
+            });
         },
         startNewFeatureWizard: function () {
             // summary:
@@ -161,7 +189,31 @@ define([
             //      user has clicked the delete feature button
             console.log('app.project.FeatureDetails:onDeleteFeatureClick', arguments);
 
-            // TODO make request to delete service.
+            var onErrorWithDefault = lang.partial(onError, 'Error deleting feature!');
+            var that = this;
+            this.makeRequest('DELETE').then(function (response) {
+                if (response.status !== 200) {
+                    onErrorWithDefault(response);
+                    return;
+                }
+
+                topic.publish(config.topics.projectIdsChanged, [that.projectId]);
+            }, function (error) {
+                onErrorWithDefault(error.response.data);
+            });
+        },
+        makeRequest: function (method) {
+            // summary:
+            //      make request to the api
+            // method: String
+            console.log('app.project.FeatureDetails:makeRequest', arguments);
+
+            return xhr(config.urls.api + '/project/' + this.projectId + '/feature/' + this.currentRowData.featureId, {
+                handleAs: 'json',
+                headers: config.defaultXhrHeaders,
+                query: { 'featureCategory': this.currentRowData.type },
+                method: method
+            }).response;
         }
     });
 });
