@@ -183,6 +183,9 @@ define([
             //      hides all content and shows the loader bar
             console.log('app.project.ProjectContainer:_showLoader', arguments);
 
+            // clear any previous timers to make sure that they do not slip by
+            this.clearTimer();
+
             var that = this;
             this.displayTimer = window.setTimeout(function () {
                 domClass.remove(that.loadingNode, 'hidden');
