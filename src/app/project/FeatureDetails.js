@@ -1,6 +1,6 @@
 define([
     'app/config',
-    'app/project/NewFeatureWizard',
+    'app/project/CreateEditFeature',
     'app/project/userCredentials',
     'app/router',
 
@@ -23,7 +23,7 @@ define([
     'dojo/NodeList-dom'
 ], function (
     config,
-    NewFeatureWizard,
+    CreateEditFeature,
     userCredentials,
     router,
 
@@ -55,7 +55,7 @@ define([
         templateString: template,
         baseClass: 'feature-details',
 
-        // newFeatureWizard: NewFeatureWizard
+        // newFeatureWizard: CreateEditFeature
         newFeatureWizard: null,
 
         // currentRowData: Number
@@ -119,7 +119,7 @@ define([
 
             this.own(
                 topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected')),
-                topic.subscribe(config.topics.feature.startNewFeatureWizard, lang.hitch(this, 'startNewFeatureWizard'))
+                topic.subscribe(config.topics.feature.startCreateEditFeature, lang.hitch(this, 'startCreateEditFeature'))
             );
         },
         onFeatureSelected: function (rowData) {
@@ -165,10 +165,10 @@ define([
                 );
             });
         },
-        startNewFeatureWizard: function () {
+        startCreateEditFeature: function () {
             // summary:
             //      starts the add new feature wizard
-            console.log('app.project.FeatureDetails:startNewFeatureWizard', arguments);
+            console.log('app.project.FeatureDetails:startCreateEditFeature', arguments);
 
             // show new feature tab
             domClass.remove(this.newFeatureTab, 'hidden');
@@ -176,7 +176,7 @@ define([
             this.newFeatureTabLink.click();
 
             if (!this.newFeatureWizard || this.newFeatureWizard._destroyed) {
-                var wizard = new NewFeatureWizard({},
+                var wizard = new CreateEditFeature({},
                     domConstruct.create('div', null, this.newFeatureTabContents));
                 wizard.startup();
 

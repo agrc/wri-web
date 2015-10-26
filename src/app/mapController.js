@@ -232,7 +232,7 @@ define([
                 domClass.add(that.map.root, 'drawing');
                 that.isDrawing = true;
             });
-            topic.subscribe(config.topics.feature.startNewFeatureWizard, lang.hitch(this, 'clearSelectedFeature'));
+            topic.subscribe(config.topics.feature.startCreateEditFeature, lang.hitch(this, 'clearSelectedFeature'));
             topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'selectFeature'));
             topic.subscribe(config.topics.layer.add, lang.hitch(this, 'addLayers'));
             topic.subscribe(config.topics.map.setExtent, lang.hitch(this, 'setExtent'));
@@ -505,7 +505,7 @@ define([
 
                 this.map.setExtent(extent, false);
             } else if (extent.type && extent.type === 'point') {
-                // extent is actually a point geometry (see NewFeatureWizard:onGeometryDefined)
+                // extent is actually a point geometry (see CreateEditFeature:onGeometryDefined)
                 this.map.centerAndZoom(extent, config.centerAndZoomLevel);
             } else if (!extent.getWidth() && !extent.getHeight()) {
                 // we are looking at the extent of a point

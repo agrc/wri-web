@@ -79,7 +79,7 @@ define([
             //      fires topics
             console.log('app.project.ProjectDetails:onAddFeatureClick', arguments);
 
-            topic.publish(config.topics.feature.startNewFeatureWizard);
+            topic.publish(config.topics.feature.startCreateEditFeature);
         }
     });
 });

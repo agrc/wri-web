@@ -146,7 +146,7 @@ define([
                         that.onRowSelected(that.grid.row(item.id));
                     });
                 }),
-                topic.subscribe(config.topics.feature.startNewFeatureWizard, function () {
+                topic.subscribe(config.topics.feature.startCreateEditFeature, function () {
                     that.clearSelection();
                 })
             );

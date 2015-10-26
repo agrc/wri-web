@@ -3,7 +3,7 @@ require([
 
     'app/config',
     'app/project/Action',
-    'app/project/NewFeatureWizard',
+    'app/project/CreateEditFeature',
 
     'dojo/Deferred',
     'dojo/dom-class',
@@ -31,7 +31,7 @@ require([
 
     stubModule
 ) {
-    describe('app/project/NewFeatureWizard', function () {
+    describe('app/project/CreateEditFeature', function () {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
@@ -50,7 +50,7 @@ require([
         });
 
         describe('Sanity', function () {
-            it('should create a NewFeatureWizard', function () {
+            it('should create a CreateEditFeature', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
             it('should build the feature types select options', function () {
@@ -568,7 +568,7 @@ require([
                 var xhrSpy = jasmine.createSpy('xhr').and.returnValue({
                     response: def.promise
                 });
-                stubModule('app/project/NewFeatureWizard', {
+                stubModule('app/project/CreateEditFeature', {
                     'app/router': {
                         getProjectId: function () {
                             return 999;

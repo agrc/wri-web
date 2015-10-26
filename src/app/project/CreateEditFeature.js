@@ -14,7 +14,7 @@ define([
     'dojo/dom-construct',
     'dojo/query',
     'dojo/request/xhr',
-    'dojo/text!app/project/templates/NewFeatureWizard.html',
+    'dojo/text!app/project/templates/CreateEditFeature.html',
     'dojo/topic',
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -126,7 +126,7 @@ define([
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
-            console.log('app.project.NewFeatureWizard::postCreate', arguments);
+            console.log('app.project.CreateEditFeature::postCreate', arguments);
 
             this.actions = [];
 
@@ -163,7 +163,7 @@ define([
         validateForm: function () {
             // summary:
             //      check for required fields and enables/disables save and add buttons accordingly
-            console.log('app.project.NewFeatureWizard:validateForm', arguments);
+            console.log('app.project.CreateEditFeature:validateForm', arguments);
 
             var category = this.featureCategorySelect.value !== '';
             var requiredActionFields = query('.form-group:not(.hidden) select, .form-group:not(.hidden) textarea',
@@ -188,7 +188,7 @@ define([
         onCancelDrawing: function () {
             // summary:
             //      restore original graphics
-            console.log('app.project.NewFeatureWizard:onCancelDrawing', arguments);
+            console.log('app.project.CreateEditFeature:onCancelDrawing', arguments);
 
             this.graphicsLayer.clear();
             this.originalGraphicJsons.forEach(function (json) {
@@ -198,7 +198,7 @@ define([
         onFeatureCategoryChange: function () {
             // summary:
             //      shows or hides the drawing buttons
-            console.log('app.project.NewFeatureWizard:onFeatureCategoryChange', arguments);
+            console.log('app.project.CreateEditFeature:onFeatureCategoryChange', arguments);
 
             $(this.featureAttributesDiv).collapse('hide');
             this.resetFeatureAttributes();
@@ -248,14 +248,14 @@ define([
         onUploadClick: function () {
             // summary:
             //      upload button was clicked
-            console.log('app.project.NewFeatureWizard:onUploadClick', arguments);
+            console.log('app.project.CreateEditFeature:onUploadClick', arguments);
 
             $(this.uploadDiv).collapse('show');
         },
         onFileSelected: function () {
             // summary:
             //      update controls after a file is selected for upload
-            console.log('app.project.NewFeatureWizard:onFileSelected', arguments);
+            console.log('app.project.CreateEditFeature:onFileSelected', arguments);
 
             this.uploadTxtBox.value = this.fileUploadInput.value.replace(/.*\\/, '');
             this.uploadBtn.disabled = false;
@@ -264,7 +264,7 @@ define([
         onUpload: function () {
             // summary:
             //      uploads the zip file
-            console.log('app.project.NewFeatureWizard:onUpload', arguments);
+            console.log('app.project.CreateEditFeature:onUpload', arguments);
 
             this.graphicsLayer.clear();
             $(this.uploadBtn).button('loading');
@@ -304,7 +304,7 @@ define([
         onDrawClick: function () {
             // summary:
             //      hide the upload div and publish the topic
-            console.log('app.project.NewFeatureWizard:onDrawClick', arguments);
+            console.log('app.project.CreateEditFeature:onDrawClick', arguments);
 
             $(this.uploadDiv).collapse('hide');
 
@@ -324,7 +324,7 @@ define([
             //      zoom to geometry
             // clear: Boolean (optional)
             //      clear any previous graphics
-            console.log('app.project.NewFeatureWizard:onGeometryDefined', arguments);
+            console.log('app.project.CreateEditFeature:onGeometryDefined', arguments);
 
             $(this.uploadDiv).collapse('hide');
             $(this.featureAttributesDiv).collapse('show');
@@ -361,7 +361,7 @@ define([
             // summary:
             //      update the treatment appropriate for the selected action
             // param or return
-            console.log('app.project.NewFeatureWizard:onPolyActionSelectChange', arguments);
+            console.log('app.project.CreateEditFeature:onPolyActionSelectChange', arguments);
 
             clearSelect(this.treatmentSelect);
             loadItemsIntoSelect(
@@ -373,7 +373,7 @@ define([
         resetFeatureAttributes: function (preserveVisibility) {
             // summary:
             //      clears all of the form controls
-            console.log('app.project.NewFeatureWizard:resetFeatureAttributes', arguments);
+            console.log('app.project.CreateEditFeature:resetFeatureAttributes', arguments);
 
             var hide = function (node) {
                 if (!preserveVisibility) {
@@ -418,7 +418,7 @@ define([
             // er: Object
             //      with either `details` or `message` or both properties
             // returns: String
-            console.log('app.project.NewFeatureWizard:getServiceErrorMessage', arguments);
+            console.log('app.project.CreateEditFeature:getServiceErrorMessage', arguments);
 
             var preface = 'Error uploading shapefile';
 
@@ -438,7 +438,7 @@ define([
             // summary:
             //      cut all features in the graphics layer with the cut geometry
             // cutGeometry: Line Geometry
-            console.log('app.project.NewFeatureWizard:onCutFeatures', arguments);
+            console.log('app.project.CreateEditFeature:onCutFeatures', arguments);
 
             this.graphicsLayer.graphics.forEach(function (g) {
                 var newGeometries = geometryEngine.cut(g.geometry, cutGeometry);
@@ -458,7 +458,7 @@ define([
         onCancel: function () {
             // summary:
             //      destroy this widget and all associated data
-            console.log('app.project.NewFeatureWizard:onCancel', arguments);
+            console.log('app.project.CreateEditFeature:onCancel', arguments);
 
             this.graphicsLayer.clear();
 
@@ -469,7 +469,7 @@ define([
         onAddActionClick: function () {
             // summary:
             //      user has clicked the add action button
-            console.log('app.project.NewFeatureWizard:onAddActionClick', arguments);
+            console.log('app.project.CreateEditFeature:onAddActionClick', arguments);
 
             var params = this.getActionParams();
 
@@ -498,7 +498,7 @@ define([
             // summary:
             //      get the params for a new Action from the visible form controls
             // param or return
-            console.log('app.project.NewFeatureWizard:getActionParams', arguments);
+            console.log('app.project.CreateEditFeature:getActionParams', arguments);
 
             var visible = function (node) {
                 return !domClass.contains(node, 'hidden');
@@ -530,7 +530,7 @@ define([
         onSaveClick: function () {
             // summary:
             //      gather data and submit to api
-            console.log('app.project.NewFeatureWizard:onSaveClick', arguments);
+            console.log('app.project.CreateEditFeature:onSaveClick', arguments);
 
             var geometries = this.graphicsLayer.graphics.map(function (graphic) {
                 return graphic.geometry;
@@ -584,7 +584,7 @@ define([
         getActionsData: function () {
             // summary:
             //      format action data for submission to api
-            console.log('app.project.NewFeatureWizard:getActionsData', arguments);
+            console.log('app.project.CreateEditFeature:getActionsData', arguments);
 
             var tempAction;
             if (this.validateForm()) {
