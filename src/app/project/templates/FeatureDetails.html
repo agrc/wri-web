@@ -1,6 +1,11 @@
 <div>
     <ul class="nav nav-tabs" role="tablist">
         <li class="hidden" role='presentation'
+            data-dojo-attach-point='editFeatureTab'>
+            <a href="#${id}_editFeatureTab" data-toggle='tab'
+                data-dojo-attach-point='editFeatureTabLink'>Modify Feature</a>
+        </li>
+        <li class="hidden" role='presentation'
             data-dojo-attach-point='newFeatureTab'>
             <a href="#${id}_newFeatureTab" data-toggle='tab'
                 data-dojo-attach-point='newFeatureTabLink'>Add Feature</a>
@@ -16,6 +21,10 @@
         </li>
     </ul>
     <div class="tab-content">
+        <div class="tab-pane hidden" id="${id}_editFeatureTab"
+            data-dojo-attach-point='editFeatureTabContainer'>
+            <div data-dojo-attach-point='editFeatureTabContents'></div>
+        </div>
         <div class="tab-pane hidden" id="${id}_newFeatureTab"
             data-dojo-attach-point='newFeatureTabContainer'>
             <div data-dojo-attach-point='newFeatureTabContents'></div>
@@ -23,9 +32,9 @@
         <div class="tab-pane hidden" id="${id}_featureTab"
             data-dojo-attach-point='featureTabContainer'>
             <p data-dojo-attach-point='modBtns' class='hidden'>
-                <!-- <button role="button" class="btn btn-primary"
+                <button role="button" class="btn btn-primary"
                     data-dojo-attach-point='modifyFeatureBtn'
-                    data-dojo-attac-event='click: onModifyFeatureClick'>Modify Feature</button> -->
+                    data-dojo-attach-event='click: onModifyFeatureClick'>Modify Feature</button>
                 <button role="button" class="btn btn-danger"
                     data-dojo-attach-point='deleteFeatureBtn'
                     data-dojo-attach-event='click: onDeleteFeatureClick'>Delete Feature</button>

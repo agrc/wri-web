@@ -188,7 +188,7 @@ define([
             toggleReferenceLayer: 'wri/toggleReferenceLayer',
             toggleReferenceLayerLabels: 'wri/toggleReferenceLayerLabels',
             feature: {
-                startCreateEditFeature: 'wri/feature/startCreateEditFeature',
+                createFeature: 'wri/feature/createFeature',
                 startDrawing: 'wri/feature/startDrawing',
                 drawingComplete: 'wri/feature/drawingComplete',
                 cutFeatures: 'wri/feature/cutFeatures',

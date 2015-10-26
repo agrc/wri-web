@@ -32,15 +32,18 @@ var widgetUnderTest;
 
 require({
     baseUrl: baseUrl,
-    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', 'mustache', 'lodash', {
+    packages: ['agrc', 'app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dojox', 'xstyle', 'mustache', 'lodash', {
         name: 'stubmodule',
         location: './stubmodule',
         main: 'src/stub-module'
-    },
-    {
+    }, {
         name: 'jquery',
         location: 'jquery/dist',
         main: 'jquery'
+    }, {
+        name: 'spin',
+        location: './spinjs',
+        main: 'spin'
     }, {
         name: 'bootstrap',
         location: 'bootstrap',
@@ -60,17 +63,17 @@ require({
 
     'dojo/domReady!'
 ], function ($, Module, lang, on, Deferred, domConstruct, stubModule) {
+    var def = new Deferred();
+    def.resolve();
     stubModule('app/project/FeatureDetails', {
         'app/router': {
             getProjectId: function () {
                 return 1;
             }
         },
-        'dojo/request/xhr': {
-            get: function () {
-                return {
-                    response: new Deferred().promise
-                }
+        'dojo/request/xhr': function () {
+            return {
+                response: def.promise
             }
         }
     }).then(function (StubbedModule) {
@@ -197,8 +200,6 @@ require({
         );
     });
 
-
-
     document.getElementById('point').click();
 });
 </script>
@@ -209,5 +210,10 @@ require({
     <button id="point" class='btn'>point</button>
     <button id="line" class='btn'>line</button>
     <button id="poly" class='btn'>poly</button>
+
+    <form id="user-data">
+        <input type="hidden" name="key" value="q4HQnzkRSG0YOKbpuyDJbM3NtFOdOwvS">
+        <input type="hidden" name="token" value="oHfJVhLkqruEkqXTA4dZlM3fDAhB5fBgbLo5Q0YydOXDzoGKklXcMHqPgvjpSrVf">
+    </form>
 </body>
 </html>

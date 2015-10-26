@@ -12,6 +12,8 @@ require([
     'dojo/text!app/tests/data/esri_geometries.json',
 
     'esri/geometry/Point',
+    'esri/geometry/Polygon',
+    'esri/geometry/Polyline',
 
     'stubmodule'
 ], function (
@@ -28,11 +30,34 @@ require([
     esriGeometries,
 
     Point,
+    Polygon,
+    Polyline,
 
     stubModule
 ) {
     describe('app/project/CreateEditFeature', function () {
+        esriGeometries = JSON.parse(esriGeometries);
         var widget;
+        var category = config.domains.featureType[0][0];
+        var geo = new Polyline(esriGeometries.esri.line);
+        var featureId = 88;
+        var existingData = {
+            category: category,
+            retreatment: true,
+            geometry: geo,
+            actions: [{
+                action: 'action1',
+                type: 'type1'
+            }, {
+                action: 'action2',
+                treatment: 'treatment2',
+                herbicide: 'herbicide2'
+            }, {
+                action: 'action3',
+                description: 'description3'
+            }],
+            featureId: featureId
+        };
         var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
@@ -56,6 +81,36 @@ require([
             it('should build the feature types select options', function () {
                 expect(widget.featureCategorySelect.children.length)
                     .toBe(config.domains.featureType.length + 1);
+            });
+        });
+        describe('parseExistingData', function () {
+            it('accepts existing data', function () {
+                widget.parseExistingData(existingData);
+
+                expect(widget.featureCategorySelect.value).toBe(category);
+                expect(widget.retreatmentChBx.checked).toBe(true);
+                expect(widget.graphicsLayer.graphics[0].geometry).toEqual(geo);
+                expect(widget.actions.length).toBe(3);
+            });
+            it('does not create action widgets for categories that don\'t support multiple actions', function () {
+                var easement = 'Easement/Acquisition';
+                var fee = 'Fee title land acquisition';
+                var existingData2 = {
+                    category: easement,
+                    geometry: new Polygon(esriGeometries.esri.poly),
+                    actions: [{
+                        action: easement,
+                        treatment: fee
+                    }],
+                    featureId: featureId
+                };
+                widget.parseExistingData(existingData2);
+
+                expect(widget.actions.length).toBe(0);
+                expect(widget.polyActionSelect.value).toBe(easement);
+                expect(domClass.contains(widget.polyAction, 'hidden')).toBe(false);
+                expect(widget.treatmentSelect.value).toBe(fee);
+                expect(domClass.contains(widget.treatment, 'hidden')).toBe(false);
             });
         });
         describe('onFeatureCategoryChange', function () {
@@ -563,9 +618,11 @@ require([
             });
         });
         describe('onSaveClick', function () {
-            it('sends the correct data to the api', function (done) {
+            var StubbedModule;
+            var xhrSpy;
+            beforeEach(function (done) {
                 var def = new Deferred();
-                var xhrSpy = jasmine.createSpy('xhr').and.returnValue({
+                xhrSpy = jasmine.createSpy('xhr').and.returnValue({
                     response: def.promise
                 });
                 stubModule('app/project/CreateEditFeature', {
@@ -579,25 +636,40 @@ require([
                             return {};
                         }
                     },
-                    'dojo/request/xhr': {
-                        post: xhrSpy
-                    }
-                }).then(function (StubbedModule) {
-                    var testWidget2 = new StubbedModule({}, domConstruct.create('div', {}, document.body));
-                    testWidget2.graphicsLayer.graphics = [{
-                        geometry: new Point(JSON.parse(esriGeometries).esri.point)
-                    }];
-                    var actionData = 'blah';
-                    spyOn(testWidget2, 'getActionsData').and.returnValue(actionData);
-
-                    testWidget2.onSaveClick();
-
-                    var args = xhrSpy.calls.mostRecent().args;
-                    expect(args[0]).toMatch(/999/);
-
-                    destroy(testWidget2);
+                    'dojo/request/xhr': xhrSpy
+                }).then(function (Module) {
+                    StubbedModule = Module;
                     done();
                 });
+            });
+            it('sends the correct data to the api for create', function () {
+                var testWidget2 = new StubbedModule({}, domConstruct.create('div', {}, document.body));
+                testWidget2.graphicsLayer.graphics = [{
+                    geometry: new Point(esriGeometries.esri.point)
+                }];
+                var actionData = 'blah';
+                spyOn(testWidget2, 'getActionsData').and.returnValue(actionData);
+
+                testWidget2.onSaveClick();
+
+                var args = xhrSpy.calls.mostRecent().args;
+                expect(args[0]).toMatch(/999\/feature\/create/);
+                expect(args[1].method).toBe('POST');
+
+                destroy(testWidget2);
+            });
+            it('sends the correct data to the api for edit', function () {
+                var testWidget2 = new StubbedModule({
+                    existingData: existingData
+                }, domConstruct.create('div', {}, document.body));
+
+                testWidget2.onSaveClick();
+
+                var args = xhrSpy.calls.mostRecent().args;
+                expect(args[0]).toMatch(/999\/feature\/88/);
+                expect(args[1].method).toBe('PUT');
+
+                destroy(testWidget2);
             });
         });
     });

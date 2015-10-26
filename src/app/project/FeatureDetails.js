@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/mapController',
     'app/project/CreateEditFeature',
     'app/project/userCredentials',
     'app/router',
@@ -23,6 +24,7 @@ define([
     'dojo/NodeList-dom'
 ], function (
     config,
+    mapController,
     CreateEditFeature,
     userCredentials,
     router,
@@ -57,6 +59,9 @@ define([
 
         // newFeatureWizard: CreateEditFeature
         newFeatureWizard: null,
+
+        // editFeatureWizard: CreateEditFeature
+        editFeatureWizard: null,
 
         // currentRowData: Number
         //      the row data of the currently selected feature
@@ -119,7 +124,7 @@ define([
 
             this.own(
                 topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected')),
-                topic.subscribe(config.topics.feature.startCreateEditFeature, lang.hitch(this, 'startCreateEditFeature'))
+                topic.subscribe(config.topics.feature.createFeature, lang.hitch(this, 'createFeature'))
             );
         },
         onFeatureSelected: function (rowData) {
@@ -134,10 +139,9 @@ define([
                 rowData[key] = this.templateFunctions[key];
             }, this);
 
-            // show feature tab
-            domClass.remove(this.featureTab, 'hidden');
-            domClass.remove(this.featureTabContainer, 'hidden');
-            this.featureTabLink.click();
+            this.toggleTab('featureTab', true);
+            this.toggleTab('editFeatureTab', false);
+            this.toggleTab('newFeatureTab', false);
 
             this.currentRowData = rowData;
 
@@ -165,15 +169,13 @@ define([
                 );
             });
         },
-        startCreateEditFeature: function () {
+        createFeature: function () {
             // summary:
             //      starts the add new feature wizard
-            console.log('app.project.FeatureDetails:startCreateEditFeature', arguments);
+            console.log('app.project.FeatureDetails:createFeature', arguments);
 
-            // show new feature tab
-            domClass.remove(this.newFeatureTab, 'hidden');
-            domClass.remove(this.newFeatureTabContainer, 'hidden');
-            this.newFeatureTabLink.click();
+            this.toggleTab('newFeatureTab', true);
+            this.toggleTab('editFeatureTab', false);
 
             if (!this.newFeatureWizard || this.newFeatureWizard._destroyed) {
                 var wizard = new CreateEditFeature({},
@@ -182,8 +184,7 @@ define([
 
                 var that = this;
                 wizard.on('hide', function () {
-                    domClass.add(that.newFeatureTab, 'hidden');
-                    domClass.add(that.newFeatureTabContainer, 'hidden');
+                    that.toggleTab('newFeatureTab', false);
                     that.detailsTabLink.click();
                 });
                 this.newFeatureWizard = wizard;
@@ -237,6 +238,97 @@ define([
 
             var url = config.urls.api + '/project/' + this.projectId + '/feature/' + this.currentRowData.featureId;
             return xhr(url, params).response;
+        },
+        onModifyFeatureClick: function () {
+            // summary:
+            //      gather feature and action data and send to create edit feature widget
+            console.log('app.project.FeatureDetails:onModifyFeatureClick', arguments);
+
+            // show edit feature tab
+            this.toggleTab('editFeatureTab', true);
+
+            // prevent duplicate widgets
+            if (this.editFeatureWizard) {
+                this.editFeatureWizard.destroyRecursive();
+                this.editFeatureWizard = null;
+            }
+
+            var row = this.currentRowData;
+            var graphic = mapController.getGraphicById(row.featureId, row.origin);
+            graphic.hide();
+            var wizard = new CreateEditFeature({
+                existingData: {
+                    category: row.type,
+                    retreatment: row.retreatment,
+                    geometry: lang.clone(graphic.geometry),
+                    actions: this.getActionsFromGridRows(
+                        row.store.filter({
+                            featureId: row.featureId,
+                            hasChildren: false
+                        })
+                    ),
+                    featureId: row.featureId
+                }
+            }, domConstruct.create('div', {}, this.editFeatureTabContents));
+            wizard.startup();
+
+            var that = this;
+            wizard.on('hide', function () {
+                graphic.show();
+                that.toggleTab('editFeatureTab', false);
+                wizard.destroyRecursive();
+                that.editFeatureWizard = null;
+                that.onFeatureSelected(that.currentRowData);
+            });
+
+            this.editFeatureWizard = wizard;
+        },
+        getActionsFromGridRows: function (rows) {
+            // summary:
+            //      pulls out the actions parameters from grid rows
+            // rows: Object[]
+            console.log('app.project.FeatureDetails:getActionsFromGridRows', arguments);
+
+            var newRows = [];
+            rows.forEach(function (r) {
+                var obj = {
+                    action: r.action,
+                    description: r.description
+                };
+
+                // split out types and treatments from subType property based on category
+                if (Array.isArray(config.domains.featureAttributes[r.type])) {
+                    obj.type = r.subType;
+                } else {
+                    obj.treatment = r.subType;
+                }
+
+                if (!r.herbicides) {
+                    newRows.push(obj);
+                } else {
+                    r.herbicides.forEach(function (h) {
+                        var newObj = lang.clone(obj);
+                        newObj.herbicide = h;
+                        newRows.push(newObj);
+                    });
+                }
+            });
+
+            return newRows;
+        },
+        toggleTab: function (tab, show) {
+            // summary:
+            //      shows or hides the tab and contents
+            // tab: String
+            //      The dojo attach point name of the tab (e.g. editFeatureTab)
+            // show: Boolean
+            console.log('app.project.FeatureDetails:toggleTab', arguments);
+
+            domClass.toggle(this[tab], 'hidden', !show);
+            domClass.toggle(this[tab + 'Container'], 'hidden', !show);
+            if (show) {
+                this[tab + 'Link'].click();
+            }
         }
     });
 });

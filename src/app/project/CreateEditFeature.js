@@ -95,7 +95,7 @@ define([
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // description:
-        //      Wizard for adding new features to a project.
+        //      Wizard for adding new features to a project or editing existing features.
         templateString: template,
         baseClass: 'new-feature-wizard',
         widgetsInTemplate: true,
@@ -121,7 +121,19 @@ define([
         //      sent to toaster
         duplicateActionMsg: 'Can\'t add duplicate actions!',
 
+
         // Properties to be sent into constructor
+
+        // existingData: Object (optional)
+        // {
+        //     category: String,
+        //     retreatment: Boolean,
+        //     geometry: Geometry,
+        //     actions: Action[],
+        //     featureId: Number
+        // }
+        //      This is used to pass in the data for a feature that is being modified
+        existingData: null,
 
         postCreate: function () {
             // summary:
@@ -149,7 +161,9 @@ define([
                     .on('change', lang.hitch(this, 'validateForm')),
                 topic.subscribe(config.topics.feature.removeEditingGraphic, function (graphic) {
                     that.graphicsLayer.remove(graphic);
-                })
+                }),
+                topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onCancel')),
+                topic.subscribe(config.topics.feature.drawEditComplete, lang.hitch(this, 'validateForm'))
             );
             topic.publish(config.topics.layer.add, {
                 graphicsLayers: [this.graphicsLayer],
@@ -158,7 +172,48 @@ define([
 
             loadItemsIntoSelect(config.domains.herbicides, this.herbicideSelect, true);
 
+            if (this.existingData) {
+                this.parseExistingData(this.existingData);
+            }
+
             this.inherited(arguments);
+        },
+        parseExistingData: function (existingData) {
+            // summary:
+            //      set the controls of this widget to match the existingData input
+            console.log('app.project.CreateEditFeature::parseExistingData', arguments);
+
+            this.featureCategorySelect.value = existingData.category;
+            this.onFeatureCategoryChange();
+            this.retreatmentChBx.checked = existingData.retreatment;
+            this.onGeometryDefined(existingData.geometry, false, true);
+
+            if (config.terrestrialAquaticCategories.indexOf(existingData.category) > -1) {
+                existingData.actions.forEach(function (a) {
+                    this.addAction(a);
+                }, this);
+            } else {
+                // category supports only single actions
+                var action = existingData.actions[0];
+                if (action.action) {
+                    // check for both polygon and multipolygon
+                    if (existingData.geometry.type.indexOf('polygon') > -1) {
+                        this.polyActionSelect.value = action.action;
+                        this.onPolyActionSelectChange();
+                    } else {
+                        this.pointLineActionSelect.value = action.action;
+                    }
+                }
+                if (action.type) {
+                    this.typeSelect.value = action.type;
+                }
+                if (action.treatment) {
+                    this.treatmentSelect.value = action.treatment;
+                }
+                if (action.description) {
+                    this.commentsTxt.value = action.description;
+                }
+            }
         },
         validateForm: function () {
             // summary:
@@ -480,19 +535,28 @@ define([
             });
 
             if (!existing) {
-                var action = new Action(params, domConstruct.create('div', null, this.actionsContainer));
-                this.own(action);
-                this.actions.push(action);
-                var that = this;
-                var handle = aspect.before(action, 'destroyRecursive', function () {
-                    that.actions.splice(that.actions.indexOf(action), 1);
-                    handle.remove();
-                });
+                this.addAction(params);
 
                 this.resetFeatureAttributes(true);
             } else {
                 topic.publish(config.topics.toast, this.duplicateActionMsg, 'warning');
             }
+        },
+        addAction: function (params) {
+            // summary:
+            //      adds an action
+            // params: Object (params for new action)
+            console.log('app.project.CreateEditFeature:addAction', arguments);
+
+            var action = new Action(params, domConstruct.create('div', null, this.actionsContainer));
+            this.own(action);
+            this.actions.push(action);
+            var that = this;
+            var handle = aspect.before(action, 'destroyRecursive', function () {
+                that.actions.splice(that.actions.indexOf(action), 1);
+                that.validateForm();
+                handle.remove();
+            });
         },
         getActionParams: function () {
             // summary:
@@ -560,7 +624,11 @@ define([
             };
 
             var projectId = router.getProjectId();
-            xhr.post(config.urls.api + '/project/' + projectId + '/feature/create', {
+            var url = config.urls.api + '/project/' + projectId + '/feature/';
+            var featureId = (this.existingData) ? this.existingData.featureId : null;
+            url += featureId || 'create';
+            xhr(url, {
+                method: (featureId) ? 'PUT' : 'POST',
                 handleAs: 'json',
                 headers: config.defaultXhrHeaders,
                 data: postData,

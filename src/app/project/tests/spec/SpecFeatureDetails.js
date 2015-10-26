@@ -114,5 +114,36 @@ require([
                 });
             });
         });
+        describe('getActionsFromGridRows', function () {
+            it('parses actions', function () {
+                var rows = [{
+                    action: 'Easement/Acquisition',
+                    subType: 'Conservation easement', // treatment
+                    type: 'Easement/Acquisition'
+                }, {
+                    action: 'Maintenance',
+                    subType: 'Big game', // type
+                    type: 'Guzzler'
+                }];
+
+                var result = widget.getActionsFromGridRows(rows);
+
+                expect(result[0].treatment).toBe('Conservation easement');
+                expect(result[1].type).toBe('Big game');
+            });
+            it('splits herbides', function () {
+                var rows = [{
+                    action: 'Herbicide application',
+                    subType: 'Aerial (fixed-wing)',
+                    type: 'Terrestrial Treatment Area',
+                    herbicides: ['herbie1', 'herbie2']
+                }];
+
+                var result = widget.getActionsFromGridRows(rows);
+
+                expect(result.length).toBe(2);
+                expect(result[1].herbicide).toBe('herbie2');
+            });
+        });
     });
 });

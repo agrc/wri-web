@@ -51,6 +51,13 @@ define([
         widgetsInTemplate: true,
         selectedClassName: 'selected',
 
+        // grid: Grid
+        grid: null,
+
+        // store: Memory
+        store: null,
+
+
         // Properties to be sent into constructor
 
         // features: Object[]
@@ -75,7 +82,7 @@ define([
             var columns = {
                 id: 'Unique ID',
                 type: {
-                    label: 'Feature Type',
+                    label: 'Feature Category',
                     renderExpando: true
                 },
                 action: 'Action',
@@ -146,7 +153,7 @@ define([
                         that.onRowSelected(that.grid.row(item.id));
                     });
                 }),
-                topic.subscribe(config.topics.feature.startCreateEditFeature, function () {
+                topic.subscribe(config.topics.feature.createFeature, function () {
                     that.clearSelection();
                 })
             );
@@ -158,15 +165,18 @@ define([
             console.log('app/project/FeaturesGrid:onRowSelected', arguments);
 
             var data = row.data;
+            data.store = this.store;
 
+            // assign type and retreatment from parent if this is a child
             var parentId = data.parent;
             if (parentId) {
-                var parent = this.features.filter(function (child) {
-                    return child.id === parentId;
+                var parent = this.features.filter(function (f) {
+                    return f.id === parentId;
                 });
 
                 if (parent && parent.length === 1) {
                     data.type = parent[0].type;
+                    data.retreatment = parent[0].retreatment;
                 }
             }
 

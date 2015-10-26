@@ -232,7 +232,7 @@ define([
                 domClass.add(that.map.root, 'drawing');
                 that.isDrawing = true;
             });
-            topic.subscribe(config.topics.feature.startCreateEditFeature, lang.hitch(this, 'clearSelectedFeature'));
+            topic.subscribe(config.topics.feature.createFeature, lang.hitch(this, 'clearSelectedFeature'));
             topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'selectFeature'));
             topic.subscribe(config.topics.layer.add, lang.hitch(this, 'addLayers'));
             topic.subscribe(config.topics.map.setExtent, lang.hitch(this, 'setExtent'));
