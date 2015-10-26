@@ -189,6 +189,10 @@ define([
             //      user has clicked the delete feature button
             console.log('app.project.FeatureDetails:onDeleteFeatureClick', arguments);
 
+            if (!window.confirm('Do you really want to delete this feature?')) {
+                return;
+            }
+
             var onErrorWithDefault = lang.partial(onError, 'Error deleting feature!');
             var that = this;
             this.makeRequest('DELETE').then(function (response) {
