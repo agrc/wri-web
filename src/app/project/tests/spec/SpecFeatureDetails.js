@@ -24,15 +24,22 @@ require([
 
         var def;
         var StubbedModule;
+        var xhrSpy;
         beforeEach(function (done) {
+            xhrSpy = jasmine.createSpy('xhr');
             def = new Deferred();
             stubModule('app/project/FeatureDetails', {
-                'dojo/request/xhr': jasmine.createSpy('xhr').and.returnValue({
+                'dojo/request/xhr': xhrSpy.and.returnValue({
                     response: def.promise
                 }),
                 'app/router': {
                     getProjectId: function () {
                         return 999;
+                    }
+                },
+                'app/project/userCredentials': {
+                    getUserData: function () {
+                        return {};
                     }
                 }
             }).then(function (Module) {
@@ -86,6 +93,25 @@ require([
                 def.resolve();
 
                 expect(widget.featureTabContents.innerHTML).not.toContain('test');
+            });
+        });
+        describe('makeRequest', function () {
+            it('uses data for post and query for get', function () {
+                var type = 'blah';
+                widget.currentRowData = {
+                    type: type
+                };
+                widget.makeRequest('GET');
+
+                expect(xhrSpy.calls.mostRecent().args[1].query).toEqual({
+                    featureCategory: type
+                });
+
+                widget.makeRequest('DELETE');
+
+                expect(xhrSpy.calls.mostRecent().args[1].data).toEqual({
+                    featureCategory: type
+                });
             });
         });
     });

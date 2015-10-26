@@ -1,6 +1,7 @@
 define([
     'app/config',
     'app/project/NewFeatureWizard',
+    'app/project/userCredentials',
     'app/router',
 
     'dijit/_TemplatedMixin',
@@ -23,6 +24,7 @@ define([
 ], function (
     config,
     NewFeatureWizard,
+    userCredentials,
     router,
 
     _TemplatedMixin,
@@ -212,12 +214,22 @@ define([
             // method: String
             console.log('app.project.FeatureDetails:makeRequest', arguments);
 
-            return xhr(config.urls.api + '/project/' + this.projectId + '/feature/' + this.currentRowData.featureId, {
+            var params = {
                 handleAs: 'json',
                 headers: config.defaultXhrHeaders,
-                query: { 'featureCategory': this.currentRowData.type },
                 method: method
-            }).response;
+            };
+            var data = lang.mixin(userCredentials.getUserData(), {
+                featureCategory: this.currentRowData.type
+            });
+            if (method === 'DELETE') {
+                params.data = data;
+            } else {
+                params.query = data;
+            }
+
+            var url = config.urls.api + '/project/' + this.projectId + '/feature/' + this.currentRowData.featureId;
+            return xhr(url, params).response;
         }
     });
 });
