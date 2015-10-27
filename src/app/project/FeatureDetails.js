@@ -197,6 +197,7 @@ define([
 
             var onErrorWithDefault = lang.partial(onError, 'Error deleting feature!');
             var that = this;
+            this.deleteFeatureBtn.disabled = true;
             this.makeRequest('DELETE').then(function (response) {
                 if (response.status !== 200) {
                     onErrorWithDefault(response);
