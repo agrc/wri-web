@@ -199,7 +199,7 @@ define([
             var that = this;
             this.deleteFeatureBtn.disabled = true;
             this.makeRequest('DELETE').then(function (response) {
-                if (response.status !== 200) {
+                if (response.status !== 202) {
                     onErrorWithDefault(response);
                     return;
                 }
