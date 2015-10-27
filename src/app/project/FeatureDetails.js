@@ -207,7 +207,10 @@ define([
                 topic.publish(config.topics.projectIdsChanged, [that.projectId]);
             }, function (error) {
                 onErrorWithDefault(error.response.data);
-            });
+                that.deleteFeatureBtn.disabled = false;
+            }).always(lang.partial(topic.publish, config.topics.hideProjectLoader));
+
+            topic.publish(config.topics.showProjectLoader);
         },
         makeRequest: function (method) {
             // summary:
