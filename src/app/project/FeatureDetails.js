@@ -81,6 +81,9 @@ define([
             },
             hasSageGrouse: function () {
                 return this.sageGrouse && this.sageGrouse.length;
+            },
+            hasHerbicides: function () {
+                return this.herbicides && this.herbicides.length;
             }
         },
 
