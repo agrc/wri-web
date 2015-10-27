@@ -474,14 +474,9 @@ define([
             var params = this.getActionParams();
 
             var existing = this.actions.some(function (a) {
-                var match;
-                Object.keys(params).forEach(function (p) {
-                    match = params[p] === a[p];
-                    if (!match) {
-                        return false;
-                    }
+                return Object.keys(params).every(function (p) {
+                    return params[p] === a[p];
                 });
-                return match;
             });
 
             if (!existing) {
