@@ -30,6 +30,7 @@ categories = {
     'Dam': ['Polyline']
 }
 
+
 def main(zfilepath, category):
     messages = []
 
