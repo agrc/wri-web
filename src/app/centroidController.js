@@ -73,9 +73,9 @@ define([
 
         centroidsVisible: true,
 
-        // isDrawing: Boolean
-        //      Used to disable clicking on adjacent features while drawing
-        isDrawing: false,
+        // isEditing: Boolean
+        //      Used to disable clicking on adjacent features while editing
+        isEditing: false,
 
         startup: function () {
             // summary:
@@ -83,16 +83,18 @@ define([
             console.log('app.centroidController::startup', arguments);
 
             var that = this;
+            var onEditChange = function (start) {
+                that.isEditing = start;
+            };
             topic.subscribe(config.topics.map.extentChanged, lang.hitch(this, 'onExtentChanged'));
             topic.subscribe(config.topics.map.toggleCentroids, lang.hitch(this, 'updateOverride'));
             topic.subscribe(config.topics.map.rubberBandZoom, lang.hitch(this, '_pauseEvent'));
             topic.subscribe(config.topics.filterQueryChanged, lang.hitch(this, 'onFilterQueryChanged'));
-            topic.subscribe(config.topics.feature.drawEditComplete, function () {
-                that.isDrawing = false;
-            });
-            topic.subscribe(config.topics.feature.startDrawing, function () {
-                that.isDrawing = true;
-            });
+
+            topic.subscribe(config.topics.feature.finishEditingCreating, lang.partial(onEditChange, false));
+
+            topic.subscribe(config.topics.feature.createFeature, lang.partial(onEditChange, true));
+            topic.subscribe(config.topics.feature.startEditing, lang.partial(onEditChange, true));
 
             this.dialog = new InfoWindowLite(null, domConstruct.create('div', null, document.body, 'last'));
             this.dialog._adjustContentArea = function () {};
@@ -190,7 +192,7 @@ define([
                     this.pausables.push(on.pausable(layer, 'mouse-out', lang.hitch(this, lang.partial(this._showPopupFor, false, false))));
                     var that = this;
                     layer.on('click', function (evt) {
-                        if (!that.isDrawing) {
+                        if (!that.isEditing) {
                             that._updateHash(evt);
                         }
                     });
@@ -295,7 +297,7 @@ define([
             }, this);
         },
         _showPopupFor: function (show, isProject, evt) {
-            if (this.isDrawing) {
+            if (this.isEditing) {
                 return;
             }
 

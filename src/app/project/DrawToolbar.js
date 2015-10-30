@@ -201,7 +201,7 @@ define([
             // graphic: Graphic
             console.log('app.project.DrawToolbar:onSelectedForEditing', arguments);
 
-            if (domClass.contains(this.selectBtn, 'active')) {
+            if (domClass.contains(this.selectBtn, 'active') && domClass.contains(this.domNode, 'in')) {
                 /*jshint bitwise: false*/
                 this.editToolbar.activate(Edit.MOVE | Edit.EDIT_VERTICES, graphic);
                 /*jshint bitwise: true*/

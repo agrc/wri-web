@@ -1,6 +1,7 @@
 define([
     'app/config',
     'app/mapController',
+    'app/modules/httpStatus',
     'app/project/CreateEditFeature',
     'app/project/userCredentials',
     'app/router',
@@ -25,6 +26,7 @@ define([
 ], function (
     config,
     mapController,
+    httpStatus,
     CreateEditFeature,
     userCredentials,
     router,
@@ -152,12 +154,12 @@ define([
             var responseData;
             var that = this;
             this.makeRequest('GET').then(function (response) {
-                if (response.status !== 200) {
-                    onErrorWithDefault(response);
+                if (httpStatus.isSuccessful(response.status, 'GET')) {
+                    responseData = response.data;
                     return;
                 }
 
-                responseData = response.data;
+                onErrorWithDefault(response);
             }, function (error) {
                 onErrorWithDefault(error.response.data);
             }).always(function () {
@@ -203,12 +205,16 @@ define([
             var that = this;
             this.deleteFeatureBtn.disabled = true;
             this.makeRequest('DELETE').then(function (response) {
-                if (response.status !== 202) {
-                    onErrorWithDefault(response);
+                if (httpStatus.isSuccessful(response.status, 'DELETE')) {
+                    topic.publish(config.topics.projectIdsChanged, [that.projectId]);
+                    topic.publish(config.topics.toast, {
+                        message: response.data || 'Feature deleted successfully.',
+                        type: 'success'
+                    });
                     return;
                 }
 
-                topic.publish(config.topics.projectIdsChanged, [that.projectId]);
+                onErrorWithDefault(response);
             }, function (error) {
                 onErrorWithDefault(error.response.data);
                 that.deleteFeatureBtn.disabled = false;

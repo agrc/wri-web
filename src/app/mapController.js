@@ -75,10 +75,9 @@ define([
         // showReferenceLayerLabels: Boolean
         showReferenceLayerLabels: true,
 
-        // isDrawing: Boolean
-        //      Is the drawing toolbar currently open
-        //      Used to disabled feature selection
-        isDrawing: false,
+        // isEditing: Boolean
+        //      Used to disabled feature selection during feature editing
+        isEditing: false,
 
         initMap: function (mapDiv, toolbarNode) {
             // summary:
@@ -223,16 +222,20 @@ define([
             console.log('app/mapController::setupConnections', arguments);
 
             var that = this;
+            var onEditingChange = function (start) {
+                domClass.toggle(that.map.root, 'drawing', start);
+                that.isEditing = start;
+            };
             topic.subscribe(config.topics.centroidController.updateVisibility, lang.hitch(this, 'updateCentroidVisibility'));
-            topic.subscribe(config.topics.feature.drawEditComplete, function () {
-                domClass.remove(that.map.root, 'drawing');
-                that.isDrawing = false;
+
+            topic.subscribe(config.topics.feature.createFeature, function () {
+                that.clearSelectedFeature();
+                onEditingChange(true);
             });
-            topic.subscribe(config.topics.feature.startDrawing, function () {
-                domClass.add(that.map.root, 'drawing');
-                that.isDrawing = true;
-            });
-            topic.subscribe(config.topics.feature.createFeature, lang.hitch(this, 'clearSelectedFeature'));
+            topic.subscribe(config.topics.feature.startEditing, lang.partial(onEditingChange, true));
+
+            topic.subscribe(config.topics.feature.finishEditingCreating, lang.partial(onEditingChange, false));
+
             topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'selectFeature'));
             topic.subscribe(config.topics.layer.add, lang.hitch(this, 'addLayers'));
             topic.subscribe(config.topics.map.setExtent, lang.hitch(this, 'setExtent'));
@@ -365,7 +368,7 @@ define([
 
                 layer.on('load', deferred.resolve);
                 layer.on('click', function (evt) {
-                    if (!that.isDrawing) {
+                    if (!that.isEditing) {
                         topic.publish(config.topics.map.featureSelected, {
                             featureId: evt.graphic.attributes[config.fieldNames.FeatureID],
                             origin: typesLookup[i]

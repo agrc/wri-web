@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/modules/httpStatus',
     'app/project/Action',
     'app/project/userCredentials',
     'app/router',
@@ -30,6 +31,7 @@ define([
     'bootstrap-stylus/js/transition'
 ], function (
     config,
+    httpStatus,
     Action,
     userCredentials,
     router,
@@ -184,6 +186,7 @@ define([
             console.log('app.project.CreateEditFeature::parseExistingData', arguments);
 
             this.featureCategorySelect.value = existingData.category;
+            this.featureCategorySelect.disabled = true;
             this.onFeatureCategoryChange();
             this.retreatmentChBx.checked = existingData.retreatment;
             this.onGeometryDefined(existingData.geometry, false, true);
@@ -214,6 +217,8 @@ define([
                     this.commentsTxt.value = action.description;
                 }
             }
+
+            topic.publish(config.topics.feature.startEditing);
         },
         validateForm: function () {
             // summary:
@@ -519,6 +524,8 @@ define([
 
             this.emit('hide');
 
+            topic.publish(config.topics.feature.finishEditingCreating);
+
             this.destroyRecursive();
         },
         onAddActionClick: function () {
@@ -626,17 +633,24 @@ define([
             var projectId = router.getProjectId();
             var url = config.urls.api + '/project/' + projectId + '/feature/';
             var featureId = (this.existingData) ? this.existingData.featureId : null;
+            var method = (featureId) ? 'PUT' : 'POST';
             url += featureId || 'create';
             xhr(url, {
-                method: (featureId) ? 'PUT' : 'POST',
+                method: method,
                 handleAs: 'json',
                 headers: config.defaultXhrHeaders,
                 data: postData,
                 failOk: true
             }).response.then(function (response) {
-                if (response.status === 200) {
+                if (httpStatus.isSuccessful(response.status, method)) {
+                    var responseMessage = response.data;
+                    if (!response.data) {
+                        var action = method === 'POST' ? 'added' : 'modified';
+                        responseMessage = 'Feature ' + action + ' successfully.';
+                    }
+
                     topic.publish(config.topics.toast, {
-                        message: response.data || 'Feature added successfully!',
+                        message: responseMessage,
                         type: 'success'
                     });
                     topic.publish(config.topics.projectIdsChanged, [projectId]);
@@ -645,7 +659,10 @@ define([
                 }
             }, function (error) {
                 onError(error.response.data);
-            }).always(lang.partial(topic.publish, config.topics.hideProjectLoader));
+            }).always(function () {
+                topic.publish(config.topics.hideProjectLoader);
+                topic.publish(config.topics.feature.finishEditingCreating);
+            });
 
             topic.publish(config.topics.showProjectLoader);
         },

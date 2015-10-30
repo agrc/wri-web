@@ -97,8 +97,8 @@ function (
 
                 expect(setContentSpy.calls.mostRecent().args[0]).toContain('PendingCompleted');
             });
-            it('doesn\'t do anything if the user is drawing', function () {
-                centroidController.isDrawing = true;
+            it('doesn\'t do anything if the user is editing', function () {
+                centroidController.isEditing = true;
 
                 centroidController._showPopupFor(true, false, {
                     target: domConstruct.create('div'),

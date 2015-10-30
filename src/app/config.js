@@ -156,7 +156,8 @@ define([
 
         commentsFieldCategories: [
             'Other point feature',
-            'Water control structure'
+            'Water control structure',
+            'Trough'
         ],
 
         terrestrialAquaticCategories: [
@@ -190,12 +191,14 @@ define([
             feature: {
                 createFeature: 'wri/feature/createFeature',
                 startDrawing: 'wri/feature/startDrawing',
+                startEditing: 'wri/feature/startEditing',
                 drawingComplete: 'wri/feature/drawingComplete',
                 cutFeatures: 'wri/feature/cutFeatures',
                 selectedForEditing: 'wri/feature/selectedForEditing',
                 drawEditComplete: 'wri/feature/drawEditComplete',
                 cancelDrawing: 'wri/feature/cancelDrawing',
-                removeEditingGraphic: 'wri/feature/removeEditingGraphic'
+                removeEditingGraphic: 'wri/feature/removeEditingGraphic',
+                finishEditingCreating: 'wri/feature/finishEditingCreating'
             },
             toast: 'wri/toast',
             showProjectLoader: 'wri/showProjectLoader',
