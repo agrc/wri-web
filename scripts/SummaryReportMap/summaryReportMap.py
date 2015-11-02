@@ -14,7 +14,7 @@ path_to_mxd = join(dirname(__file__), 'SummaryReport.mxd')
 image_path = join(env.scratchFolder, 'map_export.png')
 
 
-def main(project_id):
+def main(project_id, width, height):
     mxd = mapping.MapDocument(path_to_mxd)
     data_frame = mapping.ListDataFrames(mxd)[0]
     feature_layers = mapping.ListLayers(mxd)[0:3]
@@ -41,11 +41,15 @@ def main(project_id):
 
     data_frame.extent = Extent(xmin, ymin, xmax, ymax)
 
-    mapping.ExportToPNG(mxd, image_path, resolution=300)
+    mapping.ExportToPNG(mxd,
+                        image_path,
+                        data_frame=mxd.activeDataFrame,
+                        df_export_width=int(width),
+                        df_export_height=int(height))
 
     print(image_path)
     return image_path
 
 if __name__ == '__main__':
-    result = main(GetParameterAsText(0))
-    SetParameterAsText(1, result)
+    result = main(GetParameterAsText(0), GetParameterAsText(1), GetParameterAsText(2))
+    SetParameterAsText(3, result)
