@@ -53,13 +53,15 @@
             'app/project/DrawToolbar',
             'app/config',
             'agrc/widgets/map/BaseMap',
+            'dojo/_base/lang',
+            'dojo/on',
             'dojo/topic',
             'esri/graphic',
             'esri/geometry/geometryEngine',
             'esri/layers/GraphicsLayer',
 
             'dojo/domReady!'
-        ], function($, Module, config, Map, topic, Graphic, geometryEngine, GraphicsLayer) {
+        ], function($, Module, config, Map, lang, on, topic, Graphic, geometryEngine, GraphicsLayer) {
             var topics = config.topics.feature;
             map = new Map('mapDiv');
             map.on('load', function () {
@@ -81,7 +83,12 @@
 
             topic.publish(topics.startDrawing, 'Affected Area');
             topic.subscribe(topics.drawingComplete, function (geometry) {
-                gLayer.add(new Graphic(geometry, config.symbols.selected.poly));
+                var types_lu = {
+                    point: 'point',
+                    polyline: 'line',
+                    polygon: 'poly'
+                };
+                gLayer.add(new Graphic(geometry, config.symbols.selected[types_lu[geometry.type]]));
             });
             topic.subscribe(topics.cutFeatures, function (geometry) {
                 gLayer.graphics.forEach(function (g) {
@@ -99,10 +106,16 @@
                     }
                 });
             });
+            on(document.getElementById('aaBtn'), 'click', lang.partial(topic.publish, topics.startDrawing, 'Affected Area'));
+            on(document.getElementById('fenceBtn'), 'click', lang.partial(topic.publish, topics.startDrawing, 'Fence'));
+            on(document.getElementById('guzzBtn'), 'click', lang.partial(topic.publish, topics.startDrawing, 'Guzzler'));
         });
 </script>
 </head>
 <body class='tundra'>
+    <button id='aaBtn'>Affected Area</button>
+    <button id='fenceBtn'>Fence</button>
+    <button id='guzzBtn'>Guzzler</button>
     <div id="parent" class='app'>
         <div id="mapDiv"></div>
         <div id="node"></div>
