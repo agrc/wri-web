@@ -123,6 +123,10 @@ define([
         //      sent to toaster
         duplicateActionMsg: 'Can\'t add duplicate actions!',
 
+        // bufferLines: Polyline[]
+        //      the lines to buffer
+        bufferLines: null,
+
 
         // Properties to be sent into constructor
 
@@ -165,7 +169,10 @@ define([
                     that.graphicsLayer.remove(graphic);
                 }),
                 topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onCancel')),
-                topic.subscribe(config.topics.feature.drawEditComplete, lang.hitch(this, 'validateForm'))
+                topic.subscribe(config.topics.feature.drawEditComplete, function () {
+                    that.validateForm();
+                    that.bufferLines = null;
+                })
             );
             topic.publish(config.topics.layer.add, {
                 graphicsLayers: [this.graphicsLayer],
@@ -422,6 +429,7 @@ define([
                 }
             }
 
+            this.bufferSelect.value = '';
             this.validateForm();
         },
         onPolyActionSelectChange: function () {
@@ -738,6 +746,29 @@ define([
             }));
 
             return (result.length > 0) ? result : null;
+        },
+        onBufferChange: function () {
+            // summary:
+            //      fires when the buffer select changes
+            console.log('app.project.CreateEditFeature:onBufferChange', arguments);
+
+            // get lines from graphics layer
+            if (!this.bufferLines) {
+                this.bufferLines = this.graphicsLayer.graphics.filter(function (g) {
+                    return g.geometry.type === 'polyline';
+                });
+                this.bufferLines.forEach(function (g) {
+                    this.graphicsLayer.remove(g);
+                }, this);
+            }
+            var geometries = this.bufferLines.map(function (g) {
+                return g.geometry;
+            });
+            var buffers = geometryEngine.buffer(geometries, [parseInt(this.bufferSelect.value, 10)], 9001, true);
+
+            buffers.forEach(function (b) {
+                this.onGeometryDefined(b, false, false);
+            }, this);
         }
     });
 });

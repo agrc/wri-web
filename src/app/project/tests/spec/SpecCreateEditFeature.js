@@ -14,6 +14,7 @@ require([
     'esri/geometry/Point',
     'esri/geometry/Polygon',
     'esri/geometry/Polyline',
+    'esri/graphic',
 
     'stubmodule'
 ], function (
@@ -32,6 +33,7 @@ require([
     Point,
     Polygon,
     Polyline,
+    Graphic,
 
     stubModule
 ) {
@@ -689,6 +691,22 @@ require([
                 expect(args[1].method).toBe('PUT');
 
                 destroy(testWidget2);
+            });
+        });
+        describe('onBufferChange', function () {
+            it('gets buffer lines and removes from graphics layer', function () {
+                spyOn(widget, 'onGeometryDefined');
+                widget.graphicsLayer.graphics = [
+                    new Graphic({geometry: esriGeometries.esri.line}),
+                    new Graphic({geometry: esriGeometries.esri.line}),
+                    new Graphic({geometry: esriGeometries.esri.polygon})
+                ];
+                widget.bufferSelect.value = 5;
+
+                widget.onBufferChange();
+
+                expect(widget.bufferLines.length).toBe(2);
+                expect(widget.graphicsLayer.graphics.length).toBe(1);
             });
         });
     });
