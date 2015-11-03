@@ -12,9 +12,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
 
-    'esri/tasks/Geoprocessor',
-
-    'xstyle/css!app/mapControls/resources/Download.css'
+    'esri/tasks/Geoprocessor'
 ], function (
     config,
 
@@ -44,12 +42,6 @@ define([
         jobId: null,
 
         // parameters passed in via the constructor
-
-        // parentWidget: a reference to the parent widget
-        parentWidget: null,
-
-        // url: url to gp tool
-        url: null,
 
         //resultName: string property to request the result from the gp
         resultName: 'output',
@@ -85,8 +77,8 @@ define([
             //
             console.log('app.mapControls.Download:onDownloadClick', arguments);
 
-            // topic.publish(config.topics.showProjectLoader);
-            // this.hideDownloadLink();
+            domClass.add(this.downloadButton, 'disabled');
+            domAttr.set(this.downloadButton, 'disabled', true);
 
             var params = {
                 'project_ids': this.projectId
@@ -152,6 +144,9 @@ define([
             } else {
                 this.messageBox.innerHTML = 'There was a problem. Try again.';
             }
+
+            domClass.remove(this.downloadButton, 'disabled');
+            domAttr.remove(this.downloadButton, 'disabled');
         },
         resultComplete: function (response) {
             // summary:

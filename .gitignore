@@ -11,6 +11,7 @@ dist/
 node_modules/
 secrets.py
 secrets.json
+scripts/download/.tox/*
 src/agrc-jasmine-matchers/
 src/agrc/
 src/app/**/*.css
@@ -43,3 +44,5 @@ src/spinjs/
 src/stubmodule/
 src/util/
 src/xstyle/
+*.coverage
+scripts/download/Download.py
