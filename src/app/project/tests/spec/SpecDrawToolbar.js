@@ -43,6 +43,22 @@ require([
                 map: map
             }, domConstruct.create('div', null, document.body));
             widget.startup();
+            jasmine.addMatchers({
+                toBeHidden: function () {
+                    return {
+                        compare: function (node) {
+                            var result = {};
+                            result.pass = domClass.contains(node, 'hidden');
+                            if (result.pass) {
+                                result.message = 'Expected ' + node + ' not to be hidden';
+                            } else {
+                                result.message = 'Expected ' + node + ' to be hidden';
+                            }
+                            return result;
+                        }
+                    };
+                }
+            });
         });
 
         afterEach(function () {
@@ -71,7 +87,10 @@ require([
                             featureType: [
                                 [testType, 99],
                                 ['type2', 98],
-                                ['type3', 97]
+                                ['type3', 97],
+                                ['poly', 99],
+                                ['line', 97],
+                                ['point', 98]
                             ]
                         },
                         topics: config.topics
@@ -110,6 +129,27 @@ require([
 
                 destroy(widget2);
             });
+            it('shows the appropriate draw buttons based on geometry type', function () {
+                widget2.show();
+
+                widget2.onStartDrawingFeature('poly');
+
+                expect(widget2.drawBtnArea).not.toBeHidden();
+                expect(widget2.drawBtnLine).not.toBeHidden();
+                expect(widget2.drawBtnPoint).toBeHidden();
+
+                widget2.onStartDrawingFeature('line');
+
+                expect(widget2.drawBtnArea).toBeHidden();
+                expect(widget2.drawBtnLine).not.toBeHidden();
+                expect(widget2.drawBtnPoint).toBeHidden();
+
+                widget2.onStartDrawingFeature('point');
+
+                expect(widget2.drawBtnArea).toBeHidden();
+                expect(widget2.drawBtnLine).toBeHidden();
+                expect(widget2.drawBtnPoint).not.toBeHidden();
+            });
         });
         describe('onDrawComplete', function () {
             it('requires polygons to have at least three unique points', function () {
@@ -122,7 +162,7 @@ require([
                     ]]
                 };
                 topics.listen(config.topics.feature.drawingComplete);
-                domClass.add(widget.drawBtn, 'active');
+                domClass.add(widget.drawBtnArea, 'active');
 
                 widget.onDrawComplete({geometry: geometry});
 
