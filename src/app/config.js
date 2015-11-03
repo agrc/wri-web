@@ -108,7 +108,8 @@ define([
             googleImagery: googleImageryUrl,
             print: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Print', type: 'GP' }) + '/Export%20Web%20Map',
             upload: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/uploads/upload',
-            zipToGraphics: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/ZipToGraphics'
+            zipToGraphics: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/ZipToGraphics',
+            download: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Download', type: 'GP'}) + '/Download'
         },
 
         defaultXhrHeaders: {
