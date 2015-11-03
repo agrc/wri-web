@@ -1,6 +1,7 @@
 define([
     'app/config',
     'app/mapController',
+    'app/mapControls/Download',
     'app/modules/httpStatus',
     'app/project/CreateEditFeature',
     'app/project/userCredentials',
@@ -26,6 +27,7 @@ define([
 ], function (
     config,
     mapController,
+    Download,
     httpStatus,
     CreateEditFeature,
     userCredentials,
@@ -115,6 +117,11 @@ define([
                 domClass.remove(this.modBtns, 'hidden');
             }
 
+            var d = new Download({
+                projectId: this.projectId
+            }, this.download);
+
+            this.own(d);
             this.projectId = router.getProjectId();
 
             this.inherited(arguments);
