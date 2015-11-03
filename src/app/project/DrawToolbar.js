@@ -121,17 +121,6 @@ define([
                 this.editToolbar.deactivate();
             }
         },
-        getGeometryType: function () {
-            // summary:
-            //      returns the geometry type of the current feature category
-            // returns: String (POINT | LINE | POLY)
-            console.log('app.project.DrawToolbar:getGeometryType', arguments);
-
-            var categoryNum = config.domains.featureType.filter(function (t) {
-                return t[0] === this.categoryNode.innerHTML;
-            }, this)[0][1];
-            return config.featureTypesInTables[categoryNum];
-        },
         onStartDrawingFeature: function (category) {
             // summary:
             //      show the widget and set it up for the specified category
@@ -142,7 +131,7 @@ define([
             this.categoryNode.innerHTML = category;
 
             var target;
-            var geoType = this.getGeometryType();
+            var geoType = config.getGeometryTypeFromCategory(category);
             if (geoType === 'POLY') {
                 target = this.drawBtnArea;
                 domClass.remove(this.drawBtnArea, 'hidden');

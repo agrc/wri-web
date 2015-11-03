@@ -240,7 +240,19 @@ define([
             }
         },
 
-        referenceLayerOpacity: 0.75
+        referenceLayerOpacity: 0.75,
+
+        getGeometryTypeFromCategory: function (category) {
+            // summary:
+            //      returns the geometry type for the specified category
+            // category: String
+            console.log('app.config:getGeometryTypeFromCategory', arguments);
+
+            var categoryNum = this.domains.featureType.filter(function (t) {
+                return t[0] === category;
+            }, this)[0][1];
+            return this.featureTypesInTables[categoryNum];
+        }
     };
     var flds = config.fieldNames;
     config.supportLayers = [{
