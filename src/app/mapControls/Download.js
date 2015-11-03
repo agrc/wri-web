@@ -12,9 +12,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
 
-    'esri/tasks/Geoprocessor',
-
-    'xstyle/css!app/mapControls/resources/Download.css'
+    'esri/tasks/Geoprocessor'
 ], function (
     config,
 
@@ -45,12 +43,6 @@ define([
 
         // parameters passed in via the constructor
 
-        // parentWidget: a reference to the parent widget
-        parentWidget: null,
-
-        // url: url to gp tool
-        url: null,
-
         //resultName: string property to request the result from the gp
         resultName: 'output',
         // Properties to be sent into constructor
@@ -65,31 +57,34 @@ define([
             this.initGp(config.urls.download);
         },
         initGp: function (url) {
-           // summary:
-           //      creates the gp
-           //
-           console.log('app.mapControls.Download::initGp', arguments);
+            // summary:
+            //      creates the gp
+            //
+            console.log('app.mapControls.Download::initGp', arguments);
 
-           this.gp = new Geoprocessor(url);
+            this.gp = new Geoprocessor(url);
 
-           this.own(
-               this.gp.on('job-complete', lang.hitch(this, 'gpComplete')),
-               this.gp.on('status-update', lang.hitch(this, 'statusUpdate')),
-               this.gp.on('job-cancel', lang.hitch(this, 'jobCancelled')),
-               this.gp.on('get-result-data-complete', lang.hitch(this, 'resultComplete'))
-           );
-       },
+            this.own(
+                this.gp.on('job-complete', lang.hitch(this, 'gpComplete')),
+                this.gp.on('status-update', lang.hitch(this, 'statusUpdate')),
+                this.gp.on('job-cancel', lang.hitch(this, 'jobCancelled')),
+                this.gp.on('get-result-data-complete', lang.hitch(this, 'resultComplete')),
+                this.gp.on('error', lang.hitch(this, 'onError'))
+            );
+        },
         onDownloadClick: function () {
             // summary:
             //      handle click event to talk to download gp tools
             //
             console.log('app.mapControls.Download:onDownloadClick', arguments);
 
-            // topic.publish(config.topics.showProjectLoader);
-            // this.hideDownloadLink();
+            this._hideLink();
+
+            domClass.add(this.downloadButton, 'disabled');
+            domAttr.set(this.downloadButton, 'disabled', true);
 
             var params = {
-                'project_ids': this.projectId
+                'project_ids': this.projectId.join()
             };
 
             this.submitJob(params);
@@ -100,11 +95,6 @@ define([
             // summary:
             //      sends the download filter to the gp service
             console.log('app.mapControls.Download::submitJob', arguments);
-
-            this.resultButton.innerHTML = '';
-            this.messageBox.innerHTML = '';
-
-            domClass.add(this.resultButton, 'hidden');
 
             this.gp.submitJob(data);
         },
@@ -147,11 +137,14 @@ define([
             // status: esri/tasks/JobInfo
             console.log('app.mapControls.Download::gpComplete', arguments);
 
-            if (status.jobInfo.jobStatus === 'esriJobSucceeded' && this.resultName) {
+            if (status.jobInfo && status.jobInfo.jobStatus === 'esriJobSucceeded' && this.resultName) {
                 this.gp.getResultData(status.jobInfo.jobId, this.resultName);
             } else {
-                this.messageBox.innerHTML = 'There was a problem. Try again.';
+                topic.publish(config.topics.toast, { message: status.error.message || 'The GP Service may not be started. Try again.', type: 'danger' });
             }
+
+            domClass.remove(this.downloadButton, 'disabled');
+            domAttr.remove(this.downloadButton, 'disabled');
         },
         resultComplete: function (response) {
             // summary:
@@ -159,10 +152,27 @@ define([
             // response: the gp resultData object
             console.log('app.mapControls.Download:resultComplete', arguments);
 
-            domConstruct.place('<span class=\'glyphicon glyphicon-download-alt\'></span> Request Project Data as .fgdb', this.downloadButton, 'only');
-            this.resultButton.innerHTML = 'Download Data';
-            domAttr.set(this.resultButton, 'href', response.result.value.url);
-            domClass.remove(this.resultButton, 'hidden');
+            this.downloadButton.innerHTML = 'Request Project Data as .fgdb';
+            var url = response.url || response.result.url || response.result.value.url;
+            this.downloadLink.href = url;
+            domClass.remove(this.downloadLinkAlert, 'hidden');
+        },
+        onError: function (evt) {
+            // summary:
+            //      print returned an error
+            // evt: {error: Error}
+            console.log('app.mapControls.Download:onError', arguments);
+
+            topic.publish(config.topics.toast, { message: evt.error.message, type: 'danger' });
+            domClass.remove(this.downloadButton, 'disabled');
+            domAttr.remove(this.downloadButton, 'disabled');
+        },
+        _hideLink: function () {
+            // summary:
+            //      hides the link after the user clicks on it
+            console.log('app.mapControls.Download:_hideLink', arguments);
+
+            domClass.add(this.downloadLinkAlert, 'hidden');
         }
     });
 });
