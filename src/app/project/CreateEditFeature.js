@@ -225,14 +225,14 @@ define([
             //      check for required fields and enables/disables save and add buttons accordingly
             console.log('app.project.CreateEditFeature:validateForm', arguments);
 
-            var category = this.featureCategorySelect.value !== '';
+            var category = this.featureCategorySelect.value;
             var requiredActionFields = query('.form-group:not(.hidden) select, .form-group:not(.hidden) textarea',
                                              this.featureAttributesDiv);
             var populatedActionFields = requiredActionFields.filter(function (s) {
                 return s.value !== '';
             });
             var valid = (
-                category &&
+                category !== '' &&
                 populatedActionFields.length === requiredActionFields.length &&
                 this.graphicsLayer.graphics.length > 0
             );
@@ -242,6 +242,13 @@ define([
                 valid ||
                 (this.actions.length > 0 && category && populatedActionFields.length === 0)
             );
+
+            var hasLines = this.graphicsLayer.graphics.some(function (g) {
+                return g.geometry.type === 'polyline';
+            });
+            var showBuffer = config.getGeometryTypeFromCategory(category) === 'POLY' && hasLines;
+
+            domClass.toggle(this.buffer, 'hidden', !showBuffer);
 
             return valid;
         },

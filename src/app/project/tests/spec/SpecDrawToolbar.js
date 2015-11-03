@@ -93,7 +93,8 @@ require([
                                 ['point', 98]
                             ]
                         },
-                        topics: config.topics
+                        topics: config.topics,
+                        getGeometryTypeFromCategory: config.getGeometryTypeFromCategory
                     }
                 }).then(function (Widget2) {
                     widget2 = new Widget2({map: map}, domConstruct.create('div', null, document.body));

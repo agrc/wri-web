@@ -64,6 +64,7 @@ require([
         };
 
         beforeEach(function () {
+            spyOn(config, 'getGeometryTypeFromCategory');
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
             widget.startup();
         });
@@ -312,7 +313,7 @@ require([
                 widget.featureCategorySelect.value = 'Test Category';
                 widget.onFeatureCategoryChange();
 
-                widget.graphicsLayer.graphics = [{}];
+                widget.graphicsLayer.graphics = [{geometry: {type: ''}}];
 
                 // existing stored actions
                 widget.actions = [{}];
@@ -334,6 +335,24 @@ require([
                 widget.validateForm();
                 expect(widget.saveBtn.disabled).toBe(false);
             });
+            it('shows the buffer select if category is poly and there is a line geometry', function () {
+                expect(domClass.contains(widget.buffer, 'hidden')).toBe(true);
+
+                config.getGeometryTypeFromCategory.and.returnValue('POLY');
+                widget.graphicsLayer.graphics = [{
+                    geometry: {
+                        type: 'polyline'
+                    }
+                }, {
+                    geometry: {
+                        type: 'polygon'
+                    }
+                }];
+
+                widget.validateForm();
+
+                expect(domClass.contains(widget.buffer, 'hidden')).toBe(false);
+            });
         });
         describe('onAddActionClick', function () {
             it('prevents duplicate actions', function () {
@@ -350,7 +369,7 @@ require([
                 }, widget.featureCategorySelect);
                 widget.featureCategorySelect.value = 'Test Category';
                 widget.onFeatureCategoryChange();
-                widget.graphicsLayer.graphics = [{}];
+                widget.graphicsLayer.graphics = [{geometry: {type: ''}}];
                 domConstruct.create('option', {
                     innerHTML: 'Test Action',
                     value: 'Test Action'
@@ -489,7 +508,7 @@ require([
                 }, widget.featureCategorySelect);
                 widget.featureCategorySelect.value = 'Test Category';
                 widget.onFeatureCategoryChange();
-                widget.graphicsLayer.graphics = [{}];
+                widget.graphicsLayer.graphics = [{geometry: {type: ''}}];
                 domConstruct.create('option', {
                     innerHTML: 'Test Action',
                     value: 'Test Action'
