@@ -5,6 +5,7 @@
             'app',
             'bootstrap',
             'bootstrap-stylus',
+            'dgauges',
             'dgrid',
             'dgrid0.3',
             'dijit',

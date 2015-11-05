@@ -18,6 +18,7 @@ src/bootstrap-stylus/
 src/bootstrap/
 src/components-jasmine/
 src/dgrid/
+src/dgauges/
 src/dgrid0.3/
 src/dijit/
 src/dojo/
