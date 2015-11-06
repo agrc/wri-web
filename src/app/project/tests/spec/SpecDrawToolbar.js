@@ -10,9 +10,7 @@ require([
     'dojo/_base/lang',
 
     'esri/map',
-    'esri/toolbars/draw',
-
-    'stubmodule'
+    'esri/toolbars/draw'
 ], function (
     topics,
 
@@ -25,9 +23,7 @@ require([
     lang,
 
     Map,
-    Draw,
-
-    stubmodule
+    Draw
 ) {
     describe('app/project/DrawToolbar', function () {
         var widget;
@@ -43,6 +39,22 @@ require([
                 map: map
             }, domConstruct.create('div', null, document.body));
             widget.startup();
+            jasmine.addMatchers({
+                toBeHidden: function () {
+                    return {
+                        compare: function (node) {
+                            var result = {};
+                            result.pass = domClass.contains(node, 'hidden');
+                            if (result.pass) {
+                                result.message = 'Expected ' + node + ' not to be hidden';
+                            } else {
+                                result.message = 'Expected ' + node + ' to be hidden';
+                            }
+                            return result;
+                        }
+                    };
+                }
+            });
         });
 
         afterEach(function () {
@@ -57,58 +69,77 @@ require([
             });
         });
         describe('startDrawing', function () {
-            var widget2;
             var testType = 'TEST Type';
-            beforeEach(function (done) {
-                stubmodule('app/project/DrawToolbar', {
-                    'app/config': {
-                        featureTypesInTables: {
-                            99: 'POLY',
-                            98: 'POINT',
-                            97: 'LINE'
-                        },
-                        domains: {
-                            featureType: [
-                                [testType, 99],
-                                ['type2', 98],
-                                ['type3', 97]
-                            ]
-                        },
-                        topics: config.topics
-                    }
-                }).then(function (Widget2) {
-                    widget2 = new Widget2({map: map}, domConstruct.create('div', null, document.body));
-                    widget2.startup();
-                    done();
-                });
+            var originalFeatureTypesInTables;
+            var originalDomains;
+            beforeEach(function () {
+                originalFeatureTypesInTables = config.featureTypesInTable;
+                config.featureTypesInTables = {
+                    99: 'POLY',
+                    98: 'POINT',
+                    97: 'LINE'
+                };
+                originalDomains = config.domains;
+                config.domains = {
+                    featureType: [
+                        [testType, 99],
+                        ['type2', 98],
+                        ['type3', 97],
+                        ['poly', 99],
+                        ['line', 97],
+                        ['point', 98]
+                    ]
+                };
             });
             afterEach(function () {
-                destroy(widget2);
+                config.featureTypesInTables = originalFeatureTypesInTables;
+                config.domains = originalDomains;
             });
             it('passes appropriate geometry type to draw toolbar', function () {
-                widget2.show();
-                spyOn(widget2.drawToolbar, 'activate');
+                widget.show();
+                spyOn(widget.drawToolbar, 'activate');
 
-                widget2.onStartDrawingFeature(testType);
+                widget.onStartDrawingFeature(testType);
 
-                expect(widget2.drawToolbar.activate).toHaveBeenCalledWith(Draw.POLYGON);
+                expect(widget.drawToolbar.activate).toHaveBeenCalledWith(Draw.POLYGON);
 
-                destroy(widget2);
+                destroy(widget);
             });
             it('disables the cut tool for point geometry type', function () {
-                widget2.show();
+                widget.show();
 
-                expect(widget2.cutBtn.disabled).toBe(false);
+                expect(widget.cutBtn.disabled).toBe(false);
 
-                widget2.onStartDrawingFeature('type2');
+                widget.onStartDrawingFeature('type2');
 
-                expect(widget2.cutBtn.disabled).toBe(true);
+                expect(widget.cutBtn.disabled).toBe(true);
 
-                widget2.onStartDrawingFeature(testType);
+                widget.onStartDrawingFeature(testType);
 
-                expect(widget2.cutBtn.disabled).toBe(false);
+                expect(widget.cutBtn.disabled).toBe(false);
 
-                destroy(widget2);
+                destroy(widget);
+            });
+            it('shows the appropriate draw buttons based on geometry type', function () {
+                widget.show();
+
+                widget.onStartDrawingFeature('poly');
+
+                expect(widget.drawBtnArea).not.toBeHidden();
+                expect(widget.drawBtnLine).not.toBeHidden();
+                expect(widget.drawBtnPoint).toBeHidden();
+
+                widget.onStartDrawingFeature('line');
+
+                expect(widget.drawBtnArea).toBeHidden();
+                expect(widget.drawBtnLine).not.toBeHidden();
+                expect(widget.drawBtnPoint).toBeHidden();
+
+                widget.onStartDrawingFeature('point');
+
+                expect(widget.drawBtnArea).toBeHidden();
+                expect(widget.drawBtnLine).toBeHidden();
+                expect(widget.drawBtnPoint).not.toBeHidden();
             });
         });
         describe('onDrawComplete', function () {
@@ -122,7 +153,7 @@ require([
                     ]]
                 };
                 topics.listen(config.topics.feature.drawingComplete);
-                domClass.add(widget.drawBtn, 'active');
+                domClass.add(widget.drawBtnArea, 'active');
 
                 widget.onDrawComplete({geometry: geometry});
 

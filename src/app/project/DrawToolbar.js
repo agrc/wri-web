@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/helpers',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -23,6 +24,7 @@ define([
     'bootstrap-stylus/js/transition'
 ], function (
     config,
+    helpers,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -129,9 +131,33 @@ define([
 
             this.show();
             this.categoryNode.innerHTML = category;
+
+            var target;
+            var geoType = helpers.getGeometryTypeFromCategory(category);
+            if (geoType === 'POLY') {
+                target = this.drawBtnArea;
+                domClass.remove(this.drawBtnArea, 'hidden');
+                domClass.remove(this.drawBtnLine, 'hidden');
+                domClass.add(this.drawBtnPoint, 'hidden');
+            } else if (geoType === 'LINE') {
+                target = this.drawBtnLine;
+                domClass.add(this.drawBtnArea, 'hidden');
+                domClass.remove(this.drawBtnLine, 'hidden');
+                domClass.add(this.drawBtnPoint, 'hidden');
+            } else {
+                // point
+                target = this.drawBtnPoint;
+                domClass.add(this.drawBtnArea, 'hidden');
+                domClass.add(this.drawBtnLine, 'hidden');
+                domClass.remove(this.drawBtnPoint, 'hidden');
+            }
+
             this.onToolClick({
-                target: this.drawBtn
+                target: target
             });
+
+            // cut is not applicable to points
+            this.cutBtn.disabled = geoType === 'POINT';
         },
         onToolClick: function (evt) {
             // summary:
@@ -151,34 +177,31 @@ define([
             }
             domClass.add(btn, 'active');
 
-            if (btn === this.drawBtn) {
-                this.startDrawing();
+            if ([this.drawBtnArea, this.drawBtnLine, this.drawBtnPoint].indexOf(btn) > -1) {
+                this.startDrawing(btn);
             } else if (btn === this.cutBtn) {
                 this.startCutting();
             } else {
                 this.startSelecting();
             }
         },
-        startDrawing: function () {
+        startDrawing: function (btn) {
             // summary:
             //      start drawing a new graphic
+            // btn: Button
+            //      the button that was clicked on
             console.log('app.project.DrawToolbar:startDrawing', arguments);
 
-            this.editToolbar.deactivate();
-            var geometryTypes = {
+            var drawTypes = {
                 'POLY': Draw.POLYGON,
                 'POINT': Draw.POINT,
                 'LINE': Draw.POLYLINE
             };
 
-            var categoryNum = config.domains.featureType.filter(function (t) {
-                return t[0] === this.categoryNode.innerHTML;
-            }, this)[0][1];
-            var geoType = geometryTypes[config.featureTypesInTables[categoryNum]];
-            this.drawToolbar.activate(geoType);
+            this.editToolbar.deactivate();
 
-            // cut is not applicable to points
-            this.cutBtn.disabled = geoType === Draw.POINT;
+            this.drawToolbar.deactivate();
+            this.drawToolbar.activate(drawTypes[btn.value]);
         },
         startCutting: function () {
             // summary:
@@ -215,12 +238,12 @@ define([
             console.log('app.project.DrawToolbar:onDrawComplete', arguments);
 
             var geo = evt.geometry;
-            if (domClass.contains(this.drawBtn, 'active')) {
+            if (domClass.contains(this.cutBtn, 'active')) {
+                topic.publish(config.topics.feature.cutFeatures, evt.geometry);
+            } else {
                 if (geo.type !== 'polygon' || geo.rings[0].length > 3) {
                     topic.publish(config.topics.feature.drawingComplete, evt.geometry);
                 }
-            } else {
-                topic.publish(config.topics.feature.cutFeatures, evt.geometry);
             }
         },
         onSaveClick: function () {

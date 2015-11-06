@@ -51,5 +51,10 @@ var profile = {
     },
     userConfig: {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri']
+    },
+    map: {
+        '*': {
+            'dojox/dgauges': 'dgauges'
+        }
     }
 };

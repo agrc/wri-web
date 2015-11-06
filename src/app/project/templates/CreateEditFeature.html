@@ -49,6 +49,16 @@
 
     <div class='collapse fade'
         data-dojo-attach-point="featureAttributesDiv">
+        <div class="form-group hidden" data-dojo-attach-point="buffer">
+            <label>Buffer Distance</label>
+            <select class='form-control' data-dojo-attach-event='change: onBufferChange'
+                data-dojo-attach-point='bufferSelect'>
+                <option value="">please select a distance</option>
+                <option value="5">5 meters</option>
+                <option value="10">10 meters</option>
+                <option value="15">15 meters</option>
+            </select>
+        </div>
         <div data-dojo-attach-point="actionsContainer"></div>
         <div class="form-group hidden" data-dojo-attach-point='polyAction'>
             <label>Action</label>

@@ -3,13 +3,26 @@
     <div class="btn-group">
         <button class="btn btn-default navbar-btn tool"
             data-dojo-attach-point='selectBtn'>
-            <span class="glyphicon glyphicon-arrow-up"></span>
+            <span class="glyphicon glyphicon-arrow-down"></span>
             Select/Edit
         </button>
         <button class="btn btn-default navbar-btn tool"
-            data-dojo-attach-point='drawBtn'>
+            value='POLY'
+            data-dojo-attach-point='drawBtnArea'>
+            <span class="glyphicon glyphicon-edit"></span>
+            Area
+        </button>
+        <button class="btn btn-default navbar-btn tool"
+            value='LINE'
+            data-dojo-attach-point='drawBtnLine'>
             <span class="glyphicon glyphicon-pencil"></span>
-            Draw
+            Line
+        </button>
+        <button class="btn btn-default navbar-btn tool"
+            value='POINT'
+            data-dojo-attach-point='drawBtnPoint'>
+            <span class="glyphicon glyphicon-record"></span>
+            Point
         </button>
         <button class="btn btn-default navbar-btn tool"
             data-dojo-attach-point='cutBtn'>

@@ -2,6 +2,7 @@ require([
     'agrc-jasmine-matchers/topics',
 
     'app/config',
+    'app/helpers',
     'app/project/Action',
     'app/project/CreateEditFeature',
 
@@ -14,12 +15,14 @@ require([
     'esri/geometry/Point',
     'esri/geometry/Polygon',
     'esri/geometry/Polyline',
+    'esri/graphic',
 
     'stubmodule'
 ], function (
     topics,
 
     config,
+    helpers,
     Action,
     WidgetUnderTest,
 
@@ -32,6 +35,7 @@ require([
     Point,
     Polygon,
     Polyline,
+    Graphic,
 
     stubModule
 ) {
@@ -64,6 +68,7 @@ require([
         };
 
         beforeEach(function () {
+            spyOn(helpers, 'getGeometryTypeFromCategory');
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
             widget.startup();
         });
@@ -312,7 +317,7 @@ require([
                 widget.featureCategorySelect.value = 'Test Category';
                 widget.onFeatureCategoryChange();
 
-                widget.graphicsLayer.graphics = [{}];
+                widget.graphicsLayer.graphics = [{geometry: {type: ''}}];
 
                 // existing stored actions
                 widget.actions = [{}];
@@ -334,6 +339,24 @@ require([
                 widget.validateForm();
                 expect(widget.saveBtn.disabled).toBe(false);
             });
+            it('shows the buffer select if category is poly and there is a line geometry', function () {
+                expect(domClass.contains(widget.buffer, 'hidden')).toBe(true);
+
+                helpers.getGeometryTypeFromCategory.and.returnValue('POLY');
+                widget.graphicsLayer.graphics = [{
+                    geometry: {
+                        type: 'polyline'
+                    }
+                }, {
+                    geometry: {
+                        type: 'polygon'
+                    }
+                }];
+
+                widget.validateForm();
+
+                expect(domClass.contains(widget.buffer, 'hidden')).toBe(false);
+            });
         });
         describe('onAddActionClick', function () {
             it('prevents duplicate actions', function () {
@@ -350,7 +373,7 @@ require([
                 }, widget.featureCategorySelect);
                 widget.featureCategorySelect.value = 'Test Category';
                 widget.onFeatureCategoryChange();
-                widget.graphicsLayer.graphics = [{}];
+                widget.graphicsLayer.graphics = [{geometry: {type: ''}}];
                 domConstruct.create('option', {
                     innerHTML: 'Test Action',
                     value: 'Test Action'
@@ -489,7 +512,7 @@ require([
                 }, widget.featureCategorySelect);
                 widget.featureCategorySelect.value = 'Test Category';
                 widget.onFeatureCategoryChange();
-                widget.graphicsLayer.graphics = [{}];
+                widget.graphicsLayer.graphics = [{geometry: {type: ''}}];
                 domConstruct.create('option', {
                     innerHTML: 'Test Action',
                     value: 'Test Action'
@@ -670,6 +693,22 @@ require([
                 expect(args[1].method).toBe('PUT');
 
                 destroy(testWidget2);
+            });
+        });
+        describe('onBufferChange', function () {
+            it('gets buffer lines and removes from graphics layer', function () {
+                spyOn(widget, 'onGeometryDefined');
+                widget.graphicsLayer.graphics = [
+                    new Graphic({geometry: esriGeometries.esri.line}),
+                    new Graphic({geometry: esriGeometries.esri.line}),
+                    new Graphic({geometry: esriGeometries.esri.polygon})
+                ];
+                widget.bufferSelect.value = 5;
+
+                widget.onBufferChange();
+
+                expect(widget.bufferLines.length).toBe(2);
+                expect(widget.graphicsLayer.graphics.length).toBe(1);
             });
         });
     });
