@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/helpers',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -23,6 +24,7 @@ define([
     'bootstrap-stylus/js/transition'
 ], function (
     config,
+    helpers,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -131,7 +133,7 @@ define([
             this.categoryNode.innerHTML = category;
 
             var target;
-            var geoType = config.getGeometryTypeFromCategory(category);
+            var geoType = helpers.getGeometryTypeFromCategory(category);
             if (geoType === 'POLY') {
                 target = this.drawBtnArea;
                 domClass.remove(this.drawBtnArea, 'hidden');
