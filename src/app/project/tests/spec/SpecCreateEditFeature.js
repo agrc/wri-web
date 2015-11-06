@@ -2,6 +2,7 @@ require([
     'agrc-jasmine-matchers/topics',
 
     'app/config',
+    'app/helpers',
     'app/project/Action',
     'app/project/CreateEditFeature',
 
@@ -21,6 +22,7 @@ require([
     topics,
 
     config,
+    helpers,
     Action,
     WidgetUnderTest,
 
@@ -66,7 +68,7 @@ require([
         };
 
         beforeEach(function () {
-            spyOn(config, 'getGeometryTypeFromCategory');
+            spyOn(helpers, 'getGeometryTypeFromCategory');
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
             widget.startup();
         });
@@ -340,7 +342,7 @@ require([
             it('shows the buffer select if category is poly and there is a line geometry', function () {
                 expect(domClass.contains(widget.buffer, 'hidden')).toBe(true);
 
-                config.getGeometryTypeFromCategory.and.returnValue('POLY');
+                helpers.getGeometryTypeFromCategory.and.returnValue('POLY');
                 widget.graphicsLayer.graphics = [{
                     geometry: {
                         type: 'polyline'

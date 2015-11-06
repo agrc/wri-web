@@ -1,5 +1,6 @@
 define([
     'app/config',
+    'app/helpers',
     'app/modules/httpStatus',
     'app/project/Action',
     'app/project/userCredentials',
@@ -31,6 +32,7 @@ define([
     'bootstrap-stylus/js/transition'
 ], function (
     config,
+    helpers,
     httpStatus,
     Action,
     userCredentials,
@@ -253,7 +255,7 @@ define([
             var hasLines = this.graphicsLayer.graphics.some(function (g) {
                 return g.geometry.type === 'polyline';
             });
-            var showBuffer = config.getGeometryTypeFromCategory(category) === 'POLY' && hasLines;
+            var showBuffer = helpers.getGeometryTypeFromCategory(category) === 'POLY' && hasLines;
 
             domClass.toggle(this.buffer, 'hidden', !showBuffer);
 

@@ -1,13 +1,15 @@
 require([
     'app/config',
+    'app/helpers',
 
     'dojo/_base/lang'
 ], function (
     config,
+    helpers,
 
     lang
 ) {
-    describe('app/config', function () {
+    describe('app/helpers', function () {
         describe('getGeometryTypeFromCategory', function () {
             var originalDomains;
             var originalFeatureTypesInTables;
@@ -28,8 +30,8 @@ require([
                     2: 'POINT'
                 };
 
-                expect(config.getGeometryTypeFromCategory('Poly')).toEqual('POLY');
-                expect(config.getGeometryTypeFromCategory('Point')).toEqual('POINT');
+                expect(helpers.getGeometryTypeFromCategory('Poly')).toEqual('POLY');
+                expect(helpers.getGeometryTypeFromCategory('Point')).toEqual('POINT');
             });
         });
     });
