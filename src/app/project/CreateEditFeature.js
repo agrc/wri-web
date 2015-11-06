@@ -766,7 +766,9 @@ define([
             var geometries = this.bufferLines.map(function (g) {
                 return g.geometry;
             });
-            var buffers = geometryEngine.buffer(geometries, [parseInt(this.bufferSelect.value, 10)], 9001, true);
+            var buffers = geometryEngine.geodesicBuffer(
+                geometries, [parseInt(this.bufferSelect.value, 10)], 'meters', true
+            );
 
             buffers.forEach(function (b) {
                 this.onGeometryDefined(b, false, false);
