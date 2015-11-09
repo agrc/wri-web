@@ -481,7 +481,6 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('build-prod', [
         'clean:build',
-        'if-missing:esri_slurp:dev',
         'newer:imagemin:main',
         'stylus',
         'shell:configAt',
@@ -491,7 +490,6 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('build-stage', [
         'clean:build',
-        'if-missing:esri_slurp:dev',
         'newer:imagemin:main',
         'stylus',
         'shell:configDev',

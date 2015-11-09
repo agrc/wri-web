@@ -53,8 +53,8 @@ var profile = {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri']
     },
     map: {
-        '*': {
-            'dojox/dgauges': 'dgauges'
+        'esri': {
+            dgrid: 'dgrid0.3'
         }
     }
 };
