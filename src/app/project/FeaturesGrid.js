@@ -149,7 +149,7 @@ define([
                     }
                 }),
                 topic.subscribe(config.topics.map.featureSelected, function (data) {
-                    that.store.filter(data).forEach(function (item) {
+                    that.store.filter(data).fetchRange({start: 0, end: 1}).forEach(function (item) {
                         that.onRowSelected(that.grid.row(item.id));
                     });
                 }),
