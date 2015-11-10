@@ -1,5 +1,5 @@
 require([
-    'mapControls/DownloadButton',
+    'app/mapControls/DownloadButton',
 
     'dojo/dom-construct'
 ], function (
