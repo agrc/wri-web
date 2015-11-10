@@ -5,6 +5,7 @@ define([
     'app/config',
     'app/graphicsUtils',
     'app/mapControls/CentroidSwitchButton',
+    'app/mapControls/DownloadButton',
     'app/mapControls/NonWriButton',
     'app/mapControls/PrintButton',
     'app/router',
@@ -33,6 +34,7 @@ define([
     config,
     graphicsUtils,
     CentroidSwitchButton,
+    DownloadButton,
     NonWriButton,
     PrintButton,
     router,
@@ -153,6 +155,7 @@ define([
             var centroidButton = new CentroidSwitchButton({}).placeAt(toolbarNode, 'last');
             var printButton = new PrintButton({}).placeAt(toolbarNode, 'last');
             var nonWriButton = new NonWriButton({}).placeAt(toolbarNode, 'last');
+            var downloadButton = new DownloadButton({}).placeAt(toolbarNode, 'last');
 
             homeButton.on('home', function () {
                 router.setHash();
@@ -208,7 +211,14 @@ define([
 
             search.set('sources', sources);
 
-            this.childWidgets = this.childWidgets.concat([homeButton, printButton, centroidButton, search, nonWriButton]);
+            this.childWidgets = this.childWidgets.concat([
+                homeButton,
+                printButton,
+                centroidButton,
+                search,
+                nonWriButton,
+                downloadButton
+            ]);
 
             // suspend base map layers until we get the initial extent
             // trying to save requests to the server
