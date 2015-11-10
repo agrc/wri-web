@@ -290,7 +290,8 @@ module.exports = function (grunt) {
             dts: {
                 files: {
                     'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/dojo/dojo.js',
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/js/agrc/app/resources/App.css'
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/js/agrc/app/resources/App.css',
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/jsonconfig/config.json': 'C:/Projects/GitHub/wri-web/dist/js/agrc/jsonconfig/config.json'
                 }
             }
         },
@@ -492,7 +493,7 @@ module.exports = function (grunt) {
         'clean:build',
         'newer:imagemin:main',
         'stylus',
-        'shell:configDev',
+        'shell:configAt',
         'dojo:stage',
         'copy:main',
         'processhtml:main'
