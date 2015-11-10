@@ -435,20 +435,22 @@ define([
             var newSelectionSymbol = config.symbols.selected[data.origin];
 
             // persist any existing opacity to selection symbol
-            if (graphic.symbol) {
-                newSelectionSymbol = lang.clone(newSelectionSymbol);
-                newSelectionSymbol.color.a = graphic.symbol.color.a;
-            }
+            if (graphic) {
+                if (graphic.symbol) {
+                    newSelectionSymbol = lang.clone(newSelectionSymbol);
+                    newSelectionSymbol.color.a = graphic.symbol.color.a;
+                }
 
-            // store so that we can reset these on next selection
-            this.lastSelectedOriginalSymbol = lang.clone(graphic.symbol ||
-                this.layers[data.origin].renderer.getSymbol(graphic));
-            this.lastSelectedGraphic = graphic;
+                // store so that we can reset these on next selection
+                this.lastSelectedOriginalSymbol = lang.clone(graphic.symbol ||
+                    this.layers[data.origin].renderer.getSymbol(graphic));
+                this.lastSelectedGraphic = graphic;
 
-            graphic.setSymbol(newSelectionSymbol);
-            var shape = graphic.getDojoShape();
-            if (shape) {
-                shape.moveToFront();
+                graphic.setSymbol(newSelectionSymbol);
+                var shape = graphic.getDojoShape();
+                if (shape) {
+                    shape.moveToFront();
+                }
             }
         },
         clearSelectedFeature: function () {
