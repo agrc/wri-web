@@ -28,4 +28,12 @@ Asynchronous
 Message level: Error
 ```
 
+## Double check connections folder was also published!
+
+Login to `GRWRIAT` as yourself.
+
+```C:\arcgisserver\directories\arcgissystem\arcgisinput\configuration\Toolbox.GPServer\extracted\v101\download```
+
+Connections are in `hnas\Shared`
+
 ![install](Download.gif)
