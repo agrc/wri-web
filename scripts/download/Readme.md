@@ -10,13 +10,22 @@
     `tox`
 
 ## Installation
+Update `secrets.py` based on `secrets.sample.py`
 
-Service name: `WRI/Toolbox`
+Update line 88 `in Download.pyt`
+```
+self.db = self._get_db('configuration')
+```
+with `local`, `dev`, `at`, `prod` and exectute.
+
+```
+Service name: WRI/Toolbox
 
 add it as a result
 
 Asynchronous
 
-Message level `Error`
+Message level: Error
+```
 
 ![install](Download.gif)

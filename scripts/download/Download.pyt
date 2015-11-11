@@ -83,7 +83,7 @@ class Tool(object):
         self.label = 'Download'
         self.description = 'Download WRI Data ' + self.version
         self.canRunInBackground = True
-        self.fgdb = 'WriProjects.gdb'
+        self.fgdb = 'WriSpatial.gdb'
         self.sr = arcpy.SpatialReference(3857)
         self.db = self._get_db('local')
 
@@ -176,10 +176,10 @@ class Tool(object):
         where_clause = self._create_where_clause(project_ids)
 
         results = {}
-        arcpy.env.workspace = self.db
+        arcpy.env.workspace = self.db['workspace']
 
         for table in self.tables:
-            with arcpy.da.SearchCursor(in_table=table.table_name,
+            with arcpy.da.SearchCursor(in_table=self.db['name'] + '.dbo.' + table.table_name,
                                        field_names=table.fields,
                                        where_clause=where_clause) as cursor:
                 for row in cursor:
