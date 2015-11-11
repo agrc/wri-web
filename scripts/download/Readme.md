@@ -19,7 +19,7 @@ self.db = self._get_db('configuration')
 with `local`, `dev`, `at`, `prod` and exectute.
 
 ```
-Service name: WRI/Toolbox
+Service name: WRI/ToolboxAsync
 
 add it as a result
 
