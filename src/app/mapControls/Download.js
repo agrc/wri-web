@@ -6,7 +6,6 @@ define([
 
     'dojo/dom-attr',
     'dojo/dom-class',
-    'dojo/dom-construct',
     'dojo/text!app/mapControls/templates/Download.html',
     'dojo/topic',
     'dojo/_base/declare',
@@ -21,7 +20,6 @@ define([
 
     domAttr,
     domClass,
-    domConstruct,
     template,
     topic,
     declare,
@@ -77,6 +75,12 @@ define([
             //      handle click event to talk to download gp tools
             //
             console.log('app.mapControls.Download:onDownloadClick', arguments);
+
+            if (!this.projectId || this.projectId.length < 1) {
+                topic.publish(config.topics.toast, { message: 'There are no project ids to download data for', type: 'danger' });
+
+                return;
+            }
 
             this._hideLink();
 
@@ -163,7 +167,7 @@ define([
             // evt: {error: Error}
             console.log('app.mapControls.Download:onError', arguments);
 
-            topic.publish(config.topics.toast, { message: evt.error.message, type: 'danger' });
+            topic.publish(config.topics.toast, { message: evt.error.message || 'The GP Service may not be started. Try again.', type: 'danger' });
             domClass.remove(this.downloadButton, 'disabled');
             domAttr.remove(this.downloadButton, 'disabled');
         },
