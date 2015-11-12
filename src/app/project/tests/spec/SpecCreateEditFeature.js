@@ -12,6 +12,7 @@ require([
     'dojo/query',
     'dojo/text!app/tests/data/esri_geometries.json',
 
+    'esri/geometry/Multipoint',
     'esri/geometry/Point',
     'esri/geometry/Polygon',
     'esri/geometry/Polyline',
@@ -32,6 +33,7 @@ require([
     query,
     esriGeometries,
 
+    Multipoint,
     Point,
     Polygon,
     Polyline,
@@ -116,6 +118,37 @@ require([
                 expect(domClass.contains(widget.polyAction, 'hidden')).toBe(false);
                 expect(widget.treatmentSelect.value).toBe(fee);
                 expect(domClass.contains(widget.treatment, 'hidden')).toBe(false);
+            });
+            it('explodes multipoint geometry', function () {
+                spyOn(widget, 'onGeometryDefined').and.callThrough();
+                existingData.geometry = new Multipoint(esriGeometries.esri.multipoint);
+
+                widget.parseExistingData(existingData);
+
+                expect(widget.onGeometryDefined.calls.count()).toBe(3);
+                expect(widget.graphicsLayer.graphics.length).toBe(3);
+            });
+            it('explodes multi-part polygon geometry', function () {
+                spyOn(widget, 'onGeometryDefined').and.callThrough();
+                existingData.geometry = new Polygon(esriGeometries.esri.multipolygon);
+
+                widget.parseExistingData(existingData);
+
+                expect(widget.onGeometryDefined.calls.count()).toBe(2);
+                expect(widget.graphicsLayer.graphics.length).toBe(2);
+                expect(widget.graphicsLayer.graphics[0].geometry.rings[0])
+                    .toEqual(esriGeometries.esri.multipolygon.rings[0]);
+            });
+            it('explodes multi-part line geometry', function () {
+                spyOn(widget, 'onGeometryDefined').and.callThrough();
+                existingData.geometry = new Polyline(esriGeometries.esri.multiline);
+
+                widget.parseExistingData(existingData);
+
+                expect(widget.onGeometryDefined.calls.count()).toBe(2);
+                expect(widget.graphicsLayer.graphics.length).toBe(2);
+                expect(widget.graphicsLayer.graphics[0].geometry.paths[0])
+                    .toEqual(esriGeometries.esri.multiline.paths[0]);
             });
         });
         describe('onFeatureCategoryChange', function () {

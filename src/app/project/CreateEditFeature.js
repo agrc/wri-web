@@ -21,6 +21,9 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
 
+    'esri/geometry/Point',
+    'esri/geometry/Polygon',
+    'esri/geometry/Polyline',
     'esri/graphic',
     'esri/layers/GraphicsLayer',
     'esri/request',
@@ -53,6 +56,9 @@ define([
     declare,
     lang,
 
+    Point,
+    Polygon,
+    Polyline,
     Graphic,
     GraphicsLayer,
     esriRequest,
@@ -198,7 +204,35 @@ define([
             this.featureCategorySelect.disabled = true;
             this.onFeatureCategoryChange();
             this.retreatmentChBx.checked = existingData.retreatment;
-            this.onGeometryDefined(existingData.geometry, false, true);
+
+            // explode multi-part geometries
+            var geo = existingData.geometry;
+            var that = this;
+            var defineGeo = function (g) {
+                that.onGeometryDefined(g, false, false);
+            };
+            var sr = config.defaultExtent.spatialReference;
+            if (geo.type === 'multipoint') {
+                geo.points.forEach(function (p) {
+                    defineGeo(new Point(p, sr));
+                });
+            } else if (geo.rings && geo.rings.length > 1) {
+                geo.rings.forEach(function (r) {
+                    defineGeo(new Polygon({
+                        rings: [r],
+                        spatialReference: sr
+                    }));
+                });
+            } else if (geo.paths && geo.paths.length > 1) {
+                geo.paths.forEach(function (p) {
+                    defineGeo(new Polyline({
+                        paths: [p],
+                        spatialReference: sr
+                    }));
+                });
+            } else {
+                defineGeo(geo);
+            }
 
             if (config.terrestrialAquaticCategories.indexOf(existingData.category) > -1) {
                 existingData.actions.forEach(function (a) {
@@ -209,7 +243,7 @@ define([
                 var action = existingData.actions[0];
                 if (action.action) {
                     // check for both polygon and multipolygon
-                    if (existingData.geometry.type.indexOf('polygon') > -1) {
+                    if (geo.type.indexOf('polygon') > -1) {
                         this.polyActionSelect.value = action.action;
                         this.onPolyActionSelectChange();
                     } else {
