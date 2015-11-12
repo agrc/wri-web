@@ -141,7 +141,7 @@ define([
         // existingData: Object (optional)
         // {
         //     category: String,
-        //     retreatment: Boolean,
+        //     retreatment: String,
         //     geometry: Geometry,
         //     actions: Action[],
         //     featureId: Number
@@ -669,7 +669,7 @@ define([
             var postData = lang.mixin(userCredentials.getUserData(),
             {
                 category: this.featureCategorySelect.value,
-                retreatment: this.retreatmentChBx.checked,
+                retreatment: this.retreatmentChBx.checked ? 'Y' : 'N',
                 geometry: convert.toWkt(esriGeometry),
                 actions: JSON.stringify(this.getActionsData())
             });
