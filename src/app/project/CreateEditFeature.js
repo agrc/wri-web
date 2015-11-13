@@ -7,6 +7,8 @@ define([
     'app/router',
     'app/Wkt',
 
+    'agrc/modules/Formatting',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
@@ -41,6 +43,8 @@ define([
     userCredentials,
     router,
     Wkt,
+
+    formatting,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -667,7 +671,7 @@ define([
                 return;
             }
 
-            var esriGeometry = geometryEngine.union(geometries);
+            var esriGeometry = this.reducePrecision(geometryEngine.union(geometries));
             var convert = new Wkt();
             var postData = lang.mixin(userCredentials.getUserData(),
             {
@@ -822,6 +826,27 @@ define([
             if (this.existingData && this.existingData.featureId === featureId) {
                 this.graphicsLayer.setOpacity(newValue);
             }
+        },
+        reducePrecision: function (geometry) {
+            // summary:
+            //      rounds coordinates of polygons and polylines
+            // geometry: Geometry
+            console.log('app.project.CreateEditFeature:reducePresision', arguments);
+
+            var roundCoords = function (ringsOrPaths) {
+                ringsOrPaths.forEach(function (r) {
+                    r.forEach(function (pnt) {
+                        pnt[0] = formatting.round(pnt[0], 2);
+                        pnt[1] = formatting.round(pnt[1], 2);
+                    });
+                });
+            };
+
+            if (geometry.rings || geometry.paths) {
+                roundCoords(geometry.rings || geometry.paths);
+            }
+
+            return geometry;
         }
     });
 });

@@ -744,5 +744,31 @@ require([
                 expect(widget.graphicsLayer.graphics.length).toBe(1);
             });
         });
+        describe('reducePrecision', function () {
+            it('rounds coords for polygons', function () {
+                var result = widget.reducePrecision(new Polygon(esriGeometries.esri.multipolygon));
+
+                expect(result.rings[0][0][0]).toBe(-12545673.12);
+                expect(result.rings[0][0][1]).toBe(4865605.12);
+
+                result = widget.reducePrecision(new Polygon(esriGeometries.esri.polygon));
+
+                expect(result.rings[0][1][0]).toBe(-12544660.16);
+                expect(result.rings[0][1][1]).toBe(4867133.14);
+            });
+            it('rounds coords for polylines', function () {
+                var result = widget.reducePrecision(new Polyline(esriGeometries.esri.multiline));
+
+                expect(result.paths[0][0][0]).toBe(-12544870.12);
+                expect(result.paths[0][0][1]).toBe(4870802.12);
+            });
+            it('does nothing to points', function () {
+                var pnt = new Point(esriGeometries.esri.point);
+
+                var result = widget.reducePrecision(pnt);
+
+                expect(result).toEqual(pnt);
+            });
+        });
     });
 });
