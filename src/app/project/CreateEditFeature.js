@@ -180,7 +180,8 @@ define([
                 topic.subscribe(config.topics.feature.drawEditComplete, function () {
                     that.validateForm();
                     that.bufferLines = null;
-                })
+                }),
+                topic.subscribe(config.topics.opacityChanged, lang.hitch(this, 'changeOpacity'))
             );
             topic.publish(config.topics.layer.add, {
                 graphicsLayers: [this.graphicsLayer],
@@ -260,6 +261,8 @@ define([
                     this.commentsTxt.value = action.description;
                 }
             }
+
+            this.graphicsLayer.setOpacity(existingData.opacity);
 
             topic.publish(config.topics.feature.startEditing);
         },
@@ -807,6 +810,18 @@ define([
             buffers.forEach(function (b) {
                 this.onGeometryDefined(b, false, false);
             }, this);
+        },
+        changeOpacity: function (newValue, origin, featureId) {
+            // summary:
+            //      update the opacity of the graphics layer
+            // newValue: Number
+            // origin: String
+            // featureId: Number
+            console.log('app.project.CreateEditFeature:changeOpacity', arguments);
+
+            if (this.existingData && this.existingData.featureId === featureId) {
+                this.graphicsLayer.setOpacity(newValue);
+            }
         }
     });
 });
