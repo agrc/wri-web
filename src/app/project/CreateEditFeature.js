@@ -135,7 +135,7 @@ define([
         // existingData: Object (optional)
         // {
         //     category: String,
-        //     retreatment: Boolean,
+        //     retreatment: String,
         //     geometry: Geometry,
         //     actions: Action[],
         //     featureId: Number
@@ -197,7 +197,7 @@ define([
             this.featureCategorySelect.value = existingData.category;
             this.featureCategorySelect.disabled = true;
             this.onFeatureCategoryChange();
-            this.retreatmentChBx.checked = existingData.retreatment;
+            this.retreatmentChBx.checked = existingData.retreatment === 'Y' ? true : false;
             this.onGeometryDefined(existingData.geometry, false, true);
 
             if (config.terrestrialAquaticCategories.indexOf(existingData.category) > -1) {
@@ -635,7 +635,7 @@ define([
             var postData = lang.mixin(userCredentials.getUserData(),
             {
                 category: this.featureCategorySelect.value,
-                retreatment: this.retreatmentChBx.checked,
+                retreatment: this.retreatmentChBx.checked ? 'Y' : 'N',
                 geometry: convert.toWkt(esriGeometry),
                 actions: JSON.stringify(this.getActionsData())
             });
