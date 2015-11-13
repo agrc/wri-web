@@ -49,7 +49,7 @@ require([
         var featureId = 88;
         var existingData = {
             category: category,
-            retreatment: true,
+            retreatment: 'Y',
             geometry: geo,
             actions: [{
                 action: 'action1',
