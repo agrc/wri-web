@@ -273,7 +273,8 @@ define([
                             hasChildren: false
                         })
                     ),
-                    featureId: row.featureId
+                    featureId: row.featureId,
+                    opacity: graphic.symbol.color.a
                 }
             }, domConstruct.create('div', {}, this.editFeatureTabContents));
             wizard.startup();
