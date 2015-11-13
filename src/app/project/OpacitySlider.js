@@ -6,6 +6,7 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/on',
     'dojo/text!app/project/templates/OpacitySlider.html',
     'dojo/topic',
 
@@ -20,6 +21,7 @@ define([
 
     declare,
     lang,
+    on,
     template,
     topic
 ) {
@@ -57,7 +59,18 @@ define([
             $(this.button).popover({
                 content: this.sliderContainer,
                 container: 'body',
-                html: true
+                html: true,
+                trigger: 'manual'
+            });
+
+            var that = this;
+            on(this.button, 'click', function () {
+                $(that.button).popover('toggle');
+            });
+            $(this.button).on('shown.bs.popover', function () {
+                on.once(document, 'click', function () {
+                    $(that.button).popover('hide');
+                });
             });
 
             this.inherited(arguments);
