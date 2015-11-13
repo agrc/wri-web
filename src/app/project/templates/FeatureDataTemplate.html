@@ -8,6 +8,10 @@
 <p class="tight">
     <label>Treatment:</label> {{subType}}</p>
 {{/subType}}
+{{#retreatment}}
+<p class="tight">
+    <label>Retreatment:</label> {{retreatment}}</p>
+{{/retreatment}}
 {{#hasHerbicides}}
 <p class="tight">
     <label>Herbicides:</label> {{#herbicides}}{{.}} {{/herbicides}}
