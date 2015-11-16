@@ -235,27 +235,22 @@ define([
                 defExpression += ' AND ' + this.filter;
             }
 
-            // guards against extra queries for invisible layers
-            if (this.centroidsVisible) {
-                if (this.centroidLayer.__where__ === defExpression) {
-                    return;
-                }
-
+            // centroids
+            if (this.centroidsVisible && this.centroidLayer.__where__ !== defExpression) {
                 this.centroidLayer.setDefinitionExpression(defExpression);
-                this.centroidLayer.__where__ = defExpression;
-            } else {
-                defExpression = this.featureQueryTxt.replace('{{query}}', defExpression);
-                if (this.explodedLayer.pointExploded.__where__ === defExpression) {
-                    return;
-                }
-
-                Object.keys(this.explodedLayer).forEach(function (key) {
-                    var layer = this.explodedLayer[key];
-
-                    layer.setDefinitionExpression(defExpression);
-                    layer.__where__ = defExpression;
-                }, this);
             }
+            this.centroidLayer.__where__ = defExpression;
+
+            // exploded
+            defExpression = this.featureQueryTxt.replace('{{query}}', defExpression);
+            Object.keys(this.explodedLayer).forEach(function (key) {
+                var layer = this.explodedLayer[key];
+
+                if (!this.centroidsVisible && layer.__where__ !== defExpression) {
+                    layer.setDefinitionExpression(defExpression);
+                }
+                layer.__where__ = defExpression;
+            }, this);
 
             if (where && where !== '1=1') {
                 // no need to set query.where since FeatureLayer honors setDefinitionExpression
@@ -285,7 +280,7 @@ define([
 
                 layer.getNode().setAttribute('class', 'adjacent');
 
-                layer.setDefinitionExpression(where);
+                layer.setDefinitionExpression((layer.__where__) ? layer.__where__ + ' AND ' + where : where);
                 layer.setVisibility(true);
 
             }, this);
