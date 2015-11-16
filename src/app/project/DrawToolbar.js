@@ -107,6 +107,9 @@ define([
                 this.drawToolbar = new Draw(this.map);
                 this.own(this.drawToolbar.on('draw-complete', lang.hitch(this, 'onDrawComplete')));
                 this.editToolbar = new Edit(this.map);
+                this.own(this.editToolbar.on('deactivate', function (evt) {
+                    evt.graphic.setSymbol(config.symbols.selected.point);
+                }));
             }
 
             $(this.domNode).collapse('show');
@@ -226,6 +229,9 @@ define([
 
             if (domClass.contains(this.selectBtn, 'active') && domClass.contains(this.domNode, 'in')) {
                 /*jshint bitwise: false*/
+                if (graphic.geometry.type === 'point') {
+                    graphic.setSymbol(config.symbols.selectedPointForEditing);
+                }
                 this.editToolbar.activate(Edit.MOVE | Edit.EDIT_VERTICES, graphic);
                 /*jshint bitwise: true*/
             }
