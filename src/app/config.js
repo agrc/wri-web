@@ -169,6 +169,7 @@ define([
         topics: {
             projectIdsChanged: 'wri/projectIdsChanged',
             featureSelected: 'wri/featureSelected',
+            selectionCleared: 'wri/selectionCleared',
             opacityChanged: 'wri/opacityChanged',
             filterQueryChanged: 'wri/filterQueryChanged',
             map: {
