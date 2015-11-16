@@ -124,9 +124,15 @@ define([
             //      wire events, and such
             console.log('app.project.FeatureDetails::setupConnections', arguments);
 
+            var that = this;
             this.own(
                 topic.subscribe(config.topics.featureSelected, lang.hitch(this, 'onFeatureSelected')),
-                topic.subscribe(config.topics.feature.createFeature, lang.hitch(this, 'createFeature'))
+                topic.subscribe(config.topics.feature.createFeature, lang.hitch(this, 'createFeature')),
+                topic.subscribe(config.topics.selectionCleared, function () {
+                    that.toggleTab('featureTab', false);
+                    that.toggleTab('detailsTab', true);
+                    domConstruct.empty(that.featureTabContents);
+                })
             );
         },
         onFeatureSelected: function (rowData) {
@@ -141,9 +147,9 @@ define([
                 rowData[key] = this.templateFunctions[key];
             }, this);
 
-            this.toggleTab('featureTab', true);
             this.toggleTab('editFeatureTab', false);
             this.toggleTab('newFeatureTab', false);
+            this.toggleTab('featureTab', true);
 
             this.currentRowData = rowData;
 

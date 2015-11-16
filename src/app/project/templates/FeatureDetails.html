@@ -15,7 +15,8 @@
             <a href="#${id}_featureTab" data-toggle='tab'
                 data-dojo-attach-point='featureTabLink'>Feature</a>
         </li>
-        <li class='active'>
+        <li class='active'
+            data-dojo-attach-point='detailsTab'>
             <a href="#${id}_detailsTab" data-toggle='tab'
                 data-dojo-attach-point='detailsTabLink'>Details</a>
         </li>
@@ -41,7 +42,8 @@
             </p>
             <div data-dojo-attach-point='featureTabContents'></div>
         </div>
-        <div class="tab-pane active" id="${id}_detailsTab">
+        <div class="tab-pane active" id="${id}_detailsTab"
+            data-dojo-attach-point='detailsTabContainer'>
             <div class="project-information" id="${id}_projectDetails"
                 data-dojo-attach-point='projectDetailsNode'>
             </div>

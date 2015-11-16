@@ -129,6 +129,11 @@ define([
                         topic.publish(config.topics.map.rubberBandZoom, false);
                     }
                 });
+                that.map.on('click', function (evt) {
+                    if (!evt.graphic) {
+                        that.clearSelectedFeature();
+                    }
+                });
                 var btn = that.map.addButton(that.map.buttons.back, {
                     placeAt: toolbarNode
                 });
@@ -456,7 +461,7 @@ define([
         clearSelectedFeature: function () {
             // summary:
             //      resets the symbol of the previously selected feature
-            console.log('app.mapController:clearSelectedFeatures', arguments);
+            console.log('app.mapController:clearSelectedFeature', arguments);
 
             if (this.lastSelectedGraphic) {
                 var resetSymbol = this.lastSelectedOriginalSymbol;
@@ -465,6 +470,8 @@ define([
                 }
                 this.lastSelectedGraphic.setSymbol(resetSymbol);
             }
+
+            topic.publish(config.topics.selectionCleared);
         },
         changeOpacity: function (newValue, origin, featureId) {
             // summary:

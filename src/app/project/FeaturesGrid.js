@@ -104,13 +104,16 @@ define([
             }, this.gridDiv);
             this.own(this.grid);
 
-            aspect.after(this.grid, 'renderRow', function (row, args) {
-                if (!args[0].hasChildren) {
-                    domClass.add(row, 'selectable');
-                }
+            this.own(
+                aspect.after(this.grid, 'renderRow', function (row, args) {
+                    if (!args[0].hasChildren) {
+                        domClass.add(row, 'selectable');
+                    }
 
-                return row;
-            });
+                    return row;
+                }),
+                topic.subscribe(config.topics.selectionCleared, lang.hitch(this, 'clearSelection'))
+            );
 
             // Sets up the selectable stuff above with the aspect.
             this.store.setData(this.features);
