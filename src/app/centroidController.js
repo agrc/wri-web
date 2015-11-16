@@ -283,13 +283,7 @@ define([
             Object.keys(this.explodedLayer).forEach(function (key) {
                 var layer = this.explodedLayer[key];
 
-                var cssClass = 'adjacent';
-
-                if (key === 'lineExploded') {
-                    cssClass = 'adjacent-line';
-                }
-
-                layer.getNode().setAttribute('class', cssClass);
+                layer.getNode().setAttribute('class', 'adjacent');
 
                 layer.setDefinitionExpression(where);
                 layer.setVisibility(true);
