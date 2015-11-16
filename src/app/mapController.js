@@ -194,7 +194,7 @@ define([
                 }
                 l.featureLayer = new FeatureLayer(url);
                 l.exactMatch = false;
-                l.minCharacters = 3;
+                l.minCharacters = l.minCharacters || 3;
             });
 
             search.on('search-results', lang.hitch(this, function (result) {
