@@ -45,7 +45,10 @@ require([
         });
         describe('onToggleReferenceLayerTopic', function () {
             it('toggles button when relevant topic fires', function () {
-                var widgetWithSameName = {name: widget.name};
+                var widgetWithSameName = {
+                    name: widget.name,
+                    domNode: {}
+                };
                 expect(widget.checkbox.checked).toBe(false);
 
                 topic.publish(config.topics.toggleReferenceLayer, {}, true);
@@ -77,6 +80,18 @@ require([
                 widget.toggleLayer(true);
 
                 expect(config.topics.toggleReferenceLayer).toHaveBeenPublishedWith(widget, true);
+            });
+        });
+        describe('onMapScaleChange', function () {
+            it('disables the button if new scale is larger than minScale', function () {
+                widget.minScale = 10;
+                widget.onMapScaleChange(11);
+
+                expect(domClass.contains(widget.domNode, 'disabled')).toBe(true);
+
+                widget.onMapScaleChange(9);
+
+                expect(domClass.contains(widget.domNode, 'disabled')).toBe(false);
             });
         });
     });

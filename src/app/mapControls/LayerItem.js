@@ -61,6 +61,10 @@ define([
         //      display a legend tooltip
         legend: false,
 
+        // minScale: Number
+        //      the min scale at which the button will be enabled
+        minScale: null,
+
         postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
@@ -101,7 +105,8 @@ define([
             console.log('app.mapControls.LayerItem::setupConnections', arguments);
 
             this.own(
-                topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'onToggleReferenceLayerTopic'))
+                topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'onToggleReferenceLayerTopic')),
+                topic.subscribe(config.topics.mapScaleChanged, lang.hitch(this, 'onMapScaleChange'))
             );
         },
         onToggleReferenceLayerTopic: function (layerItem, show) {
@@ -114,19 +119,27 @@ define([
 
             if (layerItem !== this &&
                 layerItem.name === this.name &&
-                this.checkbox.checked !== show) {
+                this.checkbox.checked !== show &&
+                !domClass.contains(layerItem.domNode, 'disabled')) {
                 this.toggleBtn(show);
             }
         },
-        onClick: function () {
+        onClick: function (evt) {
             // summary:
             //      the widget is clicked
             console.log('app.mapControls.LayerItem:onClick', arguments);
 
-            var that = this;
-            window.setTimeout(function () {
-                that.toggleLayer(that.checkbox.checked);
-            }, 0);
+            if (!domClass.contains(this.domNode, 'disabled')) {
+                var that = this;
+                window.setTimeout(function () {
+                    that.toggleLayer(that.checkbox.checked);
+                }, 0);
+            } else {
+                if (evt && evt.preventDefault) {
+                    evt.preventDefault();
+                }
+                evt.stopPropagation();
+            }
         },
         toggleBtn: function (active) {
             // summary:
@@ -144,6 +157,18 @@ define([
             console.log('app.mapControlls:toggleLayer', arguments);
 
             topic.publish(config.topics.toggleReferenceLayer, this, show);
+        },
+        onMapScaleChange: function (newScale) {
+            // summary:
+            //      enable/disable the button if it has a min scale
+            // newScale: Number
+            console.log('app.mapControls.LayerItem:onMapScaleChange', arguments);
+
+            if (this.minScale) {
+                var disabled = newScale > this.minScale;
+                domClass.toggle(this.domNode, 'disabled', disabled);
+                this.toggleLayer(!disabled && domClass.contains(this.domNode, 'active'));
+            }
         }
     });
 });

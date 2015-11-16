@@ -145,6 +145,10 @@ define([
                 domClass.add(btn, 'toolbar-item');
             });
 
+            this.map.on('zoom-end', function () {
+                topic.publish(config.topics.mapScaleChanged, that.map.getScale());
+            });
+
             this.baseLayers = [googleImageryLyr, esriImageryLyr, esriLabelsLyr, esriTransLabelsLyr];
             this.map.addLayers(this.baseLayers);
 
@@ -268,6 +272,9 @@ define([
             // ids: [int] of project ids
             // returns: Promise
             console.log('app/mapController:selectLayers', arguments);
+
+            // so that reference layer buttons get disabled for min scales
+            topic.publish(config.topics.mapScaleChanged, this.map.getScale());
 
             if (!ids || ids.length === 0 || ids.length > 1) {
                 // ids is null or has no project id's
