@@ -238,7 +238,20 @@ define([
                         width: 0.5
                     }
                 })
-            }
+            },
+            selectedPointForEditing: new SimpleMarkerSymbol({
+                type: 'esriSMS',
+                style: 'esriSMSCircle',
+                color: [128, 128, 128, 128],
+                size: 10,
+                angle: 0,
+                xoffset: 0,
+                yoffset: 0,
+                outline: {
+                    color: [0, 0, 0, 255],
+                    width: 1
+                }
+            })
         },
 
         referenceLayerOpacity: 0.75
