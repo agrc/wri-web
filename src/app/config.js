@@ -169,6 +169,7 @@ define([
         ],
 
         topics: {
+            mapScaleChanged: 'wri/mapScaleChanged',
             projectIdsChanged: 'wri/projectIdsChanged',
             featureSelected: 'wri/featureSelected',
             opacityChanged: 'wri/opacityChanged',
@@ -305,7 +306,8 @@ define([
         name: 'PLSS Sections',
         reference: true,
         url: config.urls.plss,
-        type: 'cached'
+        type: 'cached',
+        minScale: 1000000
     }, {
         name: 'HUCs',
         reference: true,
@@ -330,7 +332,8 @@ define([
         reference: true,
         url: config.urls.reference,
         layerIndex: 15,
-        type: 'dynamic'
+        type: 'dynamic',
+        minScale: 80000
     }, {
         name: 'WRI Projects',
         search: true,
