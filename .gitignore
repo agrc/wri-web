@@ -1,5 +1,6 @@
 .DS_Store
 .grunt/
+*.coverage
 *.gdb
 *.noseids
 *.odc
@@ -9,17 +10,21 @@
 deploy
 dist/
 node_modules/
-secrets.py
-secrets.json
 scripts/download/.tox/*
+scripts/download/Download.py
+scripts/UpdateData/agrc
+scripts/UpdateData/database_connections/
+scripts/UpdateData/Logs/
+secrets.json
+secrets.py
 src/agrc-jasmine-matchers/
 src/agrc/
 src/app/**/*.css
 src/bootstrap-stylus/
 src/bootstrap/
 src/components-jasmine/
-src/dgrid/
 src/dgauges/
+src/dgrid/
 src/dgrid0.3/
 src/dijit/
 src/dojo/
@@ -45,5 +50,3 @@ src/spinjs/
 src/stubmodule/
 src/util/
 src/xstyle/
-*.coverage
-scripts/download/Download.py
