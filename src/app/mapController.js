@@ -130,7 +130,7 @@ define([
                     }
                 });
                 that.map.on('click', function (evt) {
-                    if (!evt.graphic) {
+                    if (!evt.graphic && !that.isEditing) {
                         that.clearSelectedFeature();
                     }
                 });
