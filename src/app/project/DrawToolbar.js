@@ -108,7 +108,9 @@ define([
                 this.own(this.drawToolbar.on('draw-complete', lang.hitch(this, 'onDrawComplete')));
                 this.editToolbar = new Edit(this.map);
                 this.own(this.editToolbar.on('deactivate', function (evt) {
-                    evt.graphic.setSymbol(config.symbols.selected.point);
+                    if (evt.graphic.geometry.type === 'point') {
+                        evt.graphic.setSymbol(config.symbols.selected.point);
+                    }
                 }));
             }
 
