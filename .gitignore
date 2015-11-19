@@ -12,9 +12,10 @@ dist/
 node_modules/
 scripts/download/.tox/*
 scripts/download/Download.py
-scripts/UpdateData/agrc
+scripts/UpdateData/agrc*
 scripts/UpdateData/database_connections/
 scripts/UpdateData/Logs/
+scripts/UpdateData/requests*
 secrets.json
 secrets.py
 src/agrc-jasmine-matchers/

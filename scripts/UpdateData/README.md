@@ -1,6 +1,7 @@
 # UpdateData.py
 
 ## Installation
+1. Install dependencies by running `pip install -r Requirements.txt -t .`
 1. Create your own `secrets.py` based on `secrets.py.sample`.
 1. Create a `database_connections` folder as a sibling to `main.py` and add `SGID10.sde` & `UDNR.sde`.
 1. Schedule to run nightly using windows scheduler
