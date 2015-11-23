@@ -208,7 +208,7 @@ define([
             this.featureCategorySelect.value = existingData.category;
             this.featureCategorySelect.disabled = true;
             this.onFeatureCategoryChange();
-            this.retreatmentChBx.checked = existingData.retreatment;
+            this.retreatmentChBx.checked = existingData.retreatment === 'Y';
 
             // explode multi-part geometries
             var geo = existingData.geometry;
