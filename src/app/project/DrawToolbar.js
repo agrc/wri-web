@@ -79,7 +79,7 @@ define([
                         that.onCancelClick();
                     }
                 }),
-                on(document, 'keyup', lang.hitch(this, 'onKeyUp'))
+                this.keyupEvent = on.pausable(document, 'keyup', lang.hitch(this, 'onKeyUp'))
             );
 
             this.inherited(arguments);
@@ -114,6 +114,8 @@ define([
                 }));
             }
 
+            this.keyupEvent.resume();
+
             $(this.domNode).collapse('show');
         },
         hide: function () {
@@ -127,6 +129,8 @@ define([
                 this.drawToolbar.deactivate();
                 this.editToolbar.deactivate();
             }
+
+            this.keyupEvent.pause();
         },
         onStartDrawingFeature: function (category) {
             // summary:
