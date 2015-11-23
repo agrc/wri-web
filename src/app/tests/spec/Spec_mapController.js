@@ -2,6 +2,7 @@ require([
     'app/config',
     'app/mapController',
 
+    'dojo/dom-construct',
     'dojo/_base/lang',
 
     'esri/layers/ArcGISDynamicMapServiceLayer'
@@ -11,11 +12,19 @@ function (
     config,
     mapController,
 
+    domConstruct,
     lang,
 
     ArcGISDynamicMapServiceLayer
 ) {
     describe('app/mapController', function () {
+        afterEach(function (done) {
+            require.undef('app/mapController');
+            require(['app/mapController'], function (newModule) {
+                mapController = newModule;
+                done();
+            });
+        });
         describe('selectFeature', function () {
             var data;
             var g;
@@ -82,12 +91,11 @@ function (
                 expect(lastGraphic.setSymbol.calls.mostRecent().args[0].color.a).toBe(opacity);
             });
             it('only calls moveToFront if shape is onscreen', function (done) {
-                g.getDojoShape = function () {
-                    return;
-                };
+                g.getDojoShape = function () {};
 
                 expect(function () {
                     mapController.selectFeature(data);
+                    expect(true).toBe(true);  // otherwise jasmine complains that this spec has no expectations
                     done();
                 }).not.toThrow();
             });
@@ -167,6 +175,33 @@ function (
                 mapController.toggleReferenceLayerLabels(false);
 
                 expect(setVisibleLayersSpy.calls.mostRecent().args).toEqual([[1]]);
+            });
+        });
+        describe('toggleSnapping', function () {
+            beforeEach(function () {
+                mapController.initMap(domConstruct.create('div'), domConstruct.create('div'));
+                mapController.ensureProjectLayersAdded();
+            });
+            it('calls enableSnapping on the map the first time', function () {
+                spyOn(mapController.map, 'enableSnapping').and.callThrough();
+
+                mapController.toggleSnapping('land', true);
+                mapController.toggleSnapping('land', true);
+
+                expect(mapController.map.enableSnapping.calls.count()).toBe(1);
+            });
+            it('constructs layerInfos', function () {
+                mapController.toggleSnapping('land', true);
+                spyOn(mapController.map.snappingManager, 'setLayerInfos');
+                var lyr = {
+                    setVisibility: function () {}
+                };
+                mapController.snappingLayers.land[0] = lyr;
+
+                mapController.toggleSnapping('land', true);
+
+                expect(mapController.map.snappingManager.setLayerInfos.calls.mostRecent().args[0])
+                    .toEqual([{layer: lyr}]);
             });
         });
     });

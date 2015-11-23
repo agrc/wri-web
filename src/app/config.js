@@ -4,6 +4,7 @@ define([
     'dojo/request',
     'dojo/_base/lang',
 
+    'esri/Color',
     'esri/config',
     'esri/geometry/Extent',
     'esri/symbols/SimpleFillSymbol',
@@ -16,6 +17,7 @@ define([
     request,
     lang,
 
+    Color,
     esriConfig,
     Extent,
     SimpleFillSymbol,
@@ -54,6 +56,8 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push('maps.dnr.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('dwrapps.utah.gov');
     var selectionColor = [255, 220, 0];
+    var landOwnershipLayerIndex = 4;
+    var transparentColor = new Color([0, 0, 0, 0]);
 
     var config = {
         // app: app.App
@@ -100,6 +104,7 @@ define([
             featuresService: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Features', type: 'Map' }),
             centroidService: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Projects', type: 'Map' }) + '/0',
             reference: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Reference', type: 'Map' }),
+            landOwnership: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Reference', type: 'Map' }) + '/' + landOwnershipLayerIndex,
             api: gisServerBaseUrl + apiEndpoint + '/api',
             plss: plssUrl,
             fireRiskIndex: 'https://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireRiskIndex/MapServer',
@@ -207,7 +212,8 @@ define([
             },
             toast: 'wri/toast',
             showProjectLoader: 'wri/showProjectLoader',
-            hideProjectLoader: 'wri/hideProjectLoader'
+            hideProjectLoader: 'wri/hideProjectLoader',
+            toggleSnapping: 'wri/toggleSnapping'
         },
 
         symbols: {
@@ -255,7 +261,8 @@ define([
                     color: [0, 0, 0, 255],
                     width: 1
                 }
-            })
+            }),
+            empty: new SimpleFillSymbol().setColor(transparentColor).outline.setColor(transparentColor)
         },
 
         referenceLayerOpacity: 0.75
@@ -265,7 +272,7 @@ define([
         name: 'Land Ownership',
         reference: true,
         url: config.urls.reference,
-        layerIndex: 4,
+        layerIndex: landOwnershipLayerIndex,
         type: 'dynamic',
         legend: true
     }, {

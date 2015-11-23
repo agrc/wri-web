@@ -27,6 +27,7 @@ define([
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
     'esri/layers/WebTiledLayer',
+    'esri/renderers/SimpleRenderer',
     'esri/tasks/query'
 ], function (
     BaseMap,
@@ -57,6 +58,7 @@ define([
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
     WebTiledLayer,
+    SimpleRenderer,
     Query
 ) {
     return {
@@ -82,6 +84,22 @@ define([
         // isEditing: Boolean
         //      Used to disabled feature selection during feature editing
         isEditing: false,
+
+        // snappingLayers: Object
+        //      Stores references to the layers available for snapping
+        snappingLayers: {
+            project: [],
+            adjacent: [],
+            land: []
+        },
+
+        // activeSnappingLayers: Object
+        //      Stores the snapping state of all of the snapping layers
+        activeSnappingLayers: {
+            project: false,
+            adjacent: false,
+            land: false
+        },
 
         initMap: function (mapDiv, toolbarNode) {
             // summary:
@@ -271,6 +289,53 @@ define([
             topic.subscribe(config.topics.projectIdsChanged, lang.hitch(this, 'selectLayers'));
             topic.subscribe(config.topics.toggleReferenceLayer, lang.hitch(this, 'toggleReferenceLayer'));
             topic.subscribe(config.topics.toggleReferenceLayerLabels, lang.hitch(this, 'toggleReferenceLayerLabels'));
+            topic.subscribe(config.topics.toggleSnapping, lang.hitch(this, 'toggleSnapping'));
+            topic.subscribe(config.topics.feature.drawEditComplete, function () {
+                if (that.snappingLayers.land[0]) {
+                    that.snappingLayers.land[0].hide();
+                }
+            });
+            topic.subscribe(config.topics.feature.startDrawing, function () {
+                if (that.snappingLayers.land[0]) {
+                    that.snappingLayers.land[0].setVisibility(that.activeSnappingLayers.land);
+                }
+            });
+        },
+        toggleSnapping: function (token, enable) {
+            // summary:
+            //      toggles snapping on the map
+            // token: String (project | adjacent | land)
+            //      The name of the layer to toggle
+            // enable: Boolean
+            console.log('app.mapController:toggleSnapping', arguments);
+
+            if (!this.map.snappingManager) {
+                this.map.enableSnapping({alwaysSnap: true});
+            }
+
+            this.activeSnappingLayers[token] = enable;
+
+            if (token === 'land') {
+                if (!this.snappingLayers[token][0]) {
+                    var landLayer = new FeatureLayer(config.urls.landOwnership);
+                    landLayer.setRenderer(new SimpleRenderer(config.symbols.empty));
+                    this.map.addLayer(landLayer);
+                    this.snappingLayers[token] = [landLayer];
+                } else {
+                    this.snappingLayers[token][0].setVisibility(enable);
+                }
+            }
+
+            var layerInfos = [];
+            Object.keys(this.activeSnappingLayers).forEach(function getLayer(key) {
+                if (this.activeSnappingLayers[key]) {
+                    layerInfos = layerInfos.concat(this.snappingLayers[key].map(function getLayerInfo(layer) {
+                        return {layer: layer};
+                    }));
+                }
+            }, this);
+
+            this.map.snappingManager.setLayerInfos(layerInfos);
         },
         selectLayers: function (ids) {
             // summary:
@@ -406,6 +471,7 @@ define([
 
                 deferreds.push(deferred);
                 this.layers[typesLookup[i]] = layer;
+                this.snappingLayers.project.push(layer);
             }, this);
 
             var lyrs = this.layers;
@@ -577,11 +643,12 @@ define([
 
             if (enabled) {
                 when(centroidController.ensureLayersLoaded(), lang.hitch(this, function (result) {
+                    var explodedLayers = result.map(function (layers) {
+                        return layers.layer;
+                    });
                     if (result !== true) {
                         this.addLayers({
-                            graphicsLayers: result.map(function (layers) {
-                                return layers.layer;
-                            }),
+                            graphicsLayers: explodedLayers,
                             dynamicLayers: []
                         });
                     }

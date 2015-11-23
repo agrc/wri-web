@@ -79,10 +79,40 @@ define([
                         that.onCancelClick();
                     }
                 }),
-                this.keyupEvent = on.pausable(document, 'keyup', lang.hitch(this, 'onKeyUp'))
+                this.keyupEvent = on.pausable(document, 'keyup', lang.hitch(this, 'onKeyUp')),
+                on(this.dropdownMenu, 'click', function (evt) {
+                    // prevent menu from hiding
+                    evt.stopPropagation();
+                }),
+                query('a', this.dropdownMenu).on('click', function (evt) {
+                    // toggle checkbox if any part of the menu item was clicked
+                    // other than the checkbox itself
+                    if (evt.target.type !== 'checkbox') {
+                        var checkbox = evt.target.children[0];
+                        checkbox.checked = !checkbox.checked;
+                        on.emit(checkbox, 'change', {bubbles: true});
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                    }
+                }),
+                query('input', this.dropdownMenu).on('change', lang.hitch(this, 'onSnapChange'))
             );
 
             this.inherited(arguments);
+        },
+        onSnapChange: function (evt) {
+            // summary:
+            //      snapping checkbox was toggled
+            // evt: Event Object
+            console.log('app.project.DrawToolbar:onSnapChange', arguments);
+
+            var checkbox = evt.target;
+
+            // enable snapping on the map
+            topic.publish(config.topics.toggleSnapping, checkbox.name, checkbox.checked);
+
+            // refresh edit/draw toolbar to enable snapping
+            this.onToolClick({target: query('.active', this.domNode)[0]});
         },
         onKeyUp: function (evt) {
             // summary:
