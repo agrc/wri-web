@@ -62,6 +62,16 @@ define([
                 }, this.toggleNode.parentNode, 'first');
 
                 this.own(on(btn, 'click', lang.hitch(this, 'onAddFeatureClick')));
+
+                // disable add features button when CreateEditFeature is visible
+                var toggleBtn = function (disable) {
+                    btn.disabled = disable;
+                };
+                this.own(
+                    topic.subscribe(config.topics.feature.startEditing, lang.partial(toggleBtn, true)),
+                    topic.subscribe(config.topics.feature.createFeature, lang.partial(toggleBtn, true)),
+                    topic.subscribe(config.topics.feature.finishEditingCreating, lang.partial(toggleBtn, false))
+                );
             }
         },
         toggleAdjacent: function () {
