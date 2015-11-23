@@ -50,20 +50,41 @@
             }]
         }, [
             'jquery',
+
             'app/project/DrawToolbar',
             'app/config',
+
             'agrc/widgets/map/BaseMap',
+
             'dojo/_base/lang',
             'dojo/on',
             'dojo/topic',
+
             'esri/graphic',
+            'esri/geometry/Extent',
             'esri/geometry/geometryEngine',
             'esri/layers/GraphicsLayer',
+            'esri/layers/FeatureLayer',
 
             'dojo/domReady!'
-        ], function($, Module, config, Map, lang, on, topic, Graphic, geometryEngine, GraphicsLayer) {
+        ], function(
+            $,
+            Module,
+            config,
+            Map,
+            lang,
+            on,
+            topic,
+            Graphic,
+            Extent,
+            geometryEngine,
+            GraphicsLayer,
+            FeatureLayer
+        ) {
             var topics = config.topics.feature;
-            map = new Map('mapDiv');
+            map = new Map('mapDiv', {
+                extent: new Extent({"xmin":434722.261206515,"ymin":4396221.996744787,"xmax":438161.9274794386,"ymax":4398080.371995019,"spatialReference":{"wkid":26912}})
+            });
             map.on('load', function () {
                 map.disableDoubleClickZoom();
                 gLayer = new GraphicsLayer();
@@ -80,6 +101,9 @@
             }, 'node');
 
             widgetUnderTest.startup();
+
+            var fLayer = new FeatureLayer(config.urls.featuresService + '/2');
+            map.addLayer(fLayer);
 
             topic.publish(topics.startDrawing, 'Affected Area');
             topic.subscribe(topics.drawingComplete, function (geometry) {
@@ -105,6 +129,13 @@
                         g.setGeometry(largestGeometry);
                     }
                 });
+            });
+            topic.subscribe(config.topics.toggleSnapping, function (token, enable) {
+                var snappingManager = map.enableSnapping({
+                    alwaysSnap: true,
+                    layerInfos: [{layer: fLayer}]
+                });
+                console.log('enabled');
             });
             on(document.getElementById('aaBtn'), 'click', lang.partial(topic.publish, topics.startDrawing, 'Affected Area'));
             on(document.getElementById('fenceBtn'), 'click', lang.partial(topic.publish, topics.startDrawing, 'Fence'));

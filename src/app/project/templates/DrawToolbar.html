@@ -29,19 +29,29 @@
             <span class="glyphicon glyphicon-scissors"></span>
             Cut
         </button>
-        <!-- <div class="btn-group">
+        <div class="btn-group">
             <button class="btn btn-default navbar-btn dropdown-toggle"
                 data-toggle='dropdown'>
                 Snap <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" data-dojo-attach-point='dropdownMenu'>
                 <li>
-                    <a href="#">one</a>
-                    <a href="#">two</a>
-                    <a href="#">three</a>
+                    <a href='#'>
+                        <input type="checkbox" name='project'> Project Features
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <input type="checkbox" name='adjacent'> Adjacent Project Features
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <input type="checkbox" name='land'> Land Ownership
+                    </a>
                 </li>
             </ul>
-        </div> -->
+        </div>
     </div>
     <div class="btn-group pull-right">
         <button class="btn btn-primary navbar-btn"
