@@ -11,6 +11,7 @@ define([
     'app/router',
 
     'dojo/Deferred',
+    'dojo/dom-attr',
     'dojo/dom-class',
     'dojo/promise/all',
     'dojo/topic',
@@ -40,6 +41,7 @@ define([
     router,
 
     Deferred,
+    domAttr,
     domClass,
     all,
     topic,
@@ -138,11 +140,13 @@ define([
                     placeAt: toolbarNode
                 });
                 domClass.add(btn, 'toolbar-item');
+                domAttr.set(btn, 'title', 'Previous Extent');
 
                 btn = that.map.addButton(that.map.buttons.forward, {
                     placeAt: toolbarNode
                 });
                 domClass.add(btn, 'toolbar-item');
+                domAttr.set(btn, 'title', 'Next Extent');
             });
 
             this.map.on('zoom-end', function () {
