@@ -102,7 +102,7 @@ define([
             reference: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Reference', type: 'Map' }),
             api: gisServerBaseUrl + apiEndpoint + '/api',
             plss: plssUrl,
-            fireRiskIndex: 'http://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireRiskIndex/MapServer',
+            fireRiskIndex: 'https://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireRiskIndex/MapServer',
             rangeTrendApp: 'https://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}',
             esriImagery: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
             esriLabels: 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
