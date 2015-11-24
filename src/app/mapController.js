@@ -10,6 +10,7 @@ define([
     'app/mapControls/PrintButton',
     'app/router',
 
+    'dojo/aspect',
     'dojo/Deferred',
     'dojo/dom-class',
     'dojo/promise/all',
@@ -39,6 +40,7 @@ define([
     PrintButton,
     router,
 
+    aspect,
     Deferred,
     domClass,
     all,
@@ -187,11 +189,13 @@ define([
             var sources = config.supportLayers.filter(function (l) {
                 return l.search;
             });
+
             sources.forEach(function (l) {
                 var url = l.url;
                 if (l.layerIndex) {
                     url += '/' + l.layerIndex;
                 }
+
                 l.featureLayer = new FeatureLayer(url);
                 l.exactMatch = false;
                 l.minCharacters = l.minCharacters || 3;
