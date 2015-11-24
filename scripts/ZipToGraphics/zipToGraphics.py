@@ -14,7 +14,8 @@ import arcpy
 required_files = ['shp', 'dbf', 'prj', 'shx']
 wgs = arcpy.SpatialReference(3857)
 
-multiple_warning = 'warning:Multiple features were found in the uploaded shapefile but only the first was returned.'
+multiple_warning = ('warning:Multiple features were found in the uploaded shapefile. Only the first was returned. '
+                    'Merge your shapefile features into a single multi-part feature to include them all.')
 categories = {
     'Terrestrial Treatment Area': ['Polygon'],
     'Aquatic/Riparian Treatment Area': ['Polygon'],
