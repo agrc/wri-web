@@ -30,7 +30,7 @@ define([
 
             var that = this;
             on(this.heading, 'click', function (evt) {
-                if (that.preventToggleElements.indexOf(evt.srcElement) === -1) {
+                if (that.preventToggleElements.indexOf(evt.target) === -1) {
                     $(that.body).collapse('toggle');
                 }
             });
