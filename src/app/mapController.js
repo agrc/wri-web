@@ -187,11 +187,13 @@ define([
             var sources = config.supportLayers.filter(function (l) {
                 return l.search;
             });
+
             sources.forEach(function (l) {
                 var url = l.url;
                 if (l.layerIndex) {
                     url += '/' + l.layerIndex;
                 }
+
                 l.featureLayer = new FeatureLayer(url);
                 l.exactMatch = false;
                 l.minCharacters = l.minCharacters || 3;

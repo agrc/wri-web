@@ -349,17 +349,18 @@ define([
         type: 'dynamic',
         minScale: 80000
     }, {
-        name: 'WRI Project Id',
+        name: 'WRI Project Name',
         search: true,
-        minCharacters: 1,
         url: config.urls.centroidService,
         searchFields: [flds.Title],
         highlightSymbol: config.symbols.selected.point
     },  {
-        name: 'WRI Project Name',
+        name: 'WRI Project ID',
         search: true,
+        minCharacters: 1,
         url: config.urls.centroidService,
         searchFields: [flds.Project_ID],
+        suggestionTemplate: '${' + flds.Project_ID + '}',
         highlightSymbol: config.symbols.selected.point
     }, {
         name: 'SGID Places',
