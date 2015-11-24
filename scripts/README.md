@@ -14,4 +14,4 @@ Synchronous
 
 Allow Uploads
 
-Message Level should be at least `Error`. This is required to allow error message to be properly displayed from within the app.
+Message Level should be at least `Warning`. This is required to allow error message to be properly displayed from within the app.
