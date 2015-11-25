@@ -238,8 +238,8 @@ define([
             // centroids
             if (this.centroidsVisible && this.centroidLayer.__where__ !== defExpression) {
                 this.centroidLayer.setDefinitionExpression(defExpression);
+                this.centroidLayer.__where__ = defExpression;
             }
-            this.centroidLayer.__where__ = defExpression;
 
             // exploded
             defExpression = this.featureQueryTxt.replace('{{query}}', defExpression);
@@ -248,8 +248,8 @@ define([
 
                 if (!this.centroidsVisible && layer.__where__ !== defExpression) {
                     layer.setDefinitionExpression(defExpression);
+                    layer.__where__ = defExpression;
                 }
-                layer.__where__ = defExpression;
             }, this);
 
             if (where && where !== '1=1') {
