@@ -291,7 +291,8 @@ module.exports = function (grunt) {
                 files: {
                     'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/dojo/dojo.js',
                     'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/js/agrc/app/resources/App.css',
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/jsonconfig/config.json': 'C:/Projects/GitHub/wri-web/dist/js/agrc/jsonconfig/config.json'
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/jsonconfig/config.json': 'C:/Projects/GitHub/wri-web/dist/js/agrc/jsonconfig/config.json',
+                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/esri/geometry/geometryEngine.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/esri/geometry/geometryEngine.js'
                 }
             }
         },
