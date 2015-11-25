@@ -555,7 +555,6 @@ define([
         updateCentroidVisibility: function () {
             // summary:
             //      creates the extent event object and invokes the method
-            // : {5:type or return: type}
             console.log('app/mapController::updateCentroidVisibility', arguments);
 
             var extent = {
