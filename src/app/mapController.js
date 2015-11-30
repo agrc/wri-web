@@ -643,12 +643,11 @@ define([
 
             if (enabled) {
                 when(centroidController.ensureLayersLoaded(), lang.hitch(this, function (result) {
-                    var explodedLayers = result.map(function (layers) {
-                        return layers.layer;
-                    });
                     if (result !== true) {
                         this.addLayers({
-                            graphicsLayers: explodedLayers,
+                            graphicsLayers: result.map(function (layers) {
+                                return layers.layer;
+                            }),
                             dynamicLayers: []
                         });
                     }
