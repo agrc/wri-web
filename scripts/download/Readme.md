@@ -16,7 +16,7 @@ Update line 88 `in Download.pyt`
 ```
 self.db = self._get_db('configuration')
 ```
-with `local`, `dev`, `at`, `prod` and exectute.
+with `local`, `dev`, `at`, `prod` and execute.
 
 ```
 Service name: WRI/ToolboxAsync
