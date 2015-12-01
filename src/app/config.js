@@ -29,20 +29,18 @@ define([
     esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('wrimaps.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('maps.ffsl.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('maps.dnr.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('dwrapps.utah.gov');
     esriConfig.defaults.map.zoomSymbol.outline.color = [18, 192, 236, 255];
 
     var gisServerBaseUrl;
     var apiEndpoint;
     var serviceUrlTemplate = '/arcgis/rest/services/WRI/{name}/{type}Server';
     var googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/delete-prefix-stretch-giant/';
-    var plssUrl = 'https://wrimaps.at.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
+    var plssUrl = 'https://__WRI_BASEURL__.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
 
     if (has('agrc-build') === 'prod') {
-        gisServerBaseUrl = 'https://wrimaps.utah.gov';
-        apiEndpoint = '';
-        plssUrl = 'https://wrimaps.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
-    } else if (has('agrc-build') === 'stage') {
-        gisServerBaseUrl = 'https://wrimaps.at.utah.gov';
+        gisServerBaseUrl = 'https://__WRI_BASEURL__.utah.gov';
         apiEndpoint = '/__WRI_CONFIGURATION__';
         serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{name}/{type}Server';
     } else {
@@ -51,8 +49,6 @@ define([
         googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
-    esriConfig.defaults.io.corsEnabledServers.push('maps.dnr.utah.gov');
-    esriConfig.defaults.io.corsEnabledServers.push('dwrapps.utah.gov');
     var selectionColor = [255, 220, 0];
 
     var config = {
