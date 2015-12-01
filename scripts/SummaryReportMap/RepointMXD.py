@@ -1,11 +1,11 @@
-# repoint mxds at dev or AT Database
+# repoint mxds at local, dev, AT, or prod Database
 # requires that you have database connections in
 # catalog with the names below
 import arcpy
-import glob
 import sys
 
 
+mxd = 'SummaryReport.mxd'
 db = r'Database Connections\\'
 local = db + 'WRI_LOCAL.sde'
 dev = db + 'WRI_DEV as wri_user.sde'
@@ -28,13 +28,11 @@ elif target == 'P':
 else:
     dest = local
 
-print('updating mxd\'s to use {}'.format(dest))
+print('updating {} to use {}'.format(mxd, dest))
 
-for f in glob.glob('*.local.mxd'):
-    print(f)
-    mxd = arcpy.mapping.MapDocument(f)
-    l = arcpy.mapping.ListLayers(mxd)[0]
-    mxd.findAndReplaceWorkspacePaths(l.workspacePath, dest, True)
-    mxd.save()
+mxd = arcpy.mapping.MapDocument(mxd)
+l = arcpy.mapping.ListLayers(mxd)[0]
+mxd.findAndReplaceWorkspacePaths(l.workspacePath, dest, True)
+mxd.save()
 
 print('done')
