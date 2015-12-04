@@ -10,6 +10,7 @@ define([
     'app/mapControls/PrintButton',
     'app/router',
 
+    'dojo/aspect',
     'dojo/Deferred',
     'dojo/dom-attr',
     'dojo/dom-class',
@@ -22,6 +23,7 @@ define([
     'esri/dijit/HomeButton',
     'esri/dijit/Search',
     'esri/geometry/Point',
+    'esri/graphic',
     'esri/InfoTemplate',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
@@ -41,6 +43,7 @@ define([
     PrintButton,
     router,
 
+    aspect,
     Deferred,
     domAttr,
     domClass,
@@ -53,6 +56,7 @@ define([
     HomeButton,
     Search,
     Point,
+    Graphic,
     InfoTemplate,
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
@@ -311,6 +315,21 @@ define([
 
             if (!this.map.snappingManager) {
                 this.map.enableSnapping({alwaysSnap: true});
+                aspect.before(this.map.snappingManager, '_extractPointsAndLines', function (features, options) {
+                    // explode multipoints
+                    var newFeatures = [];
+                    features.forEach(function (f) {
+                        if (f.geometry.type === 'multipoint') {
+                            f.geometry.points.forEach(function (coords) {
+                                newFeatures.push(new Graphic(new Point(coords, f.geometry.spatialReference)));
+                            });
+                        } else {
+                            newFeatures.push(f);
+                        }
+                    });
+
+                    return [newFeatures, options];
+                });
             }
 
             this.activeSnappingLayers[token] = enable;

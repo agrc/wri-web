@@ -57,33 +57,41 @@
             'agrc/widgets/map/BaseMap',
 
             'dojo/_base/lang',
+            'dojo/aspect',
             'dojo/on',
             'dojo/topic',
 
             'esri/graphic',
             'esri/geometry/Extent',
             'esri/geometry/geometryEngine',
+            'esri/geometry/Point',
             'esri/layers/GraphicsLayer',
             'esri/layers/FeatureLayer',
 
             'dojo/domReady!'
         ], function(
             $,
+
             Module,
             config,
+
             Map,
+
             lang,
+            aspect,
             on,
             topic,
+
             Graphic,
             Extent,
             geometryEngine,
+            Point,
             GraphicsLayer,
             FeatureLayer
         ) {
             var topics = config.topics.feature;
             map = new Map('mapDiv', {
-                extent: new Extent({"xmin":434722.261206515,"ymin":4396221.996744787,"xmax":438161.9274794386,"ymax":4398080.371995019,"spatialReference":{"wkid":26912}})
+                extent: new Extent({"xmin":414160.7005978779,"ymin":4411005.395746572,"xmax":441678.0307805043,"ymax":4425872.39774802,"spatialReference":{"wkid":26912}})
             });
             map.on('load', function () {
                 map.disableDoubleClickZoom();
@@ -102,7 +110,7 @@
 
             widgetUnderTest.startup();
 
-            var fLayer = new FeatureLayer(config.urls.featuresService + '/2');
+            var fLayer = new FeatureLayer(config.urls.featuresService + '/0');
             map.addLayer(fLayer);
 
             topic.publish(topics.startDrawing, 'Affected Area');
@@ -134,6 +142,21 @@
                 var snappingManager = map.enableSnapping({
                     alwaysSnap: true,
                     layerInfos: [{layer: fLayer}]
+                });
+                aspect.before(snappingManager, '_extractPointsAndLines', function (features, options) {
+                    var newFeatures = [];
+                    features.forEach(function (f) {
+                        console.log(f);
+                        if (f.geometry.type === 'multipoint') {
+                            f.geometry.points.forEach(function (coords) {
+                                newFeatures.push(new Graphic(new Point(coords, f.geometry.spatialReference)))
+                            })
+                        } else {
+                            newFeatures.push(f);
+                        }
+                    });
+
+                    return [newFeatures, options];
                 });
                 console.log('enabled');
             });
