@@ -165,12 +165,11 @@
                 "Rotenone"
             ]
         }, 
-        "Affected Area": {
+        "Easement/Acquisition": {
             "Easement/Acquisition": [
                 "Conservation easement", 
                 "Fee title land acquisition"
-            ], 
-            "Research": []
+            ]
         }, 
         "Terrestrial Treatment Area": {
             "Prescribed fire": [
@@ -332,18 +331,12 @@
             "Big game/Upland game", 
             "Other"
         ], 
-        "Easement/Acquisition": {
-            "Easement/Acquisition": [
-                "Conservation easement", 
-                "Fee title land acquisition"
-            ]
-        }, 
-        "Other point feature": [], 
-        "Trough": [], 
         "Pipeline": [
             "Above surface", 
             "Below surface"
         ], 
+        "Other point feature": [], 
+        "Trough": [], 
         "Water control structure": [], 
         "Fish passage structure": [
             "Barrier (electric)", 
