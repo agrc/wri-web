@@ -15,6 +15,7 @@
             'esri',
             'ijit',
             'jsonconfig',
+            'layer-selector',
             'lodash',
             'put-selector',
             'xstyle',

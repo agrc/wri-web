@@ -28,9 +28,10 @@ define([
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
-    'esri/layers/WebTiledLayer',
     'esri/renderers/SimpleRenderer',
-    'esri/tasks/query'
+    'esri/tasks/query',
+
+    'layer-selector'
 ], function (
     BaseMap,
 
@@ -61,9 +62,10 @@ define([
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
-    WebTiledLayer,
     SimpleRenderer,
-    Query
+    Query,
+
+    LayerSelector
 ) {
     return {
         // layers: Object
@@ -121,24 +123,14 @@ define([
                 extent: config.defaultExtent
             });
 
-            var googleImageryLyr = new WebTiledLayer(
-                config.urls.googleImagery + 'tiles/utah/${level}/${col}/${row}',
-                { minScale: config.switchToGoogleScale });
-            var esriImageryLyr = new ArcGISTiledMapServiceLayer(
-                config.urls.esriImagery,
-                { maxScale: config.switchToGoogleScale }
-            );
-            var esriLabelsLyr = new ArcGISTiledMapServiceLayer(
-                config.urls.esriLabels,
-                { maxScale: config.switchToGoogleScale }
-            );
-            var esriTransLabelsLyr = new ArcGISTiledMapServiceLayer(
-                config.urls.esriTransLabels,
-                { maxScale: config.switchToGoogleScale }
-            );
+            this.layerSelector = new LayerSelector({
+                map: this.map,
+                quadWord: config.quadWord,
+                baseLayers: ['Lite', 'Hybrid', 'Topo', 'Color IR'],
+                overlays: ['Overlay']
+            });
 
             this.map.on('load', function () {
-                console.debug('map is loaded', that);
                 that.map.disableDoubleClickZoom();
                 that.map.on('extent-change', function (change) {
                     topic.publish(config.topics.map.extentChanged, change);
@@ -174,9 +166,6 @@ define([
             this.map.on('zoom-end', function () {
                 topic.publish(config.topics.mapScaleChanged, that.map.getScale());
             });
-
-            this.baseLayers = [googleImageryLyr, esriImageryLyr, esriLabelsLyr, esriTransLabelsLyr];
-            this.map.addLayers(this.baseLayers);
 
             var homeButton = new HomeButton({
                 map: this.map,
@@ -254,7 +243,8 @@ define([
                 centroidButton,
                 search,
                 nonWriButton,
-                downloadButton
+                downloadButton,
+                this.layerSelector
             ]);
 
             // suspend base map layers until we get the initial extent
@@ -801,9 +791,12 @@ define([
             // action: String (suspend | resume)
             console.log('app.mapController:toggleBaseLayers', arguments);
 
-            this.baseLayers.forEach(function (l) {
-                l[action]();
-            });
+            var visibleLayers = this.layerSelector.get('visibleLayers');
+            if (visibleLayers && visibleLayers.length > 0) {
+                visibleLayers.forEach(function (l) {
+                    l[action]();
+                });
+            }
         },
         toggleProjectsFundedByWri: function (hide) {
             // summary:

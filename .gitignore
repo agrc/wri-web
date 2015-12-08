@@ -33,6 +33,7 @@ src/jasmine-jsreporter/
 src/jquery-bridget/
 src/jquery/
 src/ladda-bootstrap/
+src/layer-selector/
 src/lodash/
 src/modernizr/
 src/mustache/

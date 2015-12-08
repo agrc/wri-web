@@ -37,18 +37,19 @@ define([
 
     var gisServerBaseUrl;
     var apiEndpoint;
+    var quadWord;
     var serviceUrlTemplate = '/arcgis/rest/services/WRI/{name}/{type}Server';
-    var googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/delete-prefix-stretch-giant/';
     var plssUrl = 'https://__WRI_BASEURL__.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
 
     if (has('agrc-build') === 'prod') {
         gisServerBaseUrl = 'https://__WRI_BASEURL__.utah.gov';
+        quadWord = 'delete-prefix-stretch-giant';
         apiEndpoint = '/__WRI_CONFIGURATION__';
         serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{name}/{type}Server';
     } else {
         gisServerBaseUrl = 'http://' + window.location.host;
         apiEndpoint = '/wri';
-        googleImageryUrl = 'https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/';
+        quadWord = 'alabama-anvil-picnic-sunset';
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
     var selectionColor = [255, 220, 0];
@@ -63,6 +64,10 @@ define([
         // version.: String
         //      The version number.
         version: '0.13.3',
+
+        // quadWord: String
+        //      The quad word for using appliance layers
+        quadWord: quadWord,
 
         // scaleTrigger: Number
         //      the basemap level to toggle centroids
@@ -105,10 +110,6 @@ define([
             plss: plssUrl,
             fireRiskIndex: 'https://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireRiskIndex/MapServer',
             rangeTrendApp: 'https://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}',
-            esriImagery: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
-            esriLabels: 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer',
-            esriTransLabels: 'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer',
-            googleImagery: googleImageryUrl,
             print: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Print', type: 'GP' }) + '/Export%20Web%20Map',
             upload: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/uploads/upload',
             zipToGraphics: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/ZipToGraphics',
