@@ -1,6 +1,6 @@
 {
     "name": "wri-web",
-    "version": "0.13.2",
+    "version": "0.13.3",
     "main": "main",
     "description": "watershed restoration mapping",
     "homepage": "https://github.com/agrc/wri-web",
