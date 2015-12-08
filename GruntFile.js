@@ -418,6 +418,9 @@ module.exports = function (grunt) {
             configAt: {
                 command: 'python scripts/BuildJSON/build_json.py A'
             },
+            configProd: {
+                command: 'python scripts/BuildJSON/build_json.py P'
+            },
             mapLocal: {
                 command: 'python maps/RepointMXD.py L'
             },
@@ -485,7 +488,7 @@ module.exports = function (grunt) {
         'clean:build',
         'newer:imagemin:main',
         'stylus',
-        'shell:configAt',
+        'shell:configProd',
         'dojo:prod',
         'copy:main',
         'processhtml:main'

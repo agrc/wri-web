@@ -26,12 +26,14 @@ if len(sys.argv) > 1:
     target = sys.argv[1]
 
 if not target:
-    target = raw_input('Local (L), Dev (D), or AT (A)? ')
+    target = raw_input('Local (L), Dev (D), AT (A), or Prod (P)? ')
 
 if target == 'D':
     connection_string = secrets.DEV_CONNECTION_STRING
 elif target == 'A':
     connection_string = secrets.AT_CONNECTION_STRING
+elif target == 'P':
+    connection_string = secrets.PROD_CONNECTION_STRING
 else:
     connection_string = secrets.LOCAL_CONNECTION_STRING
 
