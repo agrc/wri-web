@@ -2,6 +2,7 @@
 define([
     'dojo/has',
     'dojo/request',
+    'dojo/request/xhr',
     'dojo/_base/lang',
 
     'esri/Color',
@@ -15,6 +16,7 @@ define([
 ], function (
     has,
     request,
+    xhr,
     lang,
 
     Color,
@@ -28,6 +30,7 @@ define([
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('basemaps.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('wrimaps.at.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('wrimaps.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('maps.ffsl.utah.gov');
@@ -43,13 +46,21 @@ define([
 
     if (has('agrc-build') === 'prod') {
         gisServerBaseUrl = 'https://__WRI_BASEURL__.utah.gov';
-        quadWord = 'delete-prefix-stretch-giant';
+        quadWord = '__QUAD_WORD__';
         apiEndpoint = '/__WRI_CONFIGURATION__';
         serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{name}/{type}Server';
     } else {
         gisServerBaseUrl = 'http://' + window.location.host;
         apiEndpoint = '/wri';
-        quadWord = 'alabama-anvil-picnic-sunset';
+
+        xhr(require.baseUrl + 'secrets.json', {
+            handleAs: 'json',
+            sync: true
+        }).then(function (secrets) {
+            quadWord = secrets.quadWord;
+        }, function () {
+            throw 'Error getting secrets!';
+        });
     }
     esriConfig.defaults.io.corsEnabledServers.push(gisServerBaseUrl);
     var selectionColor = [255, 220, 0];
