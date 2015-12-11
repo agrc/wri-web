@@ -84,15 +84,13 @@ define([
                     // prevent menu from hiding
                     evt.stopPropagation();
                 }),
-                query('a', this.dropdownMenu).on('click', function (evt) {
+                query('li', this.dropdownMenu).on('click', function (evt) {
                     // toggle checkbox if any part of the menu item was clicked
                     // other than the checkbox itself
-                    if (evt.target.type !== 'checkbox') {
-                        var checkbox = evt.target.children[0];
+                    if (evt.target.tagName === 'LI') {
+                        var checkbox = query('input', evt.target)[0];
                         checkbox.checked = !checkbox.checked;
                         on.emit(checkbox, 'change', {bubbles: true});
-                        evt.preventDefault();
-                        evt.stopPropagation();
                     }
                 }),
                 query('input', this.dropdownMenu).on('change', lang.hitch(this, 'onSnapChange'))

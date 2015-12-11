@@ -2,33 +2,42 @@ require([
     'agrc-jasmine-matchers/topics',
 
     'app/config',
-    'app/project/FeaturesGrid',
 
     'dojo/dom-construct',
     'dojo/query',
-    'dojo/text!app/project/tests/data/features.json'
+    'dojo/text!app/project/tests/data/features.json',
+
+    'stubmodule'
 ], function (
     topics,
 
     config,
-    WidgetUnderTest,
 
     domConstruct,
     query,
-    featuresTxt
+    featuresTxt,
+
+    stubModule
 ) {
     describe('app/project/FeaturesGrid', function () {
         var widget;
+        var WidgetUnderTestClass;
         var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
-        beforeEach(function () {
-            widget = new WidgetUnderTest({
-                features: JSON.parse(featuresTxt)
-            }, domConstruct.create('div', null, document.body));
-            widget.startup();
+        beforeEach(function (done) {
+            stubModule('app/project/FeaturesGrid', {
+                'app/mapController': {}
+            }).then(function (StubbedModule) {
+                WidgetUnderTestClass = StubbedModule;
+                widget = new WidgetUnderTestClass({
+                    features: JSON.parse(featuresTxt)
+                }, domConstruct.create('div', null, document.body));
+                widget.startup();
+                done();
+            });
         });
 
         afterEach(function () {
@@ -39,7 +48,7 @@ require([
 
         describe('Sanity', function () {
             it('should create a FeaturesGrid', function () {
-                expect(widget).toEqual(jasmine.any(WidgetUnderTest));
+                expect(widget).toEqual(jasmine.any(WidgetUnderTestClass));
             });
         });
         describe('onRowSelected', function () {
