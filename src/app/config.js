@@ -41,12 +41,14 @@ define([
     var gisServerBaseUrl;
     var apiEndpoint;
     var quadWord;
+    var printQuadWord;
     var serviceUrlTemplate = '/arcgis/rest/services/WRI/{name}/{type}Server';
     var plssUrl = 'https://__WRI_BASEURL__.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
 
     if (has('agrc-build') === 'prod') {
         gisServerBaseUrl = 'https://__WRI_BASEURL__.utah.gov';
         quadWord = '__QUAD_WORD__';
+        printQuadWord = '__PRINT_QUAD_WORD__';
         apiEndpoint = '/__WRI_CONFIGURATION__';
         serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{name}/{type}Server';
     } else {
@@ -57,7 +59,7 @@ define([
             handleAs: 'json',
             sync: true
         }).then(function (secrets) {
-            quadWord = secrets.quadWord;
+            quadWord = printQuadWord = secrets.quadWord;
         }, function () {
             throw 'Error getting secrets!';
         });
@@ -82,7 +84,7 @@ define([
 
         // printQuadWord: String
         //      The quad word for the proxy server to use
-        printQuadWord: '__PRINT_QUAD_WORD__',
+        printQuadWord: printQuadWord,
 
         // scaleTrigger: Number
         //      the basemap level to toggle centroids
