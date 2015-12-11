@@ -239,6 +239,17 @@ require([
                 expect(domClass.contains(widget.herbicideSelect.parentElement, 'hidden')).toBe(true);
                 expect(domClass.contains(widget.typeSelect.parentElement, 'hidden')).toBe(true);
             });
+            it('hides action dropdown for other point feature', function () {
+                atts[testType] = [];
+                config.noActionCategories.push(testType);
+
+                widget.onFeatureCategoryChange();
+
+                expect(domClass.contains(widget.pointLineActionSelect.parentElement, 'hidden')).toBe(true);
+                expect(widget.pointLineActionSelect.children.length).toBe(1);
+
+                config.noActionCategories.pop();
+            });
         });
         describe('onPolyActionSelectChange', function () {
             beforeEach(function () {

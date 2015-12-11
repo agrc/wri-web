@@ -335,10 +335,12 @@ define([
             var items = config.domains.featureAttributes[newValue];
             if (Array.isArray(items)) {
                 // line or point feature types
-                loadItemsIntoSelect(config.domains.pointLineActions, this.pointLineActionSelect);
                 loadItemsIntoSelect(items, this.typeSelect);
 
-                domClass.remove(this.pointLineActionSelect.parentElement, 'hidden');
+                if (config.noActionCategories.indexOf(newValue) === -1) {
+                    loadItemsIntoSelect(config.domains.pointLineActions, this.pointLineActionSelect);
+                    domClass.remove(this.pointLineActionSelect.parentElement, 'hidden');
+                }
             } else {
                 // polygon actions
                 var actions = [];

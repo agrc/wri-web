@@ -187,6 +187,10 @@ define([
             'Aquatic/Riparian Treatment Area'
         ],
 
+        noActionCategories: [
+            'Other point feature'
+        ],
+
         topics: {
             mapScaleChanged: 'wri/mapScaleChanged',
             projectIdsChanged: 'wri/projectIdsChanged',
