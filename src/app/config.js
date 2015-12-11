@@ -80,6 +80,10 @@ define([
         //      The quad word for using appliance layers
         quadWord: quadWord,
 
+        // printQuadWord: String
+        //      The quad word for the proxy server to use
+        printQuadWord: '__PRINT_QUAD_WORD__',
+
         // scaleTrigger: Number
         //      the basemap level to toggle centroids
         scaleTrigger: 13,
