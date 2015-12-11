@@ -120,10 +120,11 @@ define([
 
                 if (layer.urlTemplate) {
                     layer.urlTemplate = layer.urlTemplate.replace(/^https/, 'http');
+                    layer.urlTemplate = layer.urlTemplate.replace(config.quadWord, config.printQuadWord);
                 }
 
                 layer.url = layer.url.replace(/^https/, 'http');
-
+                layer.url = layer.url.replace(config.quadWord, config.printQuadWord);
                 return layer;
             });
 

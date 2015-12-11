@@ -22,9 +22,9 @@
             "opacity": 1,
             "minScale": 4000,
             "maxScale": 1128.497176,
-            "url": "https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/tiles/utah/${level}/${col}/${row}",
+            "url": "https://discover.agrc.utah.gov/login/path/some-quad-word-auth/tiles/utah/${level}/${col}/${row}",
             "type": "WebTiledLayer",
-            "urlTemplate": "https://discover.agrc.utah.gov/login/path/alabama-anvil-picnic-sunset/tiles/utah/{level}/{col}/{row}",
+            "urlTemplate": "https://discover.agrc.utah.gov/login/path/some-quad-word-auth/tiles/utah/{level}/{col}/{row}",
             "credits": ""
         },
         {

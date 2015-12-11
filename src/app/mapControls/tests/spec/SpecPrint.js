@@ -62,6 +62,40 @@ require([
                     }
                 });
             });
+            it('replaces quadWord with printQuadWord', function () {
+                if (!String.prototype.startsWith) {
+                    /*jshint -W121 */
+                    String.prototype.startsWith = function (searchString, position) {
+                        position = position || 0;
+                        return this.indexOf(searchString, position) === position;
+                    };
+                    /*jshint +W121 */
+                }
+
+                config.quadWord = 'some-quad-word-auth';
+                config.printQuadWord = 'print-quad-word-auth';
+
+                var requestArgs = {
+                    url: config.urls.print + '/submitJob',
+                    content: {
+                        Web_Map_as_JSON: webmapJson
+                    }
+                };
+
+                var args = widget.patchMapServiceUrls(requestArgs);
+                var layer = JSON.parse(args.content.Web_Map_as_JSON).operationalLayers.filter(function (layer) {
+                    return layer.id === 'layer0';
+                })[0];
+
+                if (layer.url) {
+                    expect(layer.url.indexOf(config.printQuadWord)).toBeGreaterThan(-1);
+                    expect(layer.url.indexOf(config.quadWord)).toEqual(-1);
+                }
+                if (layer.urlTemplate) {
+                    expect(layer.urlTemplate.indexOf(config.printQuadWord)).toBeGreaterThan(-1);
+                    expect(layer.urlTemplate.indexOf(config.quadWord)).toEqual(-1);
+                }
+            });
         });
     });
 });
