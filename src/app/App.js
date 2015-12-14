@@ -12,6 +12,8 @@ define([
     'dijit/_WidgetsInTemplateMixin',
 
     'dojo/dom-construct',
+    'dojo/hash',
+    'dojo/io-query',
     'dojo/text!app/templates/App.html',
     'dojo/_base/declare'
 ], function (
@@ -28,6 +30,8 @@ define([
     _WidgetsInTemplateMixin,
 
     domConstruct,
+    hash,
+    ioQuery,
     template,
     declare
 ) {
@@ -72,7 +76,10 @@ define([
                 new DrawToolbar({map: mapController.map}, this.drawToolbarNode)
             );
 
-            this.filtersContainer = new FiltersContainer({}, this.filtersContainerNode);
+            var props = ioQuery.queryToObject(hash());
+            this.filtersContainer = new FiltersContainer({
+                multiProjectView: props.id && typeof props.id !== 'string' && props.id.length > 1
+            }, this.filtersContainerNode);
             this.childWidgets.push(this.filtersContainer);
         },
         startup: function () {

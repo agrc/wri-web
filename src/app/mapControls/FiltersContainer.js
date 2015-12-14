@@ -7,12 +7,12 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/text!app/mapControls/templates/FiltersContainer.html',
-    'dojo/topic'
+    'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang'
 ], function (
     centroidController,
     config,
@@ -22,12 +22,12 @@ define([
     _TemplatedMixin,
     _WidgetBase,
 
-    declare,
-    lang,
     domClass,
     domConstruct,
     template,
-    topic
+    topic,
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         // description:
@@ -47,6 +47,13 @@ define([
             console.log('app.mapControls.FiltersContainer::postCreate', arguments);
 
             var statuses = config.domains.projectStatus;
+            // default to no status filters on by default in multi-project view
+            // otherwise turn draft and cancelled off by default
+            var statusesOffByDefault = (this.multiProjectView) ? [] : statuses.filter(function (s) {
+                return s !== statuses[0] && s !== statuses[5];
+            }).map(function (item) {
+                return item[0];
+            });
             this.filters = [
                 new Filter({
                     name: 'Project Status',
@@ -56,12 +63,7 @@ define([
                     fieldName: config.fieldNames.Status,
                     fieldType: Filter.TYPE_TEXT,
                     cssClass: 'status',
-                    defaultToSelected: statuses.filter(function (s) {
-                        // cancelled and draft should be off by default
-                        return s !== statuses[0] && s !== statuses[5];
-                    }).map(function (item) {
-                        return item[0];
-                    })
+                    defaultToSelected: statusesOffByDefault
                 }, domConstruct.create('div', null, this.container)),
                 new Filter({
                     name: 'Feature Type',
