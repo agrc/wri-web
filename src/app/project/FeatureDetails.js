@@ -94,7 +94,6 @@ define([
             }
         },
 
-
         // Properties to be sent into constructor
 
         // allowEdits: Boolean

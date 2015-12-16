@@ -28,3 +28,43 @@
 <p class="tight">
     <label>Stream Miles:</label> {{streamLnMeters}}</p>
 {{/streamLnMeters}}
+{{#hasCounty}}
+<p class="tight">
+    <label>County</label>
+    <ul class="tight">
+        {{#county}}
+        <li>{{name}}{{#space}}: {{space}}{{/space}}</li>
+        {{/county}}
+    </ul>
+</p>
+{{/hasCounty}}
+{{#landOwnership}}
+<p class="tight">
+    <label>Land Ownership</label>
+    <ul class="tight">
+        {{#landOwnership}}
+        <li>{{name}}, {{extra}}{{#space}}: {{space}}{{/space}}</li>
+        {{/landOwnership}}
+    </ul>
+</p>
+{{/landOwnership}}
+{{#focusArea}}
+<p class="tight">
+    <label>Focus Area</label>
+    <ul class="tight">
+        {{#focusArea}}
+        <li>{{name}}{{#space}}: {{space}}{{/space}}</li>
+        {{/focusArea}}
+    </ul>
+</p>
+{{/focusArea}}
+{{#sageGrouse}}
+<p class="tight">
+    <label>Sage Grouse</label>
+    <ul class="tight">
+        {{#sageGrouse}}
+        <li>{{name}}{{#space}}: {{space}}{{/space}}</li>
+        {{/sageGrouse}}
+    </ul>
+</p>
+{{/sageGrouse}}
