@@ -126,6 +126,10 @@ define([
             //      returns the single project id
             console.log('app/router:getProjectId', arguments);
 
+            if (!this.projectIds) {
+                return 0;
+            }
+
             if (this.projectIds.length === 1) {
                 return this.projectIds[0];
             } else if (this.projectIds.length > 1) {

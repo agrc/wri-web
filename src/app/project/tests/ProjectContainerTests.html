@@ -25,11 +25,16 @@ var widgetUnderTest;
 
 require({
     baseUrl: baseUrl,
-    packages: ['app', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dgrid', 'dstore', 'dojox', 'xstyle', 'mustache','put-selector','jsonconfig',
+    packages: ['app', 'agrc', 'bootstrap-stylus', 'esri', 'dojo', 'dijit', 'dgrid', 'dstore', 'dojox', 'xstyle',
+    'mustache','put-selector','jsonconfig', 'lodash', 'layer-selector',
     {
         name: 'slider',
         location: './seiyria-bootstrap-slider',
         main: 'js/bootstrap-slider'
+    }, {
+        name: 'spin',
+        location: './spinjs',
+        main: 'spin'
     }, {
         name: 'jquery',
         location: 'jquery/dist',
@@ -44,7 +49,7 @@ require({
     widgetUnderTest = new Module({
     }, 'node');
 
-    widgetUnderTest.showDetailsForProject([867]);
+    widgetUnderTest.showDetailsForProject([2724]);
 
     // widgetUnderTest.startup();
 

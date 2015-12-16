@@ -11,6 +11,13 @@ define([
             console.log('app.project.userCredentials:getUserData', arguments);
 
             var form = document.getElementById('user-data');
+            if (!form) {
+                return {
+                    key: 'key',
+                    token: 'token'
+                };
+            }
+
             var key = 'key' in form ? form.key.value : null;
             var token = 'token' in form ? form.token.value : null;
 
