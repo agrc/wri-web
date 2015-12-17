@@ -76,7 +76,7 @@ define([
 
         // version.: String
         //      The version number.
-        version: '0.15.1',
+        version: '0.15.2',
 
         // quadWord: String
         //      The quad word for using appliance layers
