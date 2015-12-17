@@ -8,3 +8,5 @@
     1. Action: "Start a program"
     1. Program/script: <Path to python.exe>
     1. Add arguments: <path to `main.py`>
+
+Note: This script must be run from the folder that contains `main.py`.
