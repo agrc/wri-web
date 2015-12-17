@@ -108,7 +108,34 @@ define([
             this.setupConnections();
 
             mustache.parse(featureTemplate);
-            domConstruct.place(mustache.render(projectTemplate, this), this.projectDetailsNode);
+
+            var projectData = {};
+            Object.keys(this.templateFunctions).forEach(function (key) {
+                projectData[key] = this.templateFunctions[key];
+            }, this);
+
+            lang.mixin(projectData, {
+                affectedAreaSqMeters: this.affectedAreaSqMeters,
+                aquaticSqMeters: this.aquaticSqMeters,
+                county: this.county,
+                description: this.description,
+                easementSqMeters: this.easementSqMeters,
+                focusArea: this.focusArea,
+                landOwnership: this.landOwnership,
+                leadAgency: this.leadAgency,
+                nhd: this.nhd,
+                projectId: this.projectId,
+                projectManagerName: this.projectManagerName,
+                region: this.region,
+                sageGrouse: this.sageGrouse,
+                status: this.status,
+                streamLnMeters: this.streamLnMeters,
+                terrestrialSqMeters: this.terrestrialSqMeters,
+                title: this.title
+            });
+
+            mustache.parse(projectTemplate);
+            domConstruct.place(mustache.render(projectTemplate, projectData), this.projectDetailsNode);
 
             if (this.allowEdits) {
                 domClass.remove(this.modBtns, 'hidden');
