@@ -123,13 +123,6 @@ define([
                 extent: config.defaultExtent
             });
 
-            this.layerSelector = new LayerSelector({
-                map: this.map,
-                quadWord: config.quadWord,
-                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo', 'Color IR'],
-                overlays: ['Overlay']
-            });
-
             this.map.on('load', function () {
                 that.map.disableDoubleClickZoom();
                 that.map.on('extent-change', function (change) {
@@ -161,6 +154,13 @@ define([
                 });
                 domClass.add(btn, 'toolbar-item');
                 domAttr.set(btn, 'title', 'Next Extent');
+            });
+
+            this.layerSelector = new LayerSelector({
+                map: this.map,
+                quadWord: config.quadWord,
+                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo', 'Color IR'],
+                overlays: ['Overlay']
             });
 
             this.map.on('zoom-end', function () {
