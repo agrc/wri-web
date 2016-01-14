@@ -159,7 +159,7 @@ define([
             this.layerSelector = new LayerSelector({
                 map: this.map,
                 quadWord: config.quadWord,
-                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo', 'Color IR'],
+                baseLayers: ['Hybrid', 'Lite', 'Terrain', 'Topo', 'Color IR'],
                 overlays: ['Overlay']
             });
 
