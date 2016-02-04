@@ -486,6 +486,8 @@ module.exports = function (grunt) {
         'watch'
     ]);
     grunt.registerTask('build-prod', [
+        'jshint:main',
+        'jscs:main',
         'clean:build',
         'newer:imagemin:main',
         'stylus',
@@ -495,6 +497,8 @@ module.exports = function (grunt) {
         'processhtml:main'
     ]);
     grunt.registerTask('build-stage', [
+        'jshint:main',
+        'jscs:main',
         'clean:build',
         'newer:imagemin:main',
         'stylus',

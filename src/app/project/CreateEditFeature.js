@@ -388,6 +388,7 @@ define([
             this.graphicsLayer.clear();
             $(this.uploadBtn).button('loading');
 
+            var that = this;
             var onError = function (er) {
                 topic.publish(config.topics.toast, {
                     message: that.getServiceErrorMessage(er),
@@ -396,7 +397,6 @@ define([
                 $(that.uploadBtn).button('reset');
             };
 
-            var that = this;
             // upload file
             esriRequest({
                 url: config.urls.upload,

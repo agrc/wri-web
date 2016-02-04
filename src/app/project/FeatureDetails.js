@@ -178,13 +178,13 @@ define([
             this.toggleTab('featureTab', true);
 
             this.currentRowData = rowData;
+            var that = this;
 
             // prevent flicker of window by putting this on a timer
             var timer = window.setTimeout(function () {
                 domConstruct.empty(that.featureTabContents);
             }, 500);
             var responseData;
-            var that = this;
             this.makeRequest('GET').then(function (response) {
                 if (httpStatus.isSuccessful(response.status, 'GET')) {
                     responseData = response.data;
