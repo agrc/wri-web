@@ -1,6 +1,6 @@
 {
   "name": "wri-web",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "dependencies": {
     "agrc": "agrc-widgets#2.12.0",
     "dijit": "^1.10",
