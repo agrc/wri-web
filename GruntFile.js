@@ -432,6 +432,34 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        uglify: {
+            options: {
+                preserveComments: false,
+                sourceMap: true,
+                compress: {
+                    drop_console: true, // eslint-disable-line camelcase
+                    passes: 2,
+                    dead_code: true // eslint-disable-line camelcase
+                }
+            },
+            stage: {
+                options: {
+                    compress: {
+                        drop_console: false // eslint-disable-line camelcase
+                    }
+                },
+                src: ['dist/js/agrc/dojo/dojo.js'],
+                dest: 'dist/js/agrc/dojo/dojo.js'
+            },
+            prod: {
+                files: [{
+                    expand: true,
+                    cwd: 'dist/js/agrc/',
+                    src: '**/*.js',
+                    dest: 'dist'
+                }]
+            }
+        },
         watch: {
             options: {
                 livereload: true
@@ -478,6 +506,7 @@ module.exports = function (grunt) {
         'stylus',
         'shell:configProd',
         'dojo:prod',
+        'uglify:stage',
         'copy:main',
         'processhtml:main'
     ]);
@@ -489,6 +518,7 @@ module.exports = function (grunt) {
         'stylus',
         'shell:configAt',
         'dojo:stage',
+        'uglify:stage',
         'copy:main',
         'processhtml:main'
     ]);
