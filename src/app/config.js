@@ -43,7 +43,7 @@ define([
     var quadWord;
     var printQuadWord;
     var serviceUrlTemplate = '/arcgis/rest/services/WRI/{name}/{type}Server';
-    var plssUrl = 'https://__WRI_BASEURL__.utah.gov/arcgis/rest/services/UtahPLSS/MapServer';
+    var plssUrl = '/arcgis/rest/services/UtahPLSS/MapServer';
 
     if (has('agrc-build') === 'prod') {
         gisServerBaseUrl = 'https://__WRI_BASEURL__.utah.gov';
@@ -51,9 +51,12 @@ define([
         printQuadWord = '__PRINT_QUAD_WORD__';
         apiEndpoint = '/__WRI_CONFIGURATION__';
         serviceUrlTemplate = '/arcgis/rest/services/__WRI_CONFIGURATION__/{name}/{type}Server';
+        plssUrl = gisServerBaseUrl + plssUrl;
     } else {
         gisServerBaseUrl = 'http://' + window.location.host;
         apiEndpoint = '/wri';
+        plssUrl = 'https://wrimaps.at.utah.gov' + plssUrl;
+
 
         xhr(require.baseUrl + 'secrets.json', {
             handleAs: 'json',
