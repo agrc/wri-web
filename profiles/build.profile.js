@@ -8,9 +8,8 @@ var profile = {
     action: 'release',
     cssOptimize: 'comments',
     mini: true,
-    optimize: 'uglify',
-    layerOptimize: 'uglify',
-    stripConsole: 'all',
+    optimize: false,
+    layerOptimize: false,
     selectorEngine: 'acme',
     layers: {
         'dojo/dojo': {
@@ -19,14 +18,35 @@ var profile = {
                 'dojo/domReady',
                 'app/run',
                 'app/App',
+                'dojox/gfx/filters',
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
+                'dojox/gfx/svgext',
                 'dojox/gfx/shape'
             ],
             targetStylesheet: 'app/resources/App.css',
             includeLocales: ['en-us'],
             customBase: true,
             boot: true
+        }
+    },
+    packages: [{
+        name: 'moment',
+        location: 'moment',
+        main: 'moment',
+        trees: [
+          // don't bother with .hidden, tests, min, src, and templates
+          ['.', '.', /(\/\.)|(~$)|(test|txt|src|min|templates)/]
+        ],
+        resourceTags: {
+            amd: function (filename, mid) {
+                return /\.js$/.test(filename);
+            }
+        }
+    }],
+    map: {
+        'esri': {
+            dgrid: 'dgrid0.3'
         }
     },
     staticHasFeatures: {

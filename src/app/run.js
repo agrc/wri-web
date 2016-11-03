@@ -3,9 +3,8 @@
         packages: [
             'agrc',
             'app',
-            'bootstrap',
             'bootstrap-stylus',
-            'dgauges',
+            'bootstrap',
             'dgrid',
             'dgrid0.3',
             'dijit',
@@ -45,12 +44,7 @@
                 location: './stubmodule',
                 main: 'src/stub-module'
             }
-        ],
-        map: {
-            'esri': {
-                dgrid: 'dgrid0.3'
-            }
-        }
+        ]
     };
     require(config, ['dojo/parser', 'jquery', 'dojo/domReady!'], function (parser) {
         parser.parse();
