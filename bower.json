@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "agrc": "agrc-widgets#2.12.0",
+    "bootstrap-stylus": "4.0.4",
+    "bootstrap": "3.3.6",
     "dijit": "^1.10",
     "dojo": "^1.10",
     "dojox": "^1.10",
@@ -14,7 +16,6 @@
     "xstyle": "^0.3.2",
     "dgauges": "*",
     "lodash": "3.9.3-amd",
-    "bootstrap-stylus": "~4.0.4",
     "dstore": "~1.1.1",
     "dgrid": "~1.1.0",
     "seiyria-bootstrap-slider": "~4.10.1",
