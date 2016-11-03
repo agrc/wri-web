@@ -5,6 +5,7 @@
     "agrc": "agrc-widgets#2.12.0",
     "bootstrap-stylus": "4.0.4",
     "bootstrap": "3.3.6",
+    "dgrid0.3": "dgrid#0.3.17",
     "dijit": "^1.10",
     "dojo": "^1.10",
     "dojox": "^1.10",
