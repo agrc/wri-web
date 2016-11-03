@@ -442,7 +442,7 @@ module.exports = function (grunt) {
                     dead_code: true // eslint-disable-line camelcase
                 }
             },
-            stage: {
+            specific: {
                 options: {
                     compress: {
                         drop_console: false // eslint-disable-line camelcase
@@ -451,7 +451,7 @@ module.exports = function (grunt) {
                 src: ['dist/js/agrc/dojo/dojo.js'],
                 dest: 'dist/js/agrc/dojo/dojo.js'
             },
-            prod: {
+            all: {
                 files: [{
                     expand: true,
                     cwd: 'dist/js/agrc/',
@@ -506,7 +506,7 @@ module.exports = function (grunt) {
         'stylus',
         'shell:configProd',
         'dojo:prod',
-        'uglify:stage',
+        'uglify:specific',
         'copy:main',
         'processhtml:main'
     ]);
@@ -517,7 +517,7 @@ module.exports = function (grunt) {
         'newer:imagemin:main',
         'stylus',
         'shell:configAt',
-        'dojo:stage',
+        'dojo:specific',
         'uglify:stage',
         'copy:main',
         'processhtml:main'
