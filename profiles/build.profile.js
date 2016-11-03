@@ -51,10 +51,5 @@ var profile = {
     },
     userConfig: {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri', 'layer-selector']
-    },
-    map: {
-        'esri': {
-            dgrid: 'dgrid0.3'
-        }
     }
 };

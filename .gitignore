@@ -29,6 +29,7 @@ src/dgrid/
 src/dgrid0.3/
 src/dijit/
 src/dojo/
+src/dojo-themes/
 src/dojox/
 src/dstore/
 src/esri/
@@ -42,6 +43,7 @@ src/ladda-bootstrap/
 src/layer-selector/
 src/lodash/
 src/modernizr/
+src/moment/
 src/mustache/
 src/proj4/
 src/put-selector/

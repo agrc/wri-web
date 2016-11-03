@@ -17,6 +17,7 @@
             'jsonconfig',
             'layer-selector',
             'lodash',
+            'moment',
             'put-selector',
             'xstyle',
             {
