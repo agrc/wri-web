@@ -318,20 +318,6 @@ module.exports = function (grunt) {
                 basePath: './src'
             }
         },
-        esri_slurp: {
-            options: {
-                version: '3.14'
-            },
-            dev: {
-                options: {
-                    beautify: true
-                },
-                dest: 'src/esri'
-            },
-            travis: {
-                dest: 'src/esri'
-            }
-        },
         imagemin: {
             main: {
                 options: {
@@ -472,7 +458,6 @@ module.exports = function (grunt) {
         'jshint:force',
         'jscs:force',
         'amdcheck:main',
-        'if-missing:esri_slurp:dev',
         'configureProxies:server',
         'connect:server',
         'connect:jasmine',
@@ -517,7 +502,6 @@ module.exports = function (grunt) {
         'saucelabs-jasmine'
     ]);
     grunt.registerTask('travis', [
-        'if-missing:esri_slurp:travis',
         'jshint:main',
         'jscs:main',
         'sauce',

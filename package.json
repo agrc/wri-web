@@ -23,7 +23,6 @@
     "grunt-contrib-stylus": "^0",
     "grunt-contrib-watch": "^0",
     "grunt-dojo": "^1",
-    "grunt-esri-slurp": "^2",
     "grunt-if-missing": "^1",
     "grunt-jscs": "^2",
     "grunt-newer": "^1",
