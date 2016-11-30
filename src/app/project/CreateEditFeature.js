@@ -835,11 +835,12 @@ define([
             // geometry: Geometry
             console.log('app.project.CreateEditFeature:reducePresision', arguments);
 
+            var decimals = 4;
             var roundCoords = function (ringsOrPaths) {
                 ringsOrPaths.forEach(function (r) {
                     r.forEach(function (pnt) {
-                        pnt[0] = formatting.round(pnt[0], 2);
-                        pnt[1] = formatting.round(pnt[1], 2);
+                        pnt[0] = formatting.round(pnt[0], decimals);
+                        pnt[1] = formatting.round(pnt[1], decimals);
                     });
                 });
             };
