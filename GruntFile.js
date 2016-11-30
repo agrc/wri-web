@@ -154,7 +154,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ['dist/js/agrc', 'dist/map'],
+            build: ['dist/'],
             all: {
                 options: {
                     force: true
@@ -276,7 +276,11 @@ module.exports = function (grunt) {
                         '!**/LICENSE.md',
                         '!**/README.md',
                         '!**/secrets.json.sample',
+                        '!**/secrets.sample.json',
                         '!**/*.styl',
+                        '!**/*.md',
+                        '!**/package.json',
+                        '!**/bower.json',
                         '!index.html',
                         '!ChangeLog.html',
                         '!**/Gruntfile.*'
@@ -435,7 +439,7 @@ module.exports = function (grunt) {
         uglify: {
             options: {
                 preserveComments: false,
-                sourceMap: true,
+                sourceMap: false,
                 compress: {
                     drop_console: true, // eslint-disable-line camelcase
                     passes: 2,
@@ -456,7 +460,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'dist/js/agrc/',
                     src: '**/*.js',
-                    dest: 'dist'
+                    dest: 'dist/js/agrc/'
                 }]
             }
         },
