@@ -77,12 +77,16 @@ def main(zfilepath, category):
             shapefile = arcpy.MakeFeatureLayer_management(shapefile, 'shapefileLyr', where)
             shapefile = arcpy.CopyFeatures_management(shapefile, 'in_memory/copy')
 
+    if shape_type == 'polygon':
+        messages.append('polygon was generalized.')
+        arcpy.Generalize_edit(shapefile)
+
     return {
         'outFeature': shapefile,
-
         # messages will be returned as an array in the results json object
         'messages': ';'.join(messages)
     }
+
 
 if __name__ == '__main__':
     result = main(arcpy.GetParameterAsText(0), arcpy.GetParameterAsText(1))
