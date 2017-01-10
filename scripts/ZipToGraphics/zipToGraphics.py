@@ -15,18 +15,18 @@ wgs = arcpy.SpatialReference(3857)
 multiple_warning = ('warning:Multiple features were found in the uploaded shapefile. Only the first was returned. '
                     'Merge your shapefile features into a single multi-part feature to include them all.')
 categories = {
-    'Terrestrial Treatment Area': ['polygon'],
-    'Aquatic/Riparian Treatment Area': ['polygon'],
-    'Affected Area': ['polygon'],
-    'Easement/Acquisition': ['polygon'],
+    'terrestrial treatment area': ['polygon'],
+    'aquatic/riparian treatment area': ['polygon'],
+    'affected area': ['polygon'],
+    'easement/acquisition': ['polygon'],
     'guzzler': ['point', 'multipoint'],
     'trough': ['point', 'multipoint'],
     'water control structure': ['point', 'multipoint'],
     'other point feature': ['point', 'multipoint'],
     'fish passage structure': ['point', 'multipoint'],
-    'Fence': ['polyline'],
-    'Pipeline': ['polyline'],
-    'Dam': ['polyline']
+    'fence': ['polyline'],
+    'pipeline': ['polyline'],
+    'dam': ['polyline']
 }
 
 
@@ -58,6 +58,7 @@ def main(zfilepath, category):
     # validate geometry type for category
     described = arcpy.Describe(shapefile)
     shape_type = described.shapeType.lower()
+    category = category.lower()
     if shape_type not in categories[category]:
         raise Exception('Incorrect shape type of {} for {}'.format(described.shapeType, category))
 
