@@ -33,7 +33,7 @@ categories = {
 def main(zfilepath, category):
     messages = []
 
-    # open zip file and get paths
+    #: open zip file and get paths
     zfile = ZipFile(zfilepath)
     zfilenames = zfile.namelist()
     zfile_exts = [name.split('.')[1] for name in zfilenames]
@@ -41,34 +41,34 @@ def main(zfilepath, category):
     zfile_folder = join(arcpy.env.scratchFolder, zfile_name)
     shapefile = join(zfile_folder, zfile_name + '.shp')
 
-    # verify that all files are present
+    #: verify that all files are present
     for ext in required_files:
         if ext not in zfile_exts:
             raise Exception('Missing .{} file'.format(ext))
 
     zfile.extractall(zfile_folder)
 
-    # validate geometry
+    #: validate geometry
     checkgeom_output = 'in_memory/checkgeometry'
     arcpy.CheckGeometry_management(shapefile, checkgeom_output)
     if int(arcpy.GetCount_management(checkgeom_output).getOutput(0)) > 0:
         with arcpy.da.SearchCursor(checkgeom_output, ['PROBLEM']) as scur:
             raise Exception('Geometry Error: {}'.format(scur.next()[0]))
 
-    # validate geometry type for category
+    #: validate geometry type for category
     described = arcpy.Describe(shapefile)
     shape_type = described.shapeType.lower()
     category = category.lower()
     if shape_type not in categories[category]:
         raise Exception('Incorrect shape type of {} for {}'.format(described.shapeType, category))
 
-    # reproject if necessary
+    #: reproject if necessary
     input_sr = described.spatialReference
     if input_sr.name != wgs.name:
         # Project doesn't support the in_memory workspace
         shapefile = arcpy.Project_management(shapefile, '{}/project'.format(arcpy.env.scratchGDB), wgs)
 
-    # only return one feature, if multiple are present
+    #: only return one feature, if multiple are present
     if int(arcpy.GetCount_management(shapefile).getOutput(0)) > 1:
         messages.append(multiple_warning)
         with arcpy.da.SearchCursor(shapefile, ['OID@']) as scur:
@@ -78,13 +78,9 @@ def main(zfilepath, category):
             shapefile = arcpy.MakeFeatureLayer_management(shapefile, 'shapefileLyr', where)
             shapefile = arcpy.CopyFeatures_management(shapefile, 'in_memory/copy')
 
-    if shape_type == 'polygon':
-        messages.append('polygon was generalized.')
-        arcpy.Generalize_edit(shapefile)
-
     return {
         'outFeature': shapefile,
-        # messages will be returned as an array in the results json object
+        #: messages will be returned as an array in the results json object
         'messages': ';'.join(messages)
     }
 
