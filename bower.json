@@ -33,6 +33,7 @@
     "esri": "3.18",
     "dstore": "v1.1.1",
     "xstyle": "v0.3.2",
-    "dgrid": "~1.1.0"
+    "dgrid": "~1.1.0",
+    "dojo-themes": "1.12.1"
   }
 }
