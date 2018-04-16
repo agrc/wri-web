@@ -129,7 +129,7 @@ define([
             api: gisServerBaseUrl + apiEndpoint + '/api',
             plss: plssUrl,
             fireRiskIndex: 'https://maps.ffsl.utah.gov/arcgis/rest/services/Fire/FireRiskIndex/MapServer',
-            rangeTrendApp: 'https://dwrapps.utah.gov/rangetrend/rtstart?SiteID=${GlobalID}',
+            rangeTrendApp: 'https://dwrapps.utah.gov/rangetrend/rtstart?SiteID=',
             print: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Print', type: 'GP' }) + '/Export%20Web%20Map',
             upload: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/uploads/upload',
             zipToGraphics: gisServerBaseUrl + lang.replace(serviceUrlTemplate, { name: 'Toolbox', type: 'GP'}) + '/ZipToGraphics',
