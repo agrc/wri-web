@@ -722,6 +722,11 @@ define([
 
             var lyr;
             var that = this;
+            var getRangeContent = function (feature) {
+                return '<a href="' + config.urls.rangeTrendApp +
+                    encodeURIComponent(feature.attributes[config.fieldNames.GlobalID]) +
+                    '" target="blank">Range Trend App</a>';
+            };
             if (!this.referenceLayers[layerItem.name]) {
                 var layerTypes = {
                     dynamic: {
@@ -738,7 +743,7 @@ define([
                             outFields: [config.fieldNames.GlobalID, config.fieldNames.STUDY_NAME],
                             infoTemplate: new InfoTemplate(
                                 '${' + config.fieldNames.STUDY_NAME + '}',
-                                '<a href="' + config.urls.rangeTrendApp + '" target="blank">Range Trend App</a>'
+                                getRangeContent
                             )
                         }
                     }
