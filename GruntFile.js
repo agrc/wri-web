@@ -293,10 +293,10 @@ module.exports = function (grunt) {
             },
             dts: {
                 files: {
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/dojo/dojo.js',
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/js/agrc/app/resources/App.css',
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/jsonconfig/config.json': 'C:/Projects/GitHub/wri-web/dist/js/agrc/jsonconfig/config.json',
-                    'C:/Projects/svn/dnr-wri/src/main/webapp/js/agrc/esri/geometry/geometryEngine.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/esri/geometry/geometryEngine.js'
+                    'C:/Projects/GitHub/wri-dts/src/main/webapp/js/agrc/dojo/dojo.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/dojo/dojo.js',
+                    'C:/Projects/GitHub/wri-dts/src/main/webapp/js/agrc/app/resources/App.css': 'C:/Projects/GitHub/wri-web/dist/js/agrc/app/resources/App.css',
+                    'C:/Projects/GitHub/wri-dts/src/main/webapp/js/agrc/jsonconfig/config.json': 'C:/Projects/GitHub/wri-web/dist/js/agrc/jsonconfig/config.json',
+                    'C:/Projects/GitHub/wri-dts/src/main/webapp/js/agrc/esri/geometry/geometryEngine.js': 'C:/Projects/GitHub/wri-web/dist/js/agrc/esri/geometry/geometryEngine.js'
                 }
             }
         },
@@ -521,8 +521,8 @@ module.exports = function (grunt) {
         'newer:imagemin:main',
         'stylus',
         'shell:configAt',
-        'dojo:specific',
-        'uglify:stage',
+        'dojo:stage',
+        'uglify:specific',
         'copy:main',
         'processhtml:main'
     ]);
